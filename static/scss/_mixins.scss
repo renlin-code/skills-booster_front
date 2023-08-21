@@ -1,0 +1,6 @@
+@mixin fontStyles($family: $font_3, $size: 20rem, $height: auto, $weight: 400) {
+  font-family: $family;
+  font-size: $size;
+  line-height: $height;
+  font-weight: $weight;
+}
