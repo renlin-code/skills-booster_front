@@ -25,7 +25,7 @@ export default {
     margin: 40rem 0 80rem;
     @media screen and (max-width: $brakepoint) {
       gap: 40rem;
-      margin: 40rem 0;
+      margin: 30rem 0 40rem;
     }
   }
 }

@@ -45,6 +45,34 @@ body {
       }
   }
 }
+.underline-white {
+  text-decoration: none;
+  background-image: linear-gradient($color_white, $color_white);
+  background-position: 50% 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 2rem;
+  transition: all $transition_base !important;
+  &:hover {
+      background-size: 100% 2rem;
+      @media only screen and (max-width: 650px) {
+          background-size: 100% 1rem;
+      }
+  }
+}
+.underline-light-gray {
+  text-decoration: none;
+  background-image: linear-gradient($color_light-gray, $color_light-gray);
+  background-position: 50% 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 2rem;
+  transition: all $transition_base !important;
+  &:hover {
+      background-size: 100% 2rem;
+      @media only screen and (max-width: 650px) {
+          background-size: 100% 1rem;
+      }
+  }
+}
 
 //TRANSITIONS
 .fade-enter-active, .fade-leave-active {

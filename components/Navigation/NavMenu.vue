@@ -132,7 +132,7 @@ export default {
         @media screen and (max-width: $brakepoint) {
           width: 136rem;
           height: 28rem;
-          background: url("/images/logos/SkillsBooster_logo.svg") center/contain no-repeat;
+          background: url("/images/logos/SkillsBooster_logo_black.svg") center/contain no-repeat;
         }
       }
       &-close {

@@ -63,7 +63,7 @@ export default {
     background: $color_white;
     z-index: 2;
     transition: all $transition_base;
-    transition-delay: 0.3s;
+    transition-delay: 0.2s;
     &--up {
       transform: translateY(-100%);
     }
@@ -86,7 +86,7 @@ export default {
   &__logo {
     width: 255rem;
     height: 56rem;
-    background: url("/images/logos/SkillsBooster_logo.svg") center/contain no-repeat;
+    background: url("/images/logos/SkillsBooster_logo_black.svg") center/contain no-repeat;
     @media screen and (max-width: $brakepoint) {
       width: 136rem;
       height: 28rem;

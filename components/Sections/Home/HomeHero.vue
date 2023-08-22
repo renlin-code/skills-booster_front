@@ -50,7 +50,7 @@ export default {
           element.style.transform = `translateY(${translateValue})`;
         });
       };
-      setParallaxLayer(this.$refs.figure, 0.8);
+      setParallaxLayer(this.$refs.figure, 0.75);
     },
   },
   mounted() {
