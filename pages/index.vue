@@ -1,5 +1,6 @@
 <template>
   <Page>
+    <HomeHero />
     Все знают, что умный телефон, который может сколько угодно раз повторять «привет,
     я Сири!» – это искусственный интеллект. Но что, собственно, это значит? ИИ —
     это машина, которая может обрабатывать информацию, учиться и быть умнее по мере того,
@@ -16,11 +17,13 @@
 
 <script>
 import Page from '~/components/Layout/Page.vue';
+import HomeHero from '~/components/Sections/Home/HomeHero.vue';
 
 export default {
   name: "IndexPage",
   components: {
-    Page
+    Page,
+    HomeHero
   }
 }
 </script>

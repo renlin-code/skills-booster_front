@@ -61,7 +61,9 @@ export default {
     border-bottom: 1px solid $color_gray;
     position: fixed;
     background: $color_white;
+    z-index: 2;
     transition: all $transition_base;
+    transition-delay: 0.3s;
     &--up {
       transform: translateY(-100%);
     }
