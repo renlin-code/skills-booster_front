@@ -20,6 +20,13 @@ body {
   }
 }
 
+.sb-section-title {
+  @include fontStyles($font_2, 42rem, 67rem, 600);
+  @media screen and (max-width: $brakepoint) {
+    @include fontStyles($font_2, 19rem, 30rem, 600);
+  }
+}
+
 .desktop-hidden {
   @media screen and (min-width: $brakepoint) {
     display: none !important;

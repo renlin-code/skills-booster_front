@@ -28,7 +28,7 @@
 
 <script>
 export default {
-  name: "HomeHero",
+  name: "HomeHeroSection",
   methods: {
     typedInit() {
       const element = this.$refs.typingText;
@@ -95,12 +95,12 @@ export default {
   }
   &__title {
     position: relative;
-    @include fontStyles($font_1, 55rem, 88rem, 400);
+    @include fontStyles($font_1, 55rem, 88rem, 400, 1.65rem);
     margin-bottom: 89rem;
     width: 835rem;
     text-align: center;
     @media screen and (max-width: $brakepoint) {
-      @include fontStyles($font_1, 23rem, 37rem, 400);
+      @include fontStyles($font_1, 23rem, 37rem, 400, 0.69rem);
       width: 100%;
       margin-bottom: 14rem;
       padding: 0 19rem;
@@ -138,7 +138,7 @@ export default {
   &__text {
     color: $color_white;
     text-align: center;
-    @include fontStyles($font_3, 20rem, 32rem, 600);
+    @include fontStyles($font_3, 20rem, 32rem, 600, 1rem);
     @media screen and (max-width: $brakepoint) {
       @include fontStyles($font_3, 14rem, 17rem, 500);
     }

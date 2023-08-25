@@ -1,9 +1,11 @@
 <template>
   <footer class="footer">
     <div class="footer__inner sb-container">
-      <div class="footer__logo-wrapper">
-        <div class="footer__icon"></div>
-        <NuxtLink to="/" class="footer__logo"></NuxtLink>
+      <div class="footer__left">
+        <div class="footer__logo-wrapper">
+          <div class="footer__vector"></div>
+          <NuxtLink to="/" class="footer__logo"></NuxtLink>
+        </div>
       </div>
       <nav class="footer__nav">
         <ul class="footer__nav-list">
@@ -38,10 +40,10 @@
         </ul>
         <p class="footer__imgs-links desktop-hidden">
           Все фотографии на сайте взяты с сайта:
-          <a href="https://freepik.com" target="_blank" class="underline-light-gray">freepik.com</a> и <a
-            href="https://unsplash.ru"
-            target="_blank"
-            class="underline-light-gray"
+          <a href="https://freepik.com" target="_blank" class="underline-light-gray"
+            >freepik.com</a
+          >
+          и <a href="https://unsplash.ru" target="_blank" class="underline-light-gray"
             >unsplash.ru</a
           >
         </p>
@@ -49,17 +51,20 @@
       <div class="footer__other-links">
         <p class="footer__imgs-links mobile-hidden">
           Все фотографии на сайте взяты с сайта:
-          <a href="https://freepik.com" target="_blank" class="underline-light-gray">freepik.com</a> и <a
-            href="https://unsplash.ru"
-            target="_blank"
-            class="underline-light-gray"
+          <a href="https://freepik.com" target="_blank" class="underline-light-gray"
+            >freepik.com</a
+          >
+          и <a href="https://unsplash.ru" target="_blank" class="underline-light-gray"
             >unsplash.ru</a
           >
         </p>
         <span class="footer__year">© Skills_Booster {{ new Date().getFullYear() }}</span>
         <span class="footer__developer"
           >Разработка сайта —
-          <a href="https://renlin-code.online?ru" target="_blank" class="underline-primary"
+          <a
+            href="https://renlin-code.online?ru"
+            target="_blank"
+            class="underline-primary"
             >renlin-code.online</a
           ></span
         >
@@ -103,11 +108,9 @@ export default {
 
 <style scoped lang="scss">
 .footer {
-  border-radius: 50rem 50rem 0 0;
   background: $color_black;
   padding-bottom: 50rem;
   @media screen and (max-width: $brakepoint) {
-    border-radius: 30px 30px 0 0;
     padding-bottom: 24rem;
   }
   &__inner {
@@ -122,20 +125,21 @@ export default {
   }
   &__logo-wrapper {
     padding-top: 27rem;
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     align-items: center;
     @media screen and (max-width: $brakepoint) {
+      width: 100%;
       flex-direction: row-reverse;
       padding-top: 15rem;
       justify-content: space-between;
     }
   }
-  &__icon {
+  &__vector {
     width: 102rem;
     height: 91rem;
     transform: translateY(10rem);
-    background: url("/images/others/stars.svg") center/contain no-repeat;
+    background: url("/images/others/stars_white.svg") center/contain no-repeat;
     @media screen and (max-width: $brakepoint) {
       width: 84rem;
       height: 75rem;
@@ -246,6 +250,5 @@ export default {
       color: $color_primary;
     }
   }
-
 }
 </style>

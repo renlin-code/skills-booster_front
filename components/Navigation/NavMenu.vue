@@ -152,7 +152,7 @@ export default {
     &__list {
       display: flex;
       align-items: center;
-      gap: 42rem;
+      gap: 50rem;
       @media screen and (max-width: $brakepoint) {
         flex-direction: column;
         align-items: flex-start;
