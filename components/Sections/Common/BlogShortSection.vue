@@ -46,9 +46,9 @@
         </li>
       </ul>
       <div class="blog-short__button-wrapper">
-        <!-- <NuxtLink to="/blog"> -->
-          <MainButton arrow type="3">Перейти ко всем статьям</MainButton>
-        <!-- </NuxtLink> -->
+        <NuxtLink to="/blog">
+          <MainButton arrow type="1">Перейти ко всем статьям</MainButton>
+        </NuxtLink>
       </div>
     </div>
   </section>
