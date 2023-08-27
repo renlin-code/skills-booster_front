@@ -3,8 +3,22 @@
 @import "./mixins";
 @import "./reset";
 
-//TEXT STYLES
+* {
+  &::-webkit-scrollbar {
+    background: transparent;
+    width: 10rem;
+    &-thumb {
+      background: rgba($color_primary, 0.8);
+      border-radius: 10rem;
+      transition: all $transition_base;
+      &:active {
+        background: rgba($color_primary, 1);
+      }
+    }
+  }
+}
 body {
+  overflow: overlay;
   @include fontStyles($font_3, 20rem, 30rem, 400);
 }
 

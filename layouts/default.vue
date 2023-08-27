@@ -3,6 +3,7 @@
     <HeaderDefault />
     <main>
       <Nuxt />
+      <UpButton class="up" />
     </main>
     <FooterDefault />
   </div>
@@ -12,12 +13,14 @@
 import { mapGetters } from "vuex";
 import HeaderDefault from "~/components/Headers/HeaderDefault.vue";
 import FooterDefault from "~/components/Footers/FooterDefault.vue";
+import UpButton from "~/components/Buttons/UpButton.vue";
 
 export default {
   components: {
     HeaderDefault,
-    FooterDefault
-  },
+    FooterDefault,
+    UpButton
+},
   computed: {
     ...mapGetters(["getScrollFixedValue"]),
   },

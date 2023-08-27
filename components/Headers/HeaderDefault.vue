@@ -32,20 +32,12 @@ export default {
     headerScrollHandler() {
       let lastScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
       window.addEventListener("scroll", () => {
-        const currentScrollPosition =
-          window.pageYOffset || document.documentElement.scrollTop;
-        if (currentScrollPosition > lastScrollPosition) {
-          this.headerUp = true;
-        } else {
-          this.headerUp = false;
-        }
+        const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+
+        this.headerUp = currentScrollPosition > lastScrollPosition;
         lastScrollPosition = currentScrollPosition;
 
-        if (lastScrollPosition > 0) {
-          this.headerColored = true;
-        } else {
-          this.headerColored = false;
-        }
+        this.headerColored = lastScrollPosition > 0;
       });
     },
   },
