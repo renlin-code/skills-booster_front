@@ -61,19 +61,37 @@ export default {
     z-index: -1;
     top: -100rem;
     right: -200rem;
-    animation: bg 10s ease-in-out infinite;
+    animation: bg 20s ease-in-out infinite;
     @keyframes bg {
+      0%, 100% {
+        transform: translate(0rem, 0rem) rotate(0) scale(1) skew(10deg, 2deg);
+      }
+      10% {
+        transform: rotate(6deg) scale(1.2) skew(13deg, 12deg);
+      }
       20% {
-        transform: rotate(20deg) scale(1.2);
+        transform: translate(1rem, 2rem) rotate(-4deg) scale(1.2) skew(-2deg, 3deg);
+      }
+      30% {
+        transform: translate(3rem, 4rem) rotate(0) scale(1.3) skew(-14deg, 1deg);
       }
       40% {
-        transform: translate(3rem, 4rem) rotate(35deg) scale(1.3);
+        transform: translate(0rem, 0rem) rotate(2deg) scale(1.1) skew(-15deg, -2deg);
+      }
+      50% {
+        transform: rotate(6deg) scale(1.2) skew(13deg, 12deg);
       }
       60% {
-        transform: translate(1rem, 2rem) rotate(30deg) scale(1.2);
+        transform: translate(1rem, 2rem) rotate(-4deg) scale(1.2) skew(-2deg, 3deg);
+      }
+      70% {
+        transform: translate(0rem, 0rem) rotate(0) scale(1) skew(10deg, 2deg);
       }
       80% {
-        transform: translate(0rem, 0rem) rotate(25deg) scale(1.1);
+        transform: translate(0rem, 0rem) rotate(2deg) scale(1.1) skew(-15deg, -2deg);
+      }
+      90% {
+        transform: translate(3rem, 4rem) rotate(0) scale(1.3) skew(-14deg, 1deg);
       }
     }
     @media screen and (max-width: $brakepoint) {
