@@ -96,8 +96,8 @@ export default {
     }
     @media screen and (max-width: $brakepoint) {
       top: auto;
-      bottom: -190rem;
-      right: -190rem;
+      bottom: -194rem;
+      right: -206rem;
     }
   }
   &__content {

@@ -27,8 +27,14 @@
 </template>
 
 <script>
+import mediaQueryMixin from '~/mixins/mediaQueryMixin';
+
 export default {
   name: "HomeHeroSection",
+  mixins: [mediaQueryMixin],
+  data: () => ({
+    parallaxListener: null
+  }),
   methods: {
     typedInit() {
       const element = this.$refs.typingText;
@@ -44,20 +50,29 @@ export default {
       const setParallaxLayer = (element, multiplier) => {
         multiplier = 1 - multiplier;
         const doc = document;
-        window.addEventListener("scroll", () => {
+
+        this.parallaxListener = () => {
           const fromTop = doc.documentElement.scrollTop || doc.body.scrollTop;
           const translateValue = (multiplier * fromTop) + 'rem';
           element.style.transform = `translateY(${translateValue})`;
-        });
+        }
+        window.addEventListener("scroll", this.parallaxListener);
       };
       setParallaxLayer(this.$refs.figure, 0.75);
     },
+    parallaxDestroy() {
+      window.removeEventListener('scroll', this.parallaxListener);
+    }
   },
   mounted() {
     this.typedInit();
-    if (document.documentElement.clientWidth < 650) {
-      this.parallaxInit();
-    }
+    this.mediaQueryHook(() => {
+      if (this.isMobile) {
+        this.parallaxInit();
+      } else {
+        this.parallaxDestroy();
+      }
+    });
   },
 };
 </script>

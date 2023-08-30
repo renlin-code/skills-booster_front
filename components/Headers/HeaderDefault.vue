@@ -50,7 +50,7 @@ export default {
 .header-default {
   &__header {
     width: 100%;
-    border-bottom: 1px solid $color_gray;
+    border-bottom: 1px solid rgba($color_light-gray, 0.5);
     position: fixed;
     background: $color_white;
     z-index: 2;

@@ -6,9 +6,9 @@
       <div class="article-card__top-bg"></div>
       <div class="article-card__top-content">
         <div class="article-card__cat">Программирование</div>
-        <p class="article-card__title">
+        <h6 class="article-card__title">
           Топ 10 самых восстребованных языков программирования
-        </p>
+        </h6>
       </div>
     </div>
     <div class="article-card__bottom">
