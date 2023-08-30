@@ -1,9 +1,10 @@
 <template>
-  <section class="blog-short">
+  <section class="blog-short sb-noselect">
     <div class="blog-short__inner sb-container">
       <div class="blog-short__header">
         <h2 class="blog-short__title sb-section-title">
-          <span class="mobile-hidden">&nbsp &nbsp &nbsp &nbsp &nbsp</span>Делимся опытом и советами в блоге
+          <span class="mobile-hidden">&nbsp &nbsp &nbsp &nbsp &nbsp</span>Делимся опытом
+          и советами в блоге
         </h2>
         <div class="blog-short__vector mobile-hidden"></div>
       </div>
@@ -15,34 +16,22 @@
       </div>
       <ul class="blog-short__articles">
         <li class="blog-short__articles-element">
-          <NuxtLink to="/">
-            <ArticleCard />
-          </NuxtLink>
+          <ArticleCard link-to="/" />
         </li>
         <li class="blog-short__articles-element">
-          <NuxtLink to="/">
-            <ArticleCard minified />
-          </NuxtLink>
+          <ArticleCard link-to="/" minified />
         </li>
         <li class="blog-short__articles-element">
-          <NuxtLink to="/">
-            <ArticleCard minified />
-          </NuxtLink>
+          <ArticleCard link-to="/" minified />
         </li>
         <li class="blog-short__articles-element">
-          <NuxtLink to="/">
-            <ArticleCard minified />
-          </NuxtLink>
+          <ArticleCard link-to="/" minified />
         </li>
         <li class="blog-short__articles-element">
-          <NuxtLink to="/">
-            <ArticleCard minified />
-          </NuxtLink>
+          <ArticleCard link-to="/" minified />
         </li>
         <li class="blog-short__articles-element">
-          <NuxtLink to="/">
-            <ArticleCard />
-          </NuxtLink>
+          <ArticleCard link-to="/" />
         </li>
       </ul>
       <div class="blog-short__button-wrapper">
@@ -55,10 +44,10 @@
 </template>
 
 <script>
-import Chips from '~/components/Others/Chips';
-import TextArrowButton from '~/components/Buttons/TextArrowButton';
-import ArticleCard from '~/components/Others/ArticleCard';
-import MainButton from '~/components/Buttons/MainButton.vue';
+import Chips from "~/components/Others/Chips";
+import TextArrowButton from "~/components/Buttons/TextArrowButton";
+import ArticleCard from "~/components/Others/ArticleCard";
+import MainButton from "~/components/Buttons/MainButton.vue";
 
 export default {
   name: "BlogShortSection",
@@ -66,8 +55,8 @@ export default {
     Chips,
     TextArrowButton,
     ArticleCard,
-    MainButton
-}
+    MainButton,
+  },
 };
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <section class="home-hero">
+  <section class="home-hero sb-noselect">
     <div class="home-hero__inner sb-container">
       <div class="home-hero__grid">
         <div class="home-hero__texts">

@@ -1,5 +1,5 @@
 <template>
-  <section class="schools-sales-short">
+  <section class="schools-sales-short sb-noselect">
     <div class="schools-sales-short__inner sb-container">
       <div class="schools-sales-short__top">
         <h2 class="schools-sales-short__title sb-section-title">Акции школ</h2>
@@ -8,38 +8,49 @@
         </NuxtLink>
       </div>
       <div class="schools-sales-short__sales">
-        <ul class="schools-sales-short__sales-cards">
-          <li class="schools-sales-short__sales-cards-card">
-            <NuxtLink to="/">
-              <SaleCard />
-            </NuxtLink>
-          </li>
-          <li class="schools-sales-short__sales-cards-card">
-            <NuxtLink to="/">
-              <SaleCard />
-            </NuxtLink>
-          </li>
-          <li class="schools-sales-short__sales-cards-card">
-            <NuxtLink to="/">
-              <SaleCard />
-            </NuxtLink>
-          </li>
-        </ul>
+        <Slider desktop-off>
+          <Slide>
+            <div class="schools-sales-short__sales-card">
+              <SaleCard link-to="/" />
+            </div>
+          </Slide>
+          <Slide>
+            <div class="schools-sales-short__sales-card">
+              <SaleCard link-to="/" black />
+            </div>
+          </Slide>
+          <Slide>
+            <div class="schools-sales-short__sales-card">
+              <SaleCard link-to="/" />
+            </div>
+          </Slide>
+        </Slider>
+      </div>
+      <div class="sb-container desktop-hidden">
+        <NuxtLink to="/blog">
+          <MainButton arrow type="3">Все акции</MainButton>
+        </NuxtLink>
       </div>
     </div>
   </section>
 </template>
 
 <script>
-import TextArrowButton from '~/components/Buttons/TextArrowButton.vue';
-import SaleCard from '~/components/Others/SaleCard.vue';
+import TextArrowButton from "~/components/Buttons/TextArrowButton.vue";
+import SaleCard from "~/components/Others/SaleCard.vue";
+import Slider from "~/components/Slider/Slider.vue";
+import Slide from "~/components/Slider/Slide.vue";
+import MainButton from "~/components/Buttons/MainButton.vue";
 
 export default {
-    name: "SchoolsSalesShortSection",
-    components: {
-      TextArrowButton,
-      SaleCard
-    }
+  name: "SchoolsSalesShortSection",
+  components: {
+    TextArrowButton,
+    SaleCard,
+    Slider,
+    Slide,
+    MainButton,
+  },
 };
 </script>
 
@@ -59,12 +70,17 @@ export default {
     justify-content: space-between;
     align-items: flex-end;
     margin-bottom: 50rem;
+    @media screen and (max-width: $brakepoint) {
+      padding: 0 15rem;
+      margin-bottom: 24rem;
+    }
   }
   &__sales {
-    &-cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20rem;
+    &-card {
+      height: 100%;
+    }
+    @media screen and (max-width: $brakepoint) {
+      margin-bottom: 12rem;
     }
   }
 }

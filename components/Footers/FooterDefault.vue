@@ -1,10 +1,10 @@
 <template>
-  <footer class="footer">
+  <footer class="footer sb-noselect">
     <div class="footer__inner sb-container">
       <div class="footer__left">
         <div class="footer__logo-wrapper">
           <div class="footer__vector"></div>
-          <NuxtLink to="/" class="footer__logo"></NuxtLink>
+          <div class="footer__logo"></div>
         </div>
       </div>
       <nav class="footer__nav">

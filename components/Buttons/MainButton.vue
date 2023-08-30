@@ -59,7 +59,7 @@ export default {
   @include fontStyles($font_3, 22rem, 26rem, 500);
   transition: all $transition_base;
   @media screen and (max-width: $brakepoint) {
-    padding: 16.5rem;
+    padding: 13rem;
     @include fontStyles($font_3, 16rem, 19rem, 500);
   }
   &__arrow {

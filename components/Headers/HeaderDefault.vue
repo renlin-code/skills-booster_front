@@ -1,5 +1,5 @@
 <template>
-  <header class="header-default">
+  <header class="header-default sb-noselect">
     <div
       class="header-default__header"
       :class="{

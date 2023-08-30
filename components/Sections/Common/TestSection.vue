@@ -1,5 +1,5 @@
 <template>
-  <section class="test-section">
+  <section class="test-section sb-noselect">
     <div class="test-section__inner sb-container">
       <div class="test-section__bg"></div>
       <div class="test-section__content">
@@ -64,34 +64,34 @@ export default {
     animation: bg 20s ease-in-out infinite;
     @keyframes bg {
       0%, 100% {
-        transform: translate(0rem, 0rem) rotate(0) scale(1) skew(10deg, 2deg);
+        transform: translate(0rem, 0rem) rotate(2deg) scale(1) skew(10deg, 2deg);
       }
-      10% {
-        transform: rotate(6deg) scale(1.2) skew(13deg, 12deg);
+      5% {
+        transform: rotate(4deg) scale(1.2) skew(13deg, 12deg);
       }
       20% {
-        transform: translate(1rem, 2rem) rotate(-4deg) scale(1.2) skew(-2deg, 3deg);
+        transform: translate(1rem, 2rem) rotate(6deg) scale(1.2) skew(-2deg, 3deg);
       }
-      30% {
-        transform: translate(3rem, 4rem) rotate(0) scale(1.3) skew(-14deg, 1deg);
+      24% {
+        transform: translate(3rem, 4rem) rotate(8deg) scale(1.3) skew(-14deg, 1deg);
       }
       40% {
-        transform: translate(0rem, 0rem) rotate(2deg) scale(1.1) skew(-15deg, -2deg);
+        transform: translate(0rem, 0rem) rotate(6deg) scale(1.1) skew(15deg, -2deg);
       }
-      50% {
-        transform: rotate(6deg) scale(1.2) skew(13deg, 12deg);
+      52% {
+        transform: rotate(4deg) scale(1.2) skew(13deg, 12deg);
       }
-      60% {
-        transform: translate(1rem, 2rem) rotate(-4deg) scale(1.2) skew(-2deg, 3deg);
+      57% {
+        transform: translate(1rem, 2rem) rotate(2deg) scale(1.2) skew(-2deg, 3deg);
       }
-      70% {
-        transform: translate(0rem, 0rem) rotate(0) scale(1) skew(10deg, 2deg);
+      63% {
+        transform: translate(0rem, 0rem) rotate(4deg) scale(1) skew(10deg, 2deg);
       }
-      80% {
-        transform: translate(0rem, 0rem) rotate(2deg) scale(1.1) skew(-15deg, -2deg);
+      68% {
+        transform: translate(0rem, 0rem) rotate(-2deg) scale(1.1) skew(-15deg, -2deg);
       }
-      90% {
-        transform: translate(3rem, 4rem) rotate(0) scale(1.3) skew(-14deg, 1deg);
+      92% {
+        transform: translate(3rem, 4rem) rotate(-7deg) scale(1.3) skew(-14deg, 1deg);
       }
     }
     @media screen and (max-width: $brakepoint) {

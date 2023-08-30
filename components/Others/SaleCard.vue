@@ -1,7 +1,8 @@
 <template>
-  <div class="sale-card sale-card--black">
+  <div class="sale-card" :class="{ 'sale-card--black': black }">
     <div class="sale-card__top">
-      <div class="sale-card__top-bg"></div>
+      <NuxtLink class="sale-card__top-link-layer mobile-hidden" :to="linkTo"></NuxtLink>
+      <div class="sale-card__top-bg mobile-hidden"></div>
       <div class="sale-card__top-content">
         <div class="sale-card__logo-name">
           <img src="/images/skillfactory.png" alt="" />
@@ -27,9 +28,9 @@
         Гарантия трудоустройства — или вернут деньги! Запишитесь на программу и заберите
         бонус на 146 000 ₽
       </p>
-      <div class="sale-card__bottom-button">
+      <NuxtLink class="sale-card__bottom-button" :to="linkTo">
         <MainButton type="1" arrow>На страницу акции</MainButton>
-      </div>
+      </NuxtLink>
     </div>
   </div>
 </template>
@@ -40,6 +41,15 @@ import MainButton from "../Buttons/MainButton.vue";
 export default {
   name: "sale-card",
   components: { MainButton },
+  props: {
+    black: {
+      type: Boolean,
+      default: false,
+    },
+    linkTo: {
+      type: String,
+    },
+  },
 };
 </script>
 
@@ -48,6 +58,10 @@ export default {
   position: relative;
   padding-top: 130rem;
   height: 100%;
+  @media screen and (max-width: $brakepoint) {
+    width: 270rem;
+    padding-top: 80rem;
+  }
   &__top {
     width: 100%;
     border-radius: 40rem;
@@ -56,6 +70,19 @@ export default {
     overflow: hidden;
     position: absolute;
     top: 0;
+    @media screen and (max-width: $brakepoint) {
+      border-radius: 16rem;
+      padding: 12rem 16rem;
+    }
+    &-link-layer {
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
     &-bg {
       position: absolute;
       right: 0;
@@ -67,20 +94,39 @@ export default {
       transform-origin: right bottom;
       transition: all 0.4s ease-in-out;
     }
+    &:hover {
+      .sale-card__top {
+        &-bg {
+          width: 150%;
+          height: 150%;
+        }
+      }
+    }
   }
   &__logo-name {
     display: flex;
     align-items: center;
     gap: 30rem;
     margin-bottom: 20rem;
+    @media screen and (max-width: $brakepoint) {
+      gap: 16rem;
+      margin-bottom: 16rem;
+    }
     img {
       width: 60rem;
       height: 60rem;
       object-fit: cover;
+      @media screen and (max-width: $brakepoint) {
+        width: 40rem;
+        height: 40rem;
+      }
     }
     span {
       color: $color_white;
       @include fontStyles($font_2, 22rem, 33rem, 700, 1.1rem);
+      @media screen and (max-width: $brakepoint) {
+        @include fontStyles($font_2, 14rem, 21rem, 400);
+      }
     }
   }
   &__average-dates {
@@ -90,25 +136,38 @@ export default {
   }
   &__average {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 5rem;
     span {
       color: $color_white;
       @include fontStyles($font_3, 20rem, 32rem, 600, 1.1rem);
+      @media screen and (max-width: $brakepoint) {
+        @include fontStyles($font_3, 13rem, 19.5rem, 400);
+      }
     }
     &-star {
       width: 30rem;
       height: 30rem;
       background: url("/images/icons/star.svg") center/contain no-repeat;
+      @media screen and (max-width: $brakepoint) {
+        width: 20rem;
+        height: 20rem;
+      }
     }
   }
   &__dates {
     display: flex;
     align-items: center;
     gap: 20rem;
+    @media screen and (max-width: $brakepoint) {
+      gap: 13rem;
+    }
     span {
       color: $color_white;
       @include fontStyles($font_3, 20rem, 32rem, 600, 1.1rem);
+      @media screen and (max-width: $brakepoint) {
+        @include fontStyles($font_3, 13rem, 19.5rem, 400);
+      }
     }
   }
   &__bottom {
@@ -118,24 +177,26 @@ export default {
     height: 100%;
     display: grid;
     grid-template-rows: auto 1fr auto;
+    @media screen and (max-width: $brakepoint) {
+      padding: 32rem 16rem 12rem;
+      border-radius: 16rem;
+    }
     &-title {
       @include fontStyles($font_1, 20rem, 32rem, 400, 2rem);
       text-align: center;
       margin-bottom: 16rem;
+      @media screen and (max-width: $brakepoint) {
+        @include fontStyles($font_1, 13rem, 20.8rem, 400, 1.3rem);
+        margin-bottom: 6rem;
+      }
     }
     &-text {
       @include fontStyles($font_3, 18rem, 29rem, 400, 1rem);
       text-align: center;
       margin-bottom: 16rem;
-    }
-  }
-  &:hover {
-    .sale-card {
-      &__top {
-        &-bg {
-          width: 150%;
-          height: 150%;
-        }
+      @media screen and (max-width: $brakepoint) {
+        @include fontStyles($font_3, 13rem, 19.5rem, 400);
+        margin-bottom: 6rem;
       }
     }
   }

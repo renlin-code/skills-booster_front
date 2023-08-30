@@ -1,9 +1,11 @@
 <template>
-  <div class="article-card"
-    :class="{'article-card--minified' : minified}"
-  >
+  <div class="article-card" :class="{ 'article-card--minified': minified }">
     <div class="article-card__top">
-      <div class="article-card__top-bg"></div>
+      <NuxtLink
+        class="article-card__top-link-layer mobile-hidden"
+        :to="linkTo"
+      ></NuxtLink>
+      <div class="article-card__top-bg mobile-hidden"></div>
       <div class="article-card__top-content">
         <div class="article-card__cat">Программирование</div>
         <h6 class="article-card__title">
@@ -16,21 +18,23 @@
         Привет, друзья! Сегодня мы поговорим о том, как искусственный интеллект помогает
         нам оставаться
       </p>
-      <div class="article-card__link">
-        ЧИТАТЬ ПОЛНОСТЬЮ
-        <svg
-          width="51rem"
-          height="12rem"
-          viewBox="0 0 51 12"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M50.5303 6.53033C50.8232 6.23744 50.8232 5.76257 50.5303 5.46967L45.7574 0.696703C45.4645 0.40381 44.9896 0.40381 44.6967 0.696703C44.4038 0.989596 44.4038 1.46447 44.6967 1.75736L48.9393 6L44.6967 10.2426C44.4038 10.5355 44.4038 11.0104 44.6967 11.3033C44.9896 11.5962 45.4645 11.5962 45.7574 11.3033L50.5303 6.53033ZM-6.55671e-08 6.75L50 6.75L50 5.25L6.55671e-08 5.25L-6.55671e-08 6.75Z"
-            fill="#F26F6F"
-          />
-        </svg>
-      </div>
+      <NuxtLink :to="linkTo">
+        <div class="article-card__link">
+          ЧИТАТЬ ПОЛНОСТЬЮ
+          <svg
+            width="51rem"
+            height="12rem"
+            viewBox="0 0 51 12"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M50.5303 6.53033C50.8232 6.23744 50.8232 5.76257 50.5303 5.46967L45.7574 0.696703C45.4645 0.40381 44.9896 0.40381 44.6967 0.696703C44.4038 0.989596 44.4038 1.46447 44.6967 1.75736L48.9393 6L44.6967 10.2426C44.4038 10.5355 44.4038 11.0104 44.6967 11.3033C44.9896 11.5962 45.4645 11.5962 45.7574 11.3033L50.5303 6.53033ZM-6.55671e-08 6.75L50 6.75L50 5.25L6.55671e-08 5.25L-6.55671e-08 6.75Z"
+              fill="#F26F6F"
+            />
+          </svg>
+        </div>
+      </NuxtLink>
     </div>
   </div>
 </template>
@@ -41,9 +45,12 @@ export default {
   props: {
     minified: {
       type: Boolean,
-      default: false
+      default: false,
     },
-  }
+    linkTo: {
+      type: String,
+    },
+  },
 };
 </script>
 
@@ -52,7 +59,6 @@ export default {
   width: 770rem;
   border-radius: 30rem;
   border: 1rem solid $color_gray;
-  cursor: pointer;
   @media screen and (max-width: $brakepoint) {
     width: 100%;
   }
@@ -62,6 +68,15 @@ export default {
     background-color: $color_primary;
     transform: scale(1.005);
     overflow: hidden;
+    &-link-layer {
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
     &-content {
       background-image: url("/images/7.png");
       background-position: bottom right;
@@ -84,6 +99,14 @@ export default {
       z-index: -1;
       transform-origin: right bottom;
       transition: all 0.4s ease-in-out;
+    }
+    &:hover {
+      .article-card__top {
+        &-bg {
+          width: 150%;
+          height: 150%;
+        }
+      }
     }
   }
   &__cat {
@@ -108,7 +131,6 @@ export default {
       max-width: 100%;
       @include fontStyles($font_1, 13rem, 20rem, 400, 2rem);
     }
-
   }
   &__bottom {
     padding: 20rem 30rem;
@@ -142,16 +164,6 @@ export default {
       gap: 19rem;
       svg path {
         fill: $color_black;
-      }
-    }
-  }
-  &:hover {
-    .article-card {
-      &__top {
-        &-bg {
-          width: 150%;
-          height: 150%;
-        }
       }
     }
   }
