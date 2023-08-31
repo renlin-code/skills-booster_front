@@ -1,7 +1,7 @@
 <template>
   <Page>
     <HomeHeroSection />
-    <BlogShortSection />
+    <BlogSection />
     <TestSection />
     <SchoolsSalesShortSection />
   </Page>
@@ -10,7 +10,7 @@
 <script>
 import Page from "~/components/Layout/Page.vue";
 import HomeHeroSection from "~/components/Sections/Home/HomeHeroSection.vue";
-import BlogShortSection from "~/components/Sections/Common/BlogShortSection.vue";
+import BlogSection from "~/components/Sections/Blog/BlogSection.vue";
 import TestSection from "~/components/Sections/Common/TestSection.vue";
 import SchoolsSalesShortSection from "~/components/Sections/Common/SchoolsSalesShortSection.vue";
 
@@ -19,7 +19,7 @@ export default {
   components: {
     Page,
     HomeHeroSection,
-    BlogShortSection,
+    BlogSection,
     TestSection,
     SchoolsSalesShortSection
 },

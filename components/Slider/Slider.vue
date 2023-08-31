@@ -38,7 +38,6 @@ export default {
   },
   mounted() {
     this.mediaQueryHook(() => {
-      console.log(this.mobileOff, this.desktopOff, this.isMobile);
       if ((this.mobileOff && this.isMobile) || (this.desktopOff && !this.isMobile)) {
         this.sliderDestroy();
       } else {
