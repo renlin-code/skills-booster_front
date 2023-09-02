@@ -81,7 +81,7 @@ export default {
       background-image: url("/images/7.png");
       background-position: bottom right;
       background-repeat: no-repeat;
-      background-size: 232rem 182rem;
+      background-size: 232rem auto;
       padding: 25rem 30rem;
       @media screen and (max-width: $brakepoint) {
         padding: 16rem;

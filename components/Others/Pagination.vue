@@ -144,6 +144,10 @@ export default {
       place-content: center;
       border: 1rem solid $color_gray;
       color: $color_gray;
+      @include fontStyles($font_2, 32rem, 32rem, 300);
+      @media screen and (max-width: $brakepoint) {
+        @include fontStyles($font_2, 20rem, 20rem, 300);
+      }
       transition: all $transition_base;
       &:disabled {
         border-color: $color_light-gray !important;

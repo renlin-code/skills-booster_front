@@ -1,5 +1,6 @@
 <template>
   <div class="page">
+    <BreadCrumbs class="page__breadcrumbs sb-container" />
     <div class="page__sections">
       <slot />
     </div>
@@ -7,17 +8,26 @@
 </template>
 
 <script>
+import BreadCrumbs from '../Others/BreadCrumbs.vue';
+
 export default {
-  name: "Page",
-  mounted() {
-    const routePath = this.$route.name;
-    this.$nuxt.$emit("pagePathName", routePath);
-  },
+    name: "Page",
+    mounted() {
+        const routePath = this.$route.name;
+        this.$nuxt.$emit("pagePathName", routePath);
+    },
+    components: { BreadCrumbs }
 };
 </script>
 
 <style scoped lang="scss">
 .page {
+  &__breadcrumbs {
+    margin-top: 20rem;
+    @media screen and (max-width: $brakepoint) {
+      margin-top: 12rem;
+    }
+  }
   &__sections {
     display: flex;
     flex-direction: column;
@@ -25,7 +35,7 @@ export default {
     margin: 40rem 0 80rem;
     @media screen and (max-width: $brakepoint) {
       gap: 40rem;
-      margin: 30rem 0 40rem;
+      margin: 24rem 0 40rem;
     }
   }
 }
