@@ -1,6 +1,10 @@
 <template>
   <div class="page">
-    <BreadCrumbs class="page__breadcrumbs sb-container" />
+    <BreadCrumbs class="page__breadcrumbs sb-container"
+      v-if="breadcrumbsPageName && breadcrumbsRoutes"
+      :routes="breadcrumbsRoutes"
+      :pageName="breadcrumbsPageName"
+    />
     <div class="page__sections">
       <slot />
     </div>
@@ -12,9 +16,20 @@ import BreadCrumbs from '../Others/BreadCrumbs.vue';
 
 export default {
     name: "Page",
+    props: {
+      page: {
+        type: Object
+      },
+      breadcrumbsRoutes: {
+        type: Array
+      },
+      breadcrumbsPageName: {
+        type: String
+      }
+    },
     mounted() {
         const routePath = this.$route.name;
-        this.$nuxt.$emit("pagePathName", routePath);
+        this.$nuxt.$emit("page-path-name", routePath);
     },
     components: { BreadCrumbs }
 };

@@ -5,7 +5,7 @@
         <div class="home-hero__texts">
           <h1 class="home-hero__title">
             <span class="home-hero__title-spaceholder"
-              >РАССКАЗЫВАЕМ ОБ ИНТЕРНЕТ-ПРОФЕССИЯХ И КУРСАХ</span
+              >{{ content.title }}</span
             >
             <span class="home-hero__title-typing">
               <span ref="typingText"></span>
@@ -13,12 +13,17 @@
           </h1>
           <div class="home-hero__bottom">
             <p class="home-hero__text">
-              Полезные статьи, советы, отзывы о школах и многое другое
+              {{ content.text }}
             </p>
           </div>
         </div>
         <figure ref="figure" class="home-hero__fig">
-          <img src="/images/Frame 91.png" alt="" />
+          <img
+            v-for="(image, index) in content.images"
+            :src="image.image"
+            alt=""
+            :class="{ active: currImgIndex === index }"
+          />
         </figure>
         <div class="home-hero__fig-spaceholder desktop-hidden"></div>
       </div>
@@ -27,25 +32,41 @@
 </template>
 
 <script>
-import mediaQueryMixin from '~/mixins/mediaQueryMixin';
+import mediaQueryMixin from "~/mixins/mediaQueryMixin";
 
 export default {
   name: "HomeHeroSection",
   mixins: [mediaQueryMixin],
+  props: {
+    content: {
+      type: Object
+    }
+  },
   data: () => ({
-    parallaxListener: null
+    parallaxListener: null,
+    currImgIndex: 0,
   }),
   methods: {
     typedInit() {
       const element = this.$refs.typingText;
 
       const options = {
-        strings: ["РАССКАЗЫВАЕМ ОБ ИНТЕРНЕТ-ПРОФЕССИЯХ И КУРСАХ"],
+        strings: [this.content.title],
         typeSpeed: 50,
       };
 
       const typed = new this.$typed(element, options);
     },
+
+    galleryInit() {
+      if (this.content.images.length > 0) {
+        setInterval(() => {
+          this.currImgIndex =
+            this.currImgIndex < this.content.images.length - 1 ? this.currImgIndex + 1 : 0;
+        }, 6000);
+      }
+    },
+
     parallaxInit() {
       const setParallaxLayer = (element, multiplier) => {
         multiplier = 1 - multiplier;
@@ -53,16 +74,16 @@ export default {
 
         this.parallaxListener = () => {
           const fromTop = doc.documentElement.scrollTop || doc.body.scrollTop;
-          const translateValue = (multiplier * fromTop) + 'rem';
+          const translateValue = multiplier * fromTop + "rem";
           element.style.transform = `translateY(${translateValue})`;
-        }
+        };
         window.addEventListener("scroll", this.parallaxListener);
       };
       setParallaxLayer(this.$refs.figure, 0.75);
     },
     parallaxDestroy() {
-      window.removeEventListener('scroll', this.parallaxListener);
-    }
+      window.removeEventListener("scroll", this.parallaxListener);
+    },
   },
   mounted() {
     this.typedInit();
@@ -72,6 +93,7 @@ export default {
       } else {
         this.parallaxDestroy();
       }
+      this.galleryInit();
     });
   },
 };
@@ -114,6 +136,7 @@ export default {
     margin-bottom: 89rem;
     width: 835rem;
     text-align: center;
+    text-transform: uppercase;
     @media screen and (max-width: $brakepoint) {
       @include fontStyles($font_1, 23rem, 37rem, 400, 0.69rem);
       width: 100%;
@@ -162,7 +185,9 @@ export default {
     display: flex;
     border-radius: 50rem;
     overflow: hidden;
+    position: relative;
     @media screen and (max-width: $brakepoint) {
+      width: 100%;
       border-radius: 20rem 20rem 0 0;
       height: 320rem;
       position: absolute;
@@ -170,8 +195,16 @@ export default {
       z-index: -1;
     }
     img {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       object-fit: cover;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      &.active {
+        opacity: 1;
+      }
     }
     &-spaceholder {
       @media screen and (max-width: $brakepoint) {

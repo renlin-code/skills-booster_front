@@ -1,6 +1,12 @@
 <template>
   <div class="search-input">
-    <input type="text" class="search-input__input" :placeholder="placeholder" />
+    <input
+      type="text"
+      class="search-input__input"
+      :placeholder="placeholder"
+      :value="value"
+      @input="$emit('input', $event.target.value)"
+    />
     <button class="search-input__button">
       <svg
         width="100%"
@@ -26,6 +32,9 @@ export default {
   props: {
     placeholder: {
       type: String,
+    },
+    value: {
+      type: String
     },
   },
 };

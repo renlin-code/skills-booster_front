@@ -99,7 +99,7 @@ export default {
   }),
   created() {
     this.$nuxt.$on(
-      "pagePathName",
+      "page-path-name",
       (pagePathName) => (this.selectedItemRoute = `/${pagePathName}`)
     );
   },

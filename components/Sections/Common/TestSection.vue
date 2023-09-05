@@ -4,23 +4,48 @@
       <div class="test-section__bg"></div>
       <div class="test-section__content">
         <div class="test-section__left">
-          <h2 class="test-section__title">Пройдите тест на профориентацию</h2>
+          <h2 class="test-section__title">{{ content.title }}</h2>
           <div class="test-section__button-wrapper">
-            <a href="#">
-              <MainButton type="2">Пройти тест</MainButton>
+            <a :href="content.link_url" target="_blank">
+              <MainButton type="2">{{ content.link_text }}</MainButton>
             </a>
           </div>
         </div>
         <div class="test-section__right">
           <figure class="test-section__fig">
-            <img src="/images/Picture.png" alt="" />
+            <img :src="content.image" alt="" />
           </figure>
           <ul class="test-section__words">
-            <li class="test-section__words-word">Кто ты?</li>
-            <li class="test-section__words-word">Маркетолог?</li>
-            <li class="test-section__words-word">Дизайнер?</li>
-            <li class="test-section__words-word">Менеджер?</li>
-            <li class="test-section__words-word">Программист?</li>
+            <li
+              v-if="content.red_word"
+              class="test-section__words-word test-section__words-word--red"
+            >
+              {{ content.red_word }}
+            </li>
+            <li
+              v-if="content.white_words[0].word"
+              class="test-section__words-word test-section__words-word--1"
+            >
+              {{ content.white_words[0].word }}
+            </li>
+            <li
+              v-if="content.white_words[1].word"
+              class="test-section__words-word test-section__words-word--2"
+            >
+              {{ content.white_words[1].word }}
+            </li>
+            <li
+              v-if="content.white_words[2].word"
+              class="test-section__words-word test-section__words-word--3"
+            >
+              {{ content.white_words[2].word }}
+            </li>
+            <li
+              v-if="content.white_words[3].word"
+              class="test-section__words-word test-section__words-word--4"
+            >
+              {{ content.white_words[3].word }}
+            </li>
           </ul>
         </div>
       </div>
@@ -29,12 +54,19 @@
 </template>
 
 <script>
+import mediaQueryMixin from "~/mixins/mediaQueryMixin";
 import MainButton from "~/components/Buttons/MainButton.vue";
 
 export default {
   name: "TestSection",
+  mixins: [mediaQueryMixin],
   components: {
     MainButton,
+  },
+  props: {
+    content: {
+      type: Object,
+    },
   },
 };
 </script>
@@ -63,7 +95,8 @@ export default {
     right: -200rem;
     animation: bg 20s ease-in-out infinite;
     @keyframes bg {
-      0%, 100% {
+      0%,
+      100% {
         transform: translate(0rem, 0rem) rotate(2deg) scale(1) skew(10deg, 2deg);
       }
       5% {
@@ -115,6 +148,7 @@ export default {
     color: $color_white;
     @include fontStyles($font_1, 32rem, 51rem, 400, 3.2rem);
     margin-bottom: 14rem;
+    text-transform: uppercase;
     @media screen and (max-width: $brakepoint) {
       @include fontStyles($font_1, 18rem, 29rem, 400, 1.8rem);
       text-align: center;
@@ -185,7 +219,7 @@ export default {
         padding: 6rem 20rem 4rem;
         top: auto !important;
       }
-      &:nth-child(1) {
+      &--red {
         @include fontStyles($font_1, 20rem, 32rem, 400, 2rem);
         padding: 10rem 20rem 6rem;
         background: $color_primary;
@@ -200,32 +234,7 @@ export default {
           right: 15rem;
         }
       }
-      &:nth-child(2) {
-        top: 78rem;
-        right: 65rem;
-        @media screen and (max-width: $brakepoint) {
-          left: 9rem;
-          bottom: 35rem;
-        }
-      }
-      &:nth-child(3) {
-        top: 140rem;
-        right: 107rem;
-        @media screen and (max-width: $brakepoint) {
-          left: 9rem;
-          bottom: 137rem;
-        }
-      }
-      &:nth-child(4) {
-        top: 119rem;
-        right: auto;
-        left: -108rem;
-        @media screen and (max-width: $brakepoint) {
-          left: 46rem;
-          bottom: 208rem;
-        }
-      }
-      &:nth-child(5) {
+      &--1 {
         top: 49rem;
         right: auto;
         left: -143rem;
@@ -233,6 +242,31 @@ export default {
           left: auto;
           right: 17rem;
           bottom: 257rem;
+        }
+      }
+      &--2 {
+        top: 78rem;
+        right: 65rem;
+        @media screen and (max-width: $brakepoint) {
+          left: 9rem;
+          bottom: 35rem;
+        }
+      }
+      &--4 {
+        top: 140rem;
+        right: 107rem;
+        @media screen and (max-width: $brakepoint) {
+          left: 9rem;
+          bottom: 137rem;
+        }
+      }
+      &--3 {
+        top: 119rem;
+        right: auto;
+        left: -108rem;
+        @media screen and (max-width: $brakepoint) {
+          left: 46rem;
+          bottom: 208rem;
         }
       }
     }

@@ -1,7 +1,7 @@
 <template>
   <div class="pagination">
-    <ul class="pagination__items">
-      <li class="pagination__item pagination__left">
+    <div class="pagination__items">
+      <div class="pagination__item pagination__left">
         <button :disabled="!(currentPage > 1)" @click="changePage(currentPage - 1)">
           <svg
             width="100%"
@@ -17,17 +17,19 @@
             />
           </svg>
         </button>
-      </li>
-      <li
-        class="pagination__item"
-        v-for="pageNumber in displayedPages"
-        :class="{ 'pagination__item--selected': pageNumber === currentPage }"
-      >
-        <button @click="changePage(pageNumber)">
-          {{ pageNumber }}
-        </button>
-      </li>
-      <li class="pagination__item pagination__right">
+      </div>
+      <div class="pagination__pages">
+        <div
+          class="pagination__item"
+          v-for="pageNumber in displayedPages"
+          :class="{ 'pagination__item--selected': pageNumber === currentPage }"
+        >
+          <button @click="changePage(pageNumber)">
+            {{ pageNumber }}
+          </button>
+        </div>
+      </div>
+      <div class="pagination__item pagination__right">
         <button
           :disabled="!(currentPage < totalPages)"
           @click="changePage(currentPage + 1)"
@@ -46,8 +48,8 @@
             />
           </svg>
         </button>
-      </li>
-    </ul>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -67,11 +69,9 @@ export default {
       default: 5,
     },
   },
-  data() {
-    return {
-      currentPage: 1,
-    };
-  },
+  data: () => ({
+    currentPage: 1,
+  }),
   computed: {
     totalPages() {
       return Math.ceil(this.totalItems / this.itemsPerPage);
@@ -109,9 +109,19 @@ export default {
     changePage(pageNumber) {
       if (pageNumber >= 1 && pageNumber <= this.totalPages) {
         this.currentPage = pageNumber;
-        this.$emit("page-changed", pageNumber);
+        this.$emit("page-changed", { curr: this.currentPage, total: this.totalPages });
       }
     },
+  },
+  watch: {
+    totalPages(value) {
+      this.$emit("total-pages", value);
+    },
+    currentPage(value) {
+    },
+  },
+  mounted() {
+    this.$emit("total-pages", this.totalPages);
   },
 };
 </script>
@@ -128,6 +138,10 @@ export default {
       gap: unset;
       justify-content: space-between;
     }
+  }
+  &__pages {
+    display: flex;
+    gap: 8rem;
   }
   &__item {
     width: 60rem;

@@ -1,13 +1,15 @@
 <template>
-  <Page>
-    <HomeHeroSection />
-    <BlogSection />
-    <TestSection />
-    <SchoolsSalesShortSection />
+  <Page :page="page">
+    <HomeHeroSection :content="pageContent.main_banner" />
+    <BlogSection :injected-title="pageContent.blog_section.title" />
+    <TestSection :content="pageContent.test_section" />
+    <SchoolsSalesShortSection :injected-title="pageContent.schools_sales_section.title" />
   </Page>
 </template>
 
 <script>
+import { pageAsyncDataMixin } from "~/mixins/pageAsyncDataMixin";
+
 import Page from "~/components/Layout/Page.vue";
 import HomeHeroSection from "~/components/Sections/Home/HomeHeroSection.vue";
 import BlogSection from "~/components/Sections/Blog/BlogSection.vue";
@@ -16,12 +18,13 @@ import SchoolsSalesShortSection from "~/components/Sections/Common/SchoolsSalesS
 
 export default {
   name: "IndexPage",
+  mixins: [pageAsyncDataMixin(14)],
   components: {
     Page,
     HomeHeroSection,
     BlogSection,
     TestSection,
-    SchoolsSalesShortSection
-},
+    SchoolsSalesShortSection,
+  },
 };
 </script>

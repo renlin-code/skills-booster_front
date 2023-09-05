@@ -1,10 +1,18 @@
 <template>
-  <button class="chips__chip chip"><slot /></button>
+  <button class="chips__chip chip" :class="{ 'chip--selected': selected }">
+    <slot />
+  </button>
 </template>
 
 <script>
 export default {
   name: "ChipButton",
+  props: {
+    selected: {
+      type: Boolean,
+      default: false
+    },
+  },
 };
 </script>
 
@@ -25,11 +33,10 @@ export default {
     color: $color_white;
     background: $color_black;
   }
-  &:focus,
   &--selected {
-    color: $color_white;
-    background: $color_primary;
-    border-color: $color_primary;
+    color: $color_white !important;
+    background: $color_primary !important;
+    border-color: $color_primary !important;
   }
 }
 </style>

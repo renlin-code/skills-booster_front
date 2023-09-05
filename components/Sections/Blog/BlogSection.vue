@@ -1,55 +1,82 @@
 <template>
   <section class="blog sb-noselect">
     <div class="blog__inner sb-container">
-      <div class="blog__header">
-        <h2 class="blog__title sb-section-title">
-          <span class="mobile-hidden">&nbsp &nbsp &nbsp &nbsp &nbsp</span>Делимся опытом
-          и советами в блоге
-        </h2>
-        <div class="blog__vector mobile-hidden"></div>
-      </div>
-      <div class="blog__subheader">
-        <Chips />
-        <NuxtLink v-if="!extended" to="/blog" class="mobile-hidden">
-          <TextArrowButton>Все статьи</TextArrowButton>
-        </NuxtLink>
-        <div v-else class="blog__search">
-          <SearchInput class="blog__search-el" placeholder="Поиск" />
+      <Transition name="fade">
+        <div v-show="!pendingRender">
+          <div class="blog__header">
+            <h2 class="blog__title sb-section-title">
+              <span class="mobile-hidden">&nbsp &nbsp &nbsp &nbsp &nbsp</span
+              >{{ injectedTitle }}
+            </h2>
+            <div class="blog__vector mobile-hidden"></div>
+          </div>
+          <div class="blog__subheader">
+            <Chips :items="chipsOptions" @select-chip="switchCategory" />
+            <NuxtLink v-if="!extended" to="/blog" class="mobile-hidden">
+              <TextArrowButton>Все статьи</TextArrowButton>
+            </NuxtLink>
+            <div v-else class="blog__search">
+              <SearchInput
+                class="blog__search-el"
+                placeholder="Поиск"
+                v-model="searchQuery"
+              />
+            </div>
+          </div>
+          <div class="blog__body">
+            <ul class="blog__articles" v-if="!pendingArticles">
+              <li
+                class="blog__articles-element"
+                v-for="article in templateArticles"
+                :key="article.id"
+              >
+                <ArticleCard :minified="article.minified" :content="article" />
+              </li>
+            </ul>
+            <Transition name="fade">
+              <RingPreloader class="blog__loading blog__loading" v-if="pendingArticles" />
+            </Transition>
+            <NoResultsView class="blog__no-results" v-if="templateArticles.length === 0">
+              Извините, но по вашему запросу нет статей. Попробуйте изменить запрос
+            </NoResultsView>
+          </div>
+          <div v-if="!extended" class="blog__link-to-all">
+            <NuxtLink to="/blog">
+              <MainButton arrow type="1">Перейти ко всем статьям</MainButton>
+            </NuxtLink>
+          </div>
+          <div v-else>
+            <div
+              class="blog__load-more"
+              v-if="totalItems > itemsPerPage && currentPage !== totalPages || pendingLoadMore"
+            >
+              <Transition name="fade">
+                <MainButton type="3" @click.native="loadMore" v-if="!pendingLoadMore"
+                  >Показать еще</MainButton
+                >
+              </Transition>
+              <Transition name="fade">
+                <RingPreloader
+                  class="blog__loading blog__loading"
+                  v-if="pendingLoadMore"
+                />
+              </Transition>
+            </div>
+            <div class="blog__pagination sb-container" v-show="totalItems > itemsPerPage">
+              <Pagination
+                v-if="totalItems"
+                :total-items="totalItems"
+                :items-per-page="itemsPerPage"
+                @page-changed="handlePageChange"
+                @total-pages="setTotalPages"
+              />
+            </div>
+          </div>
         </div>
-      </div>
-      <ul class="blog__articles">
-        <li class="blog__articles-element">
-          <ArticleCard link-to="/" />
-        </li>
-        <li class="blog__articles-element">
-          <ArticleCard link-to="/" minified />
-        </li>
-        <li class="blog__articles-element">
-          <ArticleCard link-to="/" minified />
-        </li>
-        <li class="blog__articles-element">
-          <ArticleCard link-to="/" minified />
-        </li>
-        <li class="blog__articles-element">
-          <ArticleCard link-to="/" minified />
-        </li>
-        <li class="blog__articles-element">
-          <ArticleCard link-to="/" />
-        </li>
-      </ul>
-      <div v-if="!extended" class="blog__link-to-all">
-        <NuxtLink to="/blog">
-          <MainButton arrow type="1">Перейти ко всем статьям</MainButton>
-        </NuxtLink>
-      </div>
-      <div v-else>
-        <div class="blog__load-more">
-          <MainButton type="3">Показать еще</MainButton>
-        </div>
-        <div class="blog__pagination sb-container">
-          <Pagination :total-items="totalItems" :items-per-page="itemsPerPage" @page-changed="handlePageChange" />
-        </div>
-      </div>
+      </Transition>
+      <Transition name="fade">
+        <RingPreloader class="blog__loading blog__loading" v-show="pendingRender" />
+      </Transition>
     </div>
   </section>
 </template>
@@ -61,6 +88,8 @@ import ArticleCard from "~/components/Others/ArticleCard";
 import MainButton from "~/components/Buttons/MainButton.vue";
 import SearchInput from "~/components/Others/SearchInput";
 import Pagination from "~/components/Others/Pagination";
+import RingPreloader from "~/components/Preloaders/RingPreloader";
+import NoResultsView from "~/components/Others/NoResultsView.vue";
 
 export default {
   name: "BlogSection",
@@ -71,50 +100,113 @@ export default {
     MainButton,
     SearchInput,
     Pagination,
+    RingPreloader,
+    NoResultsView,
   },
   props: {
     extended: {
       type: Boolean,
       default: false,
     },
+    injectedTitle: {
+      type: String,
+    },
   },
-  data() {
-    return {
-      totalItems: 120, // Número total de elementos
-      itemsPerPage: 6, // Número de elementos por página
-      currentPage: 1, // Página actual
-      items: [] // Aquí se almacenarían los elementos que se mostrarán en cada página
-    };
-  },
+  data: () => ({
+    render: false,
+    templateArticles: [],
+    allCategories: [],
+    selectedCatId: "",
+    searchQuery: "",
+    totalPending: 0,
+    pendingRender: true,
+    pendingArticles: false,
+    pendingLoadMore: false,
+    itemsPerPage: 6,
+    totalItems: null,
+    currentPage: 1,
+    totalPages: null,
+  }),
   computed: {
+    chipsOptions() {
+      return ["Все категории", ...this.allCategories.map((cat) => cat.title)];
+    },
     displayedItems() {
       const startIndex = (this.currentPage - 1) * this.itemsPerPage;
       const endIndex = startIndex + this.itemsPerPage;
       return this.items.slice(startIndex, endIndex);
-    }
+    },
   },
   methods: {
-    handlePageChange(pageNumber) {
-      this.currentPage = pageNumber;
-      // Aquí puedes cargar los elementos correspondientes a la página actual
-    }
+    async switchCategory(index) {
+      this.selectedCatId = index > 0 ? this.allCategories[index - 1].id : "";
+      this.pendingArticles = true;
+      await this.fetchData();
+      this.pendingArticles = this.totalPending !== 0;
+    },
+    async fetchData() {
+      this.totalPending++;
+      const data = await this.$axios.$get(
+        `/wp-json/get/articles/?category_id=${this.selectedCatId}&search=${this.searchQuery}&page=${this.currentPage}&per_page=${this.itemsPerPage}`
+      );
+      this.allCategories = data.all_categories;
+      this.totalItems = data.total_pages * this.itemsPerPage;
+      const { articles } = data;
+
+      this.templateArticles = [];
+      let minifiedCounter = 0;
+      articles.forEach((i) => {
+        this.templateArticles.push({
+          ...i,
+          minified: minifiedCounter > 0 && minifiedCounter < 5,
+        });
+        minifiedCounter = minifiedCounter < 5 ? minifiedCounter + 1 : 0;
+      });
+
+      this.totalPending--;
+    },
+    async loadMore() {
+      this.itemsPerPage += 6;
+      this.pendingLoadMore = true;
+      await this.fetchData();
+      this.pendingLoadMore = false;
+    },
+    async handlePageChange({ curr, total }) {
+      if (curr !== this.currentPage) {
+        this.currentPage = curr;
+        this.totalPages = total;
+        this.pendingArticles = true;
+        await this.fetchData();
+        this.pendingArticles = this.totalPending !== 0;
+      }
+    },
+    setTotalPages(payload) {
+      this.totalPages = payload;
+    },
   },
-  created() {
-    // Aquí puedes cargar los elementos iniciales o realizar una llamada a una API para obtener los datos
-    // En este ejemplo, simplemente generamos elementos de ejemplo
-    for (let i = 1; i <= this.totalItems; i++) {
-      this.items.push({ id: i, name: `Elemento ${i}` });
-    }
-  }
+  watch: {
+    async searchQuery() {
+      if (this.templateArticles.length !== 0) this.pendingArticles = true;
+      await this.fetchData();
+      this.pendingArticles = false;
+    },
+  },
+  async created() {
+    await this.fetchData();
+    this.pendingRender = false;
+  },
 };
 </script>
 
 <style scoped lang="scss">
 .blog {
   &__inner {
+    width: 100%;
+    position: relative;
     background: $color_bg;
     border-radius: 50rem;
     padding: 60rem 50rem;
+    min-height: 600rem;
     @media screen and (max-width: $brakepoint) {
       border-radius: 30rem;
       padding: 30rem 0;
@@ -169,10 +261,23 @@ export default {
       }
     }
   }
+  &__body {
+    width: 100%;
+    position: relative;
+    min-height: 470rem;
+  }
+  &__loading {
+    width: min-content;
+    position: absolute;
+    margin-bottom: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+  }
   &__articles {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    column-gap: 20rem;
     row-gap: 40rem;
     margin-bottom: 30rem;
     @media screen and (max-width: $brakepoint) {
@@ -181,6 +286,12 @@ export default {
       row-gap: 16rem;
       padding: 0 15rem;
       margin-bottom: 12rem;
+    }
+  }
+  &__no-results {
+    margin-top: 150rem;
+    @media screen and (max-width: $brakepoint) {
+      margin-top: 70rem;
     }
   }
   &__link-to-all {
@@ -193,8 +304,10 @@ export default {
   }
   &__load-more {
     margin: 0 auto;
-    width: 240rem;
     margin-bottom: 30rem;
+    width: 240rem;
+    height: 70rem;
+    position: relative;
     @media screen and (max-width: $brakepoint) {
       width: 100%;
       padding: 0 15rem;

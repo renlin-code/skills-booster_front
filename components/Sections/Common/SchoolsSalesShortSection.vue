@@ -2,7 +2,7 @@
   <section class="schools-sales-short sb-noselect">
     <div class="schools-sales-short__inner sb-container">
       <div class="schools-sales-short__top">
-        <h2 class="schools-sales-short__title sb-section-title">Акции школ</h2>
+        <h2 class="schools-sales-short__title sb-section-title">{{ injectedTitle }}</h2>
         <NuxtLink to="/schools-sales" class="mobile-hidden">
           <TextArrowButton>Все акции</TextArrowButton>
         </NuxtLink>
@@ -51,6 +51,11 @@ export default {
     Slide,
     MainButton,
   },
+  props: {
+    injectedTitle: {
+      type: String
+    }
+  }
 };
 </script>
 

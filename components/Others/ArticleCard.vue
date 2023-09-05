@@ -3,22 +3,23 @@
     <div class="article-card__top">
       <NuxtLink
         class="article-card__top-link-layer mobile-hidden"
-        :to="linkTo"
+        :to="`/blog/${content.slug}`"
       ></NuxtLink>
       <div class="article-card__top-bg mobile-hidden"></div>
-      <div class="article-card__top-content">
-        <div class="article-card__cat">Программирование</div>
+      <div class="article-card__top-content"
+        :style="`background-image: url(${content.category.image});`"
+      >
+        <div class="article-card__cat" :style="`background: ${content.category.color}`">{{ content.category.title }}</div>
         <h6 class="article-card__title">
-          Топ 10 самых восстребованных языков программирования
+          {{ content.title }}
         </h6>
       </div>
     </div>
     <div class="article-card__bottom">
       <p class="article-card__description">
-        Привет, друзья! Сегодня мы поговорим о том, как искусственный интеллект помогает
-        нам оставаться
+        {{ content.description }}
       </p>
-      <NuxtLink :to="linkTo">
+      <NuxtLink :to="`/blog/${content.slug}`">
         <div class="article-card__link">
           ЧИТАТЬ ПОЛНОСТЬЮ
           <svg
@@ -47,9 +48,9 @@ export default {
       type: Boolean,
       default: false,
     },
-    linkTo: {
-      type: String,
-    },
+    content: {
+      type: Object
+    }
   },
 };
 </script>
@@ -78,7 +79,6 @@ export default {
       z-index: 1;
     }
     &-content {
-      background-image: url("/images/7.png");
       background-position: bottom right;
       background-repeat: no-repeat;
       background-size: 232rem auto;
@@ -111,7 +111,6 @@ export default {
   }
   &__cat {
     display: inline-block;
-    background: #abd2ff;
     padding: 6rem 30rem;
     border-radius: 32rem;
     @include fontStyles($font_3, 15rem, unset, 400);
@@ -127,6 +126,7 @@ export default {
     @include fontStyles($font_1, 26rem, 41rem, 400);
     max-width: 474rem;
     min-height: 166rem;
+    text-transform: uppercase;
     @media screen and (max-width: $brakepoint) {
       max-width: 100%;
       @include fontStyles($font_1, 13rem, 20rem, 400, 2rem);

@@ -2,8 +2,11 @@
   <div class="chips">
     <div class="chips__inner">
       <ul class="chips__list">
-        <li class="chips__list-item" v-for="(element, index) in elements">
-          <ChipButton>{{ element.name }}</ChipButton>
+        <li class="chips__list-item" v-for="(item, index) in items">
+          <ChipButton
+            :selected="selectedIndex === index"
+            @click.native="selectChip(index)"
+          >{{ item }}</ChipButton>
         </li>
       </ul>
     </div>
@@ -17,30 +20,20 @@ export default {
   components: {
     ChipButton
   },
+  props: {
+    items: {
+      type: Array,
+    }
+  },
   data: () => ({
-    elements: [
-      {
-        id: 0,
-        name: "Все статьи",
-      },
-      {
-        id: 1,
-        name: "Программирование",
-      },
-      {
-        id: 2,
-        name: "Исскуственный интеллект",
-      },
-      {
-        id: 3,
-        name: "Маркетинг",
-      },
-      {
-        id: 4,
-        name: "Дизайн",
-      },
-    ],
+    selectedIndex: 0
   }),
+  methods: {
+    selectChip(index) {
+      this.selectedIndex = index;
+      this.$emit("select-chip", this.selectedIndex);
+    }
+  },
 };
 </script>
 
