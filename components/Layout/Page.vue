@@ -4,6 +4,7 @@
       v-if="breadcrumbsPageName && breadcrumbsRoutes"
       :routes="breadcrumbsRoutes"
       :pageName="breadcrumbsPageName"
+      :sliced="breadcrumbsSliced"
     />
     <div class="page__sections">
       <slot />
@@ -25,6 +26,10 @@ export default {
       },
       breadcrumbsPageName: {
         type: String
+      },
+      breadcrumbsSliced: {
+        type: Boolean,
+        default: false
       }
     },
     mounted() {

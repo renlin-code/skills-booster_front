@@ -1,5 +1,10 @@
 <template>
-  <Page :page="page" :breadcrumbs-routes="breadcrumbsRoutes" breadcrumbs-page-name="Блог">
+  <Page
+    v-if="page"
+    :page="page"
+    :breadcrumbs-routes="breadcrumbsRoutes"
+    breadcrumbs-page-name="Блог"
+  >
     <BlogSection extended :injected-title="pageContent.title" />
   </Page>
 </template>
@@ -22,8 +27,8 @@ export default {
       {
         name: "Главная",
         path: "/",
-      }
-    ]
-  })
+      },
+    ],
+  }),
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <Transition name="fade">
-    <button class="up-button mobile-hidden" @click="scrollToTop" v-if="shown">
+    <button class="up-button" @click="scrollToTop" v-if="shown">
       <div class="up-button__arrow">
         <svg
           width="100%"
@@ -61,9 +61,19 @@ export default {
   height: 48rem;
   background-color: $color_primary;
   transition: all $transition_base;
+  @media screen and (max-width: $brakepoint) {
+    width: 38rem;
+    height: 38rem;
+    right: 15rem;
+    bottom: 60rem;
+  }
   &__arrow {
     width: 18rem;
     height: 18rem;
+    @media screen and (max-width: $brakepoint) {
+      width: 14rem;
+      height: 14rem;
+    }
   }
   &:hover {
     background-color: #ff918c;

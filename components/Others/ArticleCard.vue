@@ -3,7 +3,7 @@
     <div class="article-card__top">
       <NuxtLink
         class="article-card__top-link-layer mobile-hidden"
-        :to="`/blog/${content.slug}`"
+        :to="`/blog/${content.slug}-${content.id}`"
       ></NuxtLink>
       <div class="article-card__top-bg mobile-hidden"></div>
       <div class="article-card__top-content"
@@ -19,7 +19,7 @@
       <p class="article-card__description">
         {{ content.description }}
       </p>
-      <NuxtLink :to="`/blog/${content.slug}`">
+      <NuxtLink :to="`/blog/${content.slug}-${content.id}`">
         <div class="article-card__link">
           ЧИТАТЬ ПОЛНОСТЬЮ
           <svg

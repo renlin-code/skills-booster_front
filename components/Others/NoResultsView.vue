@@ -36,18 +36,22 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10rem;
+    gap: 20rem;
     @media screen and (max-width: $brakepoint) {
       gap: 8rem;
       padding: 0 15rem;
     }
   }
   &__icon {
-    width: 36rem;
-    height: 36rem;
+    width: 80rem;
+    height: 80rem;
+    @media screen and (max-width: $brakepoint) {
+      width: 40rem;
+      height: 40rem;
+    }
     svg {
-      width: 36rem;
-      height: 36rem;
+      width: 100%;
+      height: 100%;
     }
   }
   &__text {

@@ -1,11 +1,19 @@
 <template>
   <article class="article-content">
     <div class="article-content__inner">
-      <div class="article-content__banner banner sb-container">
+      <div
+        class="article-content__banner banner sb-container"
+        :style="`background-image: url(${content.category.image})`"
+      >
         <h1 class="banner__title">
-          Топ 10 самых восстребованных языков программирования
+          {{ content.title }}
         </h1>
-        <div class="banner__cat">Программирование</div>
+        <div
+          class="banner__cat sb-noselect"
+          :style="`background: ${content.category.color}`"
+        >
+          {{ content.category.title }}
+        </div>
       </div>
       <div class="article-content__body body sb-container">
         <div class="body__left">
@@ -31,160 +39,106 @@
             </button>
             <Transition name="index">
               <ol class="index__list" v-if="!indexClose">
-                <li>
-                  <span>1.&nbsp;</span>
+                <li
+                  v-for="(section, index) in sectionsTitles"
+                  :class="{ hover: indexHover === index }"
+                >
+                  <span class="sb-noselect">{{ index + 1 }}.&nbsp;</span>
                   <div>
-                    <a href="/">Что же такое этот искусственный интеллект?</a>
-                  </div>
-                </li>
-                <li>
-                  <span>2.&nbsp;</span>
-                  <div>
-                    <a href="/">Как работает искусственный интеллект</a>
-                  </div>
-                </li>
-                <li>
-                  <span>3.&nbsp;</span>
-                  <div>
-                    <a href="/">Может ли искусственный интеллект заменить людей</a>
-                  </div>
-                </li>
-                <li>
-                  <span>4.&nbsp;</span>
-                  <div>
-                    <a href="/">
-                      Преимущества искусственного интеллекта для повседневной жизни
-                      обычного человека
+                    <a
+                      :href="`#section-${index + 1}`"
+                      @mouseover="indexHover = index"
+                      @mouseout="indexHover = null"
+                    >
+                      {{ section }}
                     </a>
-                  </div>
-                </li>
-                <li>
-                  <span>5.&nbsp;</span>
-                  <div>
-                    <a href="/">Основные виды искусственного интеллекта</a>
-                  </div>
-                </li>
-                <li>
-                  <span>6.&nbsp;</span>
-                  <div>
-                    <a href="/">Нужно ли бояться искусственного интеллекта</a>
-                  </div>
-                </li>
-                <li>
-                  <span>7.&nbsp;</span>
-                  <div>
-                    <a href="/">
-                      Как стать разработчиком искусственного интеллекта: пошаговый план
-                    </a>
-                  </div>
-                </li>
-                <li>
-                  <span>8.&nbsp;</span>
-                  <div>
-                    <a href="/">4 курса, которые можно порекомендовать новичку</a>
-                  </div>
-                </li>
-                <li>
-                  <span>9.&nbsp;</span>
-                  <div>
-                    <a href="/">Заключение</a>
                   </div>
                 </li>
               </ol>
             </Transition>
           </div>
           <div class="body__left-content sections">
-            <section class="sections__section">
-              <h3 class="sections__section-title">
-                Что же такое этот искусственный интеллект?
+            <section
+              class="sections__section section"
+              v-for="(section, index) in content.sections"
+              :id="`section-${index + 1}`"
+            >
+              <h3 class="section__title">
+                {{ section.article_section_title }}
               </h3>
-              <div class="sections__section-html">
-                <div>
-                  Все знают, что умный телефон, который может сколько угодно раз повторять
-                  «привет, я Сири!» – это искусственный интеллект. Но что, собственно,
-                  это значит?<br /><br />
-                  ИИ — это машина, которая может обрабатывать информацию, учиться и быть
-                  умнее по мере того, как она получает больше знаний. Обычно люди учатся
-                  самостоятельно, но ИИ может учиться, как ребёнок, только быстрее.
-                  Он может ориентироваться в разных ситуациях, обрабатывать текст,
-                  изображения и звуки.
+              <div class="section__content">
+                <div
+                  class="section__content-block"
+                  v-for="block in section.article_section_content"
+                >
+                  <div
+                    class="section__content-html"
+                    :class="{ 'section__content-html--backgrounded': block.backgrounded }"
+                    v-if="block._type === 'content_html'"
+                    v-html="block.content_html"
+                  ></div>
+
+                  <figure
+                    class="section__content-img"
+                    v-if="block._type === 'content_img'"
+                  >
+                    <img :src="isMobile ? block.content_img_mob : block.content_img" alt="" />
+                  </figure>
+
+                  <ul
+                    class="section__content-list"
+                    :class="{ 'section__content-list--iconified-ul': block.iconified }"
+                    v-if="block._type === 'content_list' && !block.ordered"
+                  >
+                    <li
+                      class="section__content-list-item"
+                      v-for="(element, index) in block.content_list"
+                    >
+                      <div class="section__content-list-item-inner">
+                        <div
+                          class="section__content-list-title"
+                          v-if="element.title"
+                          v-html="element.title"
+                        ></div>
+                        <div
+                          class="section__content-list-body"
+                          v-html="element.body"
+                        ></div>
+                      </div>
+                    </li>
+                  </ul>
+
+                  <ol
+                    class="section__content-list"
+                    :class="{
+                      'section__content-list--iconified-ol': block.iconified,
+                      'section__content-list--ordered': block.ordered,
+                    }"
+                    v-if="block._type === 'content_list' && block.ordered"
+                  >
+                    <li
+                      class="section__content-list-item"
+                      v-for="(element, index) in block.content_list"
+                    >
+                      <span
+                        class="section__content-list-item-icon"
+                        v-if="block.ordered && block.iconified"
+                        >{{ index + 1 }}</span
+                      >
+                      <div class="section__content-list-item-inner">
+                        <div
+                          class="section__content-list-title"
+                          v-if="element.title"
+                          v-html="element.title"
+                        ></div>
+                        <div
+                          class="section__content-list-body"
+                          v-html="element.body"
+                        ></div>
+                      </div>
+                    </li>
+                  </ol>
                 </div>
-                <img src="/images/article.png" alt="" />
-                <div>
-                  Например, с помощью ИИ мы можем побеждать в шахматы, играть
-                  в компьютерные игры и разговаривать с Алисой от Яндекса. А в будущем
-                  эти машины смогут помочь с медицинскими диагнозами, решением сложных
-                  задач и тому подобное. Ну, конечно, опасаться нужно, что роботы могут
-                  стать умнее нас и захватить мир! Шучу, шучу, просто следите за своей
-                  кофеваркой.
-                </div>
-              </div>
-            </section>
-            <section class="sections__section">
-              <h3 class="sections__section-title">
-                Как работает искусственный интеллект
-              </h3>
-              <div class="sections__section-html">
-                <div>
-                  В сегодняшнем мире искусственный интеллект — это довольно обычное
-                  понятие. Но как работает ИИ на самом деле?
-                </div>
-                <ul>
-                  <li>
-                    <span>Нейронные сети</span><br /><br />
-                    Искусственный интеллект часто основывается на нейронных сетях, которые
-                    имитируют работу мозга. Каждый нейрон в нейронной сети обрабатывает
-                    информацию и передаёт её другим нейронам. Так что ИИ может учиться
-                    на основе данных и алгоритмов, обработки звука, изображений и текста.
-                  </li>
-                  <li>
-                    <span>Алгоритмы</span><br /><br />
-                    Алгоритмы могут использоваться для обработки информации и определения
-                    определённых закономерностей или шаблонов. Таким образом, ИИ может
-                    обработать больше данных, чем могут обработать люди.
-                  </li>
-                  <li>
-                    <span>Обучение с подкреплением</span><br /><br />
-                    С помощью обучения с подкреплением ИИ может получать опыт в решении
-                    определённых задач. Когда ИИ решает задачу, он получает «награду».
-                    Если ИИ сделал хорошо, награда будет положительной. Таким образом,
-                    искусственный интеллект знает, что делать, чтобы получить больше
-                    положительных наград.
-                  </li>
-                  <li>
-                    <span>Определение паттернов</span><br /><br />
-                    ИИ также может использоваться для определения шаблонов и паттернов.
-                    Например, ИИ может обработать большие объёмы финансовых данных,
-                    чтобы выявить тенденции в экономике.
-                  </li>
-                </ul>
-                <div>
-                  Конечно, искусственный интеллект не является безошибочным. Но, несмотря
-                  на это, ИИ имеет огромный потенциал и будет продолжать развиваться!
-                </div>
-              </div>
-            </section>
-            <section class="sections__section">
-              <h3 class="sections__section-title">
-                Может ли искусственный интеллект заменить людей
-              </h3>
-              <div class="sections__section-html">
-                <div>
-                  Итак, искусственный интеллект развивается и его возможности
-                  увеличиваются с каждым годом. Но сможет ли он заменить людей во всех
-                  областях жизни? Начнём с работы.<br /><br />
-                  Многие машины уже заменили ручной труд человека, и это только начало.
-                  Компьютеры могут обрабатывать информацию быстрее, точнее и без ошибок,
-                  чем человек. Однако, некоторые работодатели предпочитают найти
-                  сотрудников именно с человеческими качествами.<br /><br />
-                  Например, такими, как творческий подход, сочувствие, эмпатия и т.п.
-                  В торговле также нужны человеческие качества. Ведь продавец должен
-                  внимательно слушать клиента и учитывать его пожелания.<br /><br />
-                  Интересно, а может ли ИИ заменить нас в социальной сфере?
-                  Уже есть приложения, которые могут напомнить, когда нужно начать кормить
-                  ребёнка, но значение родительской любви ни с чем не сравнить.
-                </div>
-                <img src="/images/article2.png" alt="" />
               </div>
             </section>
           </div>
@@ -196,15 +150,31 @@
 </template>
 
 <script>
+import mediaQueryMixin from '~/mixins/mediaQueryMixin';
 export default {
   name: "ArticleContent",
+  mixins: [mediaQueryMixin],
+  props: {
+    content: {
+      type: Object,
+    },
+  },
   data: () => ({
+    indexHover: null,
     indexClose: false,
   }),
+  computed: {
+    sectionsTitles() {
+      return this.content.sections.map((i) => i.article_section_title);
+    },
+  },
+  mounted() {
+    this.mediaQueryHook();
+  },
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .article-content {
   .banner {
     border-radius: 30rem;
@@ -215,7 +185,6 @@ export default {
     align-items: center;
     padding: 42rem 116rem;
     margin-bottom: 50rem;
-    background-image: url("/images/7.png");
     background-position: bottom right;
     background-repeat: no-repeat;
     background-size: 401rem auto;
@@ -245,7 +214,6 @@ export default {
       @include fontStyles($font_3, 16rem, 19.5rem, 400);
       padding: 12rem 30rem;
       border-radius: 20rem;
-      background: #abd2ff;
       @media screen and (max-width: $brakepoint) {
         padding: 8rem 20rem;
         @include fontStyles($font_3, 14rem, 21rem, 500);
@@ -256,25 +224,55 @@ export default {
     display: grid;
     grid-template-columns: 1fr 400rem;
     gap: 20rem;
+    @media screen and (max-width: $brakepoint) {
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+    }
   }
   .index {
     border-radius: 50rem;
     padding: 50rem;
     background: $color_bg;
-    margin-bottom: 50rem;
+    margin-bottom: 10rem;
+    @media screen and (max-width: $brakepoint) {
+      border-radius: 30rem;
+      padding: 30rem 15rem;
+      margin-bottom: 0;
+    }
     &__head {
       display: inline-flex;
       gap: 12rem;
       align-items: center;
       transition: all $transition_base;
+      @media screen and (max-width: $brakepoint) {
+        gap: 4rem;
+      }
       span {
         @include fontStyles($font_2, 36rem, 57.6rem, 600);
+        @media screen and (max-width: $brakepoint) {
+          @include fontStyles($font_2, 18rem, 28.8rem, 600);
+        }
       }
       svg {
         width: 30rem;
         height: 30rem;
         transform: rotate(-180deg);
         transition: all $transition_base;
+        path {
+          transition: fill $transition_base;
+        }
+        @media screen and (max-width: $brakepoint) {
+          width: 14rem;
+          height: 14rem;
+        }
+      }
+      &:hover {
+        svg {
+          path {
+            fill: $color_primary;
+          }
+        }
       }
     }
     &__list {
@@ -284,12 +282,31 @@ export default {
       margin-top: 30rem;
       transform-origin: top;
       transition: all $transition_base;
+      @media screen and (max-width: $brakepoint) {
+        gap: 8rem;
+        margin-top: 16rem;
+      }
       li {
         display: grid;
         grid-template-columns: auto 1fr;
+        div {
+          display: inline-flex;
+        }
+        &.hover {
+          span,
+          div a {
+            color: $color_primary;
+          }
+        }
+        span, a {
+          @include fontStyles($font_2, 22rem, 35.2rem, 400, 1.1rem);
+          transition: all $transition_base;
+          @media screen and (max-width: $brakepoint) {
+            @include fontStyles($font_2, 14rem, 21rem, 400, 0.7rem);
+          }
+        }
         a {
           text-decoration: underline;
-          @include fontStyles($font_2, 22rem, 35.2rem, 400, 1.1rem);
         }
       }
     }
@@ -306,48 +323,181 @@ export default {
   .sections {
     display: flex;
     flex-direction: column;
-    gap: 40rem;
-    &__section {
-      &-title {
+    .section {
+      padding-top: 40rem;
+      @media screen and (max-width: $brakepoint) {
+        padding-top: 24rem;
+      }
+      &__title {
         @include fontStyles($font_3, 22rem, 35.2rem, 600, 2.2rem);
         text-transform: uppercase;
         margin-bottom: 30rem;
+        @media screen and (max-width: $brakepoint) {
+          @include fontStyles($font_3, 16rem, 25.6rem, 600, 0.8rem);
+          margin-bottom: 16rem;
+          padding: 0 15rem;
+        }
       }
-      &-html {
+      &__content {
         display: flex;
         flex-direction: column;
-        gap: 30rem;
-        p,
-        div {
+        gap: 20rem;
+        &-html {
           @include fontStyles($font_3, 20rem, 30rem, 400, 1rem);
+          @media screen and (max-width: $brakepoint) {
+            @include fontStyles($font_3, 14rem, 21rem, 500);
+            padding: 0 15rem;
+          }
+          em {
+            display: inline;
+            color: $color_primary;
+          }
+          a {
+            display: inline;
+            color: $color_primary;
+            transition: all $transition_base;
+            &:hover {
+              opacity: 0.8;
+            }
+          }
+          strong {
+            display: inline;
+            color: $color_black;
+            font-weight: 600;
+          }
+          &--backgrounded {
+            padding: 20rem;
+            border-radius: 20rem;
+            background: $color_bg;
+            @media screen and (max-width: $brakepoint) {
+              padding: 20rem 10rem;
+              margin: 0 15rem;
+            }
+          }
         }
-        img {
-          width: 100%;
-          height: auto;
-          object-fit: contain;
+        &-img {
+          display: flex;
           border-radius: 20rem;
+          overflow: hidden;
+          @media screen and (max-width: $brakepoint) {
+            border-radius: 0;
+          }
+          img {
+            width: 100%;
+            object-fit: contain;
+          }
         }
-        ul {
+        &-list {
           display: flex;
           flex-direction: column;
           gap: 20rem;
-          li {
-            position: relative;
-            padding-left: 33rem;
-            &::before {
-              content: "";
-              position: absolute;
-              left: 0;
-              width: 18rem;
-              height: 18rem;
+          @media screen and (max-width: $brakepoint) {
+            gap: 12rem;
+            padding: 0 15rem;
+          }
+          &-title {
+            @include fontStyles($font_3, 20rem, 32rem, 600, 1rem);
+            @media screen and (max-width: $brakepoint) {
+              @include fontStyles($font_3, 15rem, 24rem, 600);
+            }
+            em {
+              display: inline;
+              color: $color_primary;
+            }
+            a {
+              display: inline;
+              color: $color_primary;
+              transition: all $transition_base;
+              &:hover {
+                opacity: 0.8;
+              }
+            }
+            strong {
+              display: inline;
+              color: $color_black;
+              font-weight: 600;
+            }
+          }
+          &-body {
+            @include fontStyles($font_3, 20rem, 30rem, 400, 1rem);
+            @media screen and (max-width: $brakepoint) {
+              @include fontStyles($font_3, 14rem, 21rem, 500);
+            }
+            em {
+              display: inline;
+              color: $color_primary;
+            }
+            a {
+              display: inline;
+              color: $color_primary;
+              transition: all $transition_base;
+              &:hover {
+                opacity: 0.8;
+              }
+            }
+            strong {
+              display: inline;
+              color: $color_black;
+              font-weight: 600;
+            }
+          }
+          &-item {
+            &-inner {
+              display: flex;
+              flex-direction: column;
+              gap: 10rem;
+              @media screen and (max-width: $brakepoint) {
+                gap: 8rem;
+              }
+            }
+            &-icon {
+              display: grid;
+              width: 50rem;
+              height: 50rem;
+              place-content: center;
               border-radius: 50%;
               background: $color_primary;
-              top: 5rem;
+              color: $color_white;
+              @include fontStyles($font_2, 20rem, 30rem, 700, 1rem);
+              @media screen and (max-width: $brakepoint) {
+                width: 25rem;
+                height: 25rem;
+                @include fontStyles($font_2, 12rem, 18rem, 700, 0.6rem);
+              }
             }
-            span {
-              display: inline-block;
-              color: $color_primary;
-              @include fontStyles($font_3, 20rem, 20rem, 600, 1rem);
+          }
+          &--iconified-ul {
+            li {
+              position: relative;
+              padding-left: 33rem;
+              @media screen and (max-width: $brakepoint) {
+                padding-left: 18rem;
+              }
+              &::before {
+                content: "";
+                position: absolute;
+                top: 6rem;
+                left: 0;
+                width: 18rem;
+                height: 18rem;
+                border-radius: 50%;
+                background: $color_primary;
+                @media screen and (max-width: $brakepoint) {
+                  width: 14rem;
+                  height: 14rem;
+                }
+              }
+            }
+          }
+          &--iconified-ol {
+            li {
+              display: grid;
+              grid-template-columns: 50rem 1fr;
+              gap: 15rem;
+              @media screen and (max-width: $brakepoint) {
+                grid-template-columns: 25rem 1fr;
+                gap: 8rem;
+              }
             }
           }
         }

@@ -1,5 +1,5 @@
 <template>
-  <Page :page="page">
+  <Page v-if="page" :page="page">
     <HomeHeroSection :content="pageContent.main_banner" />
     <BlogSection :injected-title="pageContent.blog_section.title" />
     <TestSection :content="pageContent.test_section" />
