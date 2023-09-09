@@ -3,7 +3,7 @@
     <BreadCrumbs class="page__breadcrumbs sb-container"
       v-if="breadcrumbsPageName && breadcrumbsRoutes"
       :routes="breadcrumbsRoutes"
-      :pageName="breadcrumbsPageName"
+      :page-name="breadcrumbsPageName"
       :sliced="breadcrumbsSliced"
     />
     <div class="page__sections">
