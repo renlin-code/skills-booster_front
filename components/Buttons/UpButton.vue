@@ -82,6 +82,8 @@ export default {
   &__arrow {
     width: 18rem;
     height: 18rem;
+    display: grid;
+    place-content: center;
     @media screen and (max-width: $brakepoint) {
       width: 14rem;
       height: 14rem;

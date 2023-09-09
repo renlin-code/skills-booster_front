@@ -2,7 +2,8 @@
   <div>
     <HeaderDefault />
     <main>
-      <Nuxt />
+      <OfflineView v-if="$nuxt.isOffline" />
+      <Nuxt v-else />
       <UpButton class="up" />
     </main>
     <FooterDefault />
@@ -13,14 +14,18 @@
 import { mapGetters } from "vuex";
 import HeaderDefault from "~/components/Headers/HeaderDefault.vue";
 import FooterDefault from "~/components/Footers/FooterDefault.vue";
+import OfflineView from "~/components/Others/OfflineView.vue";
 import UpButton from "~/components/Buttons/UpButton.vue";
 
 export default {
   components: {
     HeaderDefault,
+    OfflineView,
     FooterDefault,
-    UpButton
-},
+    UpButton,
+  },
+  data: () => ({
+  }),
   computed: {
     ...mapGetters(["getScrollFixedValue"]),
   },
