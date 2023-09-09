@@ -3,15 +3,17 @@ export default {
     isMobile: false,
   }),
   methods: {
-    mediaQueryHook(callback) {
+    async mediaQueryHook(callback) {
       const mq = window.matchMedia("(max-width: 650px)");
       this.isMobile = mq.matches;
       if(callback) {
+        await this.$nextTick();
         callback();
       }
-      mq.addEventListener("change", (e) => {
+      mq.addEventListener("change", async (e) => {
         this.isMobile = e.matches;
         if(callback) {
+          await this.$nextTick();
           callback();
         }
       });

@@ -1,7 +1,10 @@
 <template>
-  <section class="test-section sb-noselect">
+  <section
+    class="test-section sb-noselect"
+    :class="{ 'test-section--minified': minified }"
+  >
     <div class="test-section__inner sb-container">
-      <div class="test-section__bg"></div>
+      <div class="test-section__bg" :class="{ 'mobile-hidden': minified }"></div>
       <div class="test-section__content">
         <div class="test-section__left">
           <h2 class="test-section__title">{{ content.title }}</h2>
@@ -66,6 +69,10 @@ export default {
   props: {
     content: {
       type: Object,
+    },
+    minified: {
+      type: Boolean,
+      default: false,
     },
   },
 };
@@ -160,8 +167,9 @@ export default {
   }
   &__fig {
     display: flex;
-    width: 200rem;
-    height: 200rem;
+    width: 204rem;
+    height: 204rem;
+    padding: 4rem;
     position: relative;
     @media screen and (max-width: $brakepoint) {
       width: 300rem;
@@ -175,11 +183,7 @@ export default {
       left: 0;
       width: 100%;
       height: 100%;
-      transform: scale(1.04);
       background: url("/images/others/img_border.svg") center/contain no-repeat;
-      @media screen and (max-width: $brakepoint) {
-        transform: scale(1.03);
-      }
     }
     img {
       width: 100%;
@@ -267,6 +271,147 @@ export default {
         @media screen and (max-width: $brakepoint) {
           left: 46rem;
           bottom: 208rem;
+        }
+      }
+    }
+  }
+  &--minified {
+    .test-section {
+      &__inner {
+        min-height: 500rem;
+        border-radius: 20rem;
+        padding: 30rem 20rem;
+        @media screen and (max-width: $brakepoint) {
+          min-height: unset;
+          width: 270rem;
+          height: 300rem;
+          padding: 20rem;
+        }
+      }
+      &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 91rem;
+        @media screen and (max-width: $brakepoint) {
+          gap: 0;
+        }
+      }
+      &__bg {
+        top: auto;
+        bottom: -194rem;
+        right: -206rem;
+        @media screen and (max-width: $brakepoint) {
+          bottom: -287rem;
+        }
+      }
+      &__left {
+        padding-top: 0;
+      }
+      &__title {
+        color: $color_white;
+        @include fontStyles($font_1, 26rem, 41.6rem, 400);
+        margin-bottom: 12rem;
+        text-transform: uppercase;
+        text-align: center;
+        @media screen and (max-width: $brakepoint) {
+          @include fontStyles($font_1, 13rem, 20.8rem, 400, 1.3rem);
+          margin-bottom: 15rem;
+        }
+      }
+      &__fig {
+        display: flex;
+        width: 310rem;
+        height: 310rem;
+        transform: translate(76rem, 86rem);
+        padding: 4rem;
+        position: relative;
+        @media screen and (max-width: $brakepoint) {
+          width: 180rem;
+          height: 180rem;
+          transform: translate(0, 8rem);
+        }
+        &::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: url("/images/others/img_border.svg") center/contain no-repeat;
+        }
+        img {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+      }
+      &__words {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        &-word {
+          @include fontStyles($font_3, 15rem, unset, 400);
+          color: $color_black;
+          padding: 6rem 20rem 4rem;
+          border-radius: 20rem;
+          background: $color_white;
+          display: inline-block;
+          position: absolute;
+          width: max-content;
+          top: auto !important;
+          @media screen and (max-width: $brakepoint) {
+            @include fontStyles($font_3, 12rem, 18rem, 400);
+            padding: 6rem 12rem 4rem;
+          }
+          &--red {
+            @include fontStyles($font_1, 13rem, 21rem, 400, 1.3rem);
+            background: $color_white;
+            color: $color_black;
+            bottom: 0rem;
+            right: 0rem;
+            padding: 9rem 20rem 5rem;
+            @media screen and (max-width: $brakepoint) {
+              @include fontStyles($font_1, 12rem, 19.2rem, 400, 1.2rem);
+              padding: 8rem 12rem 4rem;
+              bottom: 15rem;
+              right: -25rem;
+            }
+          }
+          &--1 {
+            left: auto;
+            right: 44rem;
+            bottom: 257rem;
+            @media screen and (max-width: $brakepoint) {
+              right: -30rem;
+              bottom: 135rem;
+            }
+          }
+          &--2 {
+            left: -16rem;
+            bottom: 20rem;
+            @media screen and (max-width: $brakepoint) {
+              left: -32rem;
+              bottom: 20rem;
+            }
+          }
+          &--4 {
+            left: -15rem;
+            bottom: 116rem;
+            @media screen and (max-width: $brakepoint) {
+              display: none;
+            }
+          }
+          &--3 {
+            left: 20rem;
+            bottom: 191rem;
+            @media screen and (max-width: $brakepoint) {
+              left: -38rem;
+              bottom: 122rem;
+            }
+          }
         }
       }
     }

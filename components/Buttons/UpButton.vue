@@ -1,6 +1,10 @@
 <template>
   <Transition name="fade">
-    <button class="up-button" @click="scrollToTop" v-if="shown">
+    <button class="up-button"
+      :class="{ 'up-button--down-page' : endOfPage && isMobile }"
+      @click="scrollToTop"
+      v-if="shown"
+    >
       <div class="up-button__arrow">
         <svg
           width="100%"
@@ -23,10 +27,13 @@
 </template>
 
 <script>
+import mediaQueryMixin from '~/mixins/mediaQueryMixin';
 export default {
   name: "UpButton",
+  mixins: [mediaQueryMixin],
   data: () => ({
     shown: false,
+    endOfPage: false,
   }),
   methods: {
     scrollToTop() {
@@ -39,12 +46,17 @@ export default {
           window.pageYOffset || document.documentElement.scrollTop;
         lastScrollPosition = currentScrollPosition;
 
-        this.shown = lastScrollPosition > 0;
+        this.shown = lastScrollPosition > 20;
+
+        const innerHeight = window.innerHeight;
+        const offsetHeight = document.body.offsetHeight;
+        this.endOfPage = offsetHeight - (innerHeight + lastScrollPosition) < 20;
       });
     },
   },
   mounted() {
     this.scrollHandler();
+    this.mediaQueryHook();
   },
 };
 </script>
@@ -65,7 +77,7 @@ export default {
     width: 38rem;
     height: 38rem;
     right: 15rem;
-    bottom: 60rem;
+    bottom: 15rem;
   }
   &__arrow {
     width: 18rem;
@@ -80,6 +92,9 @@ export default {
   }
   &:active {
     background-color: $color_black;
+  }
+  &--down-page {
+    bottom: 60rem;
   }
 }
 </style>

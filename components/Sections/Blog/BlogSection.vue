@@ -51,7 +51,7 @@
               v-if="totalItems > itemsPerPage && currentPage !== totalPages || pendingLoadMore"
             >
               <Transition name="fade">
-                <MainButton type="3" @click.native="loadMore" v-if="!pendingLoadMore"
+                <MainButton type="3" @click.native="loadMore" v-if="!pendingLoadMore && !pendingArticles"
                   >Показать еще</MainButton
                 >
               </Transition>

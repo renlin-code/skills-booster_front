@@ -33,7 +33,6 @@ export default {
     ],
   }),
   async asyncData({ $axios, params }) {
-    console.log(params);
     const splittedSlug = params.slug.split("-");
     const id = splittedSlug[splittedSlug.length - 1];
 

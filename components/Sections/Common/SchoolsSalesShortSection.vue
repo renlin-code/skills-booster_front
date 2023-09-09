@@ -8,18 +8,18 @@
         </NuxtLink>
       </div>
       <div class="schools-sales-short__sales">
-        <Slider desktop-off>
-          <Slide>
+        <Slider class="schools-sales-short__slider" desktop-off :wrapper-styles="sliderWrapperStyles">
+          <Slide class="schools-sales-short__slider-slide">
             <div class="schools-sales-short__sales-card">
               <SaleCard link-to="/" />
             </div>
           </Slide>
-          <Slide>
+          <Slide class="schools-sales-short__slider-slide">
             <div class="schools-sales-short__sales-card">
               <SaleCard link-to="/" black />
             </div>
           </Slide>
-          <Slide>
+          <Slide class="schools-sales-short__slider-slide">
             <div class="schools-sales-short__sales-card">
               <SaleCard link-to="/" />
             </div>
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import mediaQueryMixin from '~/mixins/mediaQueryMixin';
 import TextArrowButton from "~/components/Buttons/TextArrowButton.vue";
 import SaleCard from "~/components/Others/SaleCard.vue";
 import Slider from "~/components/Slider/Slider.vue";
@@ -44,6 +45,7 @@ import MainButton from "~/components/Buttons/MainButton.vue";
 
 export default {
   name: "SchoolsSalesShortSection",
+  mixins: [mediaQueryMixin],
   components: {
     TextArrowButton,
     SaleCard,
@@ -55,7 +57,15 @@ export default {
     injectedTitle: {
       type: String
     }
-  }
+  },
+  computed: {
+    sliderWrapperStyles() {
+      return !this.isMobile ? "gap: 20rem" : "";
+    }
+  },
+  mounted() {
+    this.mediaQueryHook();
+  },
 };
 </script>
 
@@ -86,6 +96,13 @@ export default {
     }
     @media screen and (max-width: $brakepoint) {
       margin-bottom: 12rem;
+    }
+  }
+  &__slider {
+    &-slide {
+      @media screen and (max-width: $brakepoint) {
+        margin-right: 15rem;
+      }
     }
   }
 }
