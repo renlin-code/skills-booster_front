@@ -1,11 +1,19 @@
 <template>
-  <div class="autor-card">
+  <div class="autor-card" :class="{ 'autor-card--many': autors.length > 1 }">
     <div class="autor-card__inner">
       <span class="autor-card__title sb-noselect">{{ title }}</span>
-      <figure class="autor-card__figure">
-        <img :src="autor.img" alt="" />
-      </figure>
-      <span class="autor-card__name">{{ autor.name }}</span>
+      <div class="autor-card__figures">
+        <figure class="autor-card__figure">
+          <img :src="autors[0].image" alt="" />
+        </figure>
+        <figure class="autor-card__figure" v-if="autors[1]">
+          <img :src="autors[1].image" alt="" />
+        </figure>
+      </div>
+      <div class="autor-card__names">
+        <span>{{ autors[0].name }}</span>
+        <span v-if="autors[1]">& {{ autors[1].name }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -15,12 +23,12 @@ export default {
   name: "AutorCard",
   props: {
     title: {
-      type: String
+      type: String,
     },
-    autor: {
-      type: Object
-    }
-  }
+    autors: {
+      type: Array,
+    },
+  },
 };
 </script>
 
@@ -79,11 +87,62 @@ export default {
       object-fit: cover;
     }
   }
-  &__name {
-    color: $color_white;
-    @include fontStyles($font_2, 26rem, 41.6rem, 600);
-    @media screen and (max-width: $brakepoint) {
-      @include fontStyles($font_2, 16rem, 24rem, 700, 0.8rem);
+  &__names {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    span {
+      color: $color_white;
+      @include fontStyles($font_2, 26rem, 41.6rem, 600);
+      @media screen and (max-width: $brakepoint) {
+        @include fontStyles($font_2, 16rem, 24rem, 700, 0.8rem);
+      }
+    }
+  }
+  &--many {
+    .autor-card {
+      &__figures {
+        height: 200rem;
+        position: relative;
+        width: 100%;
+        @media screen and (max-width: $brakepoint) {
+          height: 97rem;
+        }
+      }
+      &__inner {
+        @media screen and (max-width: $brakepoint) {
+          margin: 0;
+        }
+      }
+      &__figure {
+        width: 160rem;
+        height: 160rem;
+        padding: 7rem;
+        position: absolute;
+        @media screen and (max-width: $brakepoint) {
+          width: 87rem;
+          height: 87rem;
+          padding: 4rem;
+        }
+        &:nth-child(1) {
+          left: 20rem;
+          top: 0;
+          @media screen and (max-width: $brakepoint) {
+            left: 49rem;
+            top: auto;
+            bottom: 0;
+          }
+        }
+        &:nth-child(2) {
+          right: 20rem;
+          bottom: 0;
+          @media screen and (max-width: $brakepoint) {
+            right: 49rem;
+            bottom: auto;
+            top: 0;
+          }
+        }
+      }
     }
   }
 }

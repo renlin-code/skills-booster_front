@@ -193,6 +193,7 @@
                         <div
                           class="table__row-cell"
                           v-for="(cell, cellIndex) in row.content_table_row_cells"
+                          :class="{ 'table__row--bg': cellIndex % 2 !== 0 && !isMobile }"
                         >
                           <div class="table__header-cell">
                             {{
@@ -292,10 +293,18 @@
               </li>
             </ul>
           </div>
-          <AutorCard class="desktop-hidden" title="Автор статьи" :autor="content.autor" />
+          <AutorCard
+            class="desktop-hidden"
+            title="Автор статьи"
+            :autors="[content.autor]"
+          />
         </div>
         <div class="body__right">
-          <AutorCard class="mobile-hidden" title="Автор статьи" :autor="content.autor" />
+          <AutorCard
+            class="mobile-hidden"
+            title="Автор статьи"
+            :autors="[content.autor]"
+          />
 
           <div class="article-content__others desktop-hidden">
             <h4 class="article-content__others-title sb-container">
@@ -335,9 +344,7 @@
       </div>
 
       <div class="article-content__others mobile-hidden sb-noselect">
-        <h4 class="article-content__others-title sb-container">
-          Еще статьи на эту тему
-        </h4>
+        <h4 class="article-content__others-title sb-container">Еще статьи на эту тему</h4>
         <Slider
           class="article-content__others-slider"
           show-arrows
