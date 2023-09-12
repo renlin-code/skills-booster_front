@@ -1,36 +1,39 @@
 <template>
   <div class="sale-card" :class="{ 'sale-card--black': black }">
     <div class="sale-card__top">
-      <NuxtLink class="sale-card__top-link-layer mobile-hidden" :to="linkTo"></NuxtLink>
+      <a
+        class="sale-card__top-link-layer mobile-hidden"
+        target="_blank"
+        :href="content.sale_link"
+      ></a>
       <div class="sale-card__top-bg mobile-hidden"></div>
       <div class="sale-card__top-content">
         <div class="sale-card__logo-name">
-          <img src="/images/skillfactory.png" alt="" />
-          <span> Skillfactory </span>
+          <img :src="content.school_logo" alt="" />
+          <span> {{ content.school_title }} </span>
         </div>
         <div class="sale-card__average-dates">
-          <div class="sale-card__average">
-            <span>4.3</span>
+          <div class="sale-card__average" :style="`opacity: ${averageFormatted ? 1 : 0}`">
+            <span>{{ averageFormatted }}</span>
             <div class="sale-card__average-star"></div>
           </div>
           <div class="sale-card__dates">
-            <span>с 01.06-31.08</span>
-            <span>до 01.08-31.08</span>
+            <span v-if="content.sale_start">с {{ content.sale_start }}</span>
+            <span>до {{ content.sale_end }}</span>
           </div>
         </div>
       </div>
     </div>
     <div class="sale-card__bottom">
       <h6 class="sale-card__bottom-title">
-        Распродажа в SkillFactory. На все курсы скидка 45%!
+        {{ content.sale_title }}
       </h6>
       <p class="sale-card__bottom-text">
-        Гарантия трудоустройства — или вернут деньги! Запишитесь на программу и заберите
-        бонус на 146 000 ₽
+        {{ content.sale_description }}
       </p>
-      <NuxtLink class="sale-card__bottom-button" :to="linkTo">
+      <a class="sale-card__bottom-button" target="_blank" :href="content.sale_link">
         <MainButton type="1" arrow>На страницу акции</MainButton>
-      </NuxtLink>
+      </a>
     </div>
   </div>
 </template>
@@ -46,8 +49,18 @@ export default {
       type: Boolean,
       default: false,
     },
-    linkTo: {
-      type: String,
+    content: {
+      type: Object,
+    },
+  },
+  computed: {
+    averageFormatted() {
+      const number = this.content?.school_average;
+      return number
+        ? Number.isInteger(number)
+          ? `${number}.00`
+          : number.toFixed(2)
+        : "";
     },
   },
 };
@@ -166,7 +179,7 @@ export default {
       color: $color_white;
       @include fontStyles($font_3, 20rem, 32rem, 600, 1.1rem);
       @media screen and (max-width: $brakepoint) {
-        @include fontStyles($font_3, 13rem, 19.5rem, 400);
+        @include fontStyles($font_3, 11rem, 19.5rem, 400);
       }
     }
   }

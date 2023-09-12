@@ -1,0 +1,254 @@
+<template>
+  <section class="schools-sales sb-noselect">
+    <div class="schools-sales__inner sb-container">
+      <Transition name="fade">
+        <div v-show="!pendingRender">
+          <div class="schools-sales__top">
+            <h2 class="schools-sales__title sb-section-title">{{ injectedTitle }}</h2>
+            <NuxtLink to="/schools-sales" class="mobile-hidden" v-if="!extended">
+              <TextArrowButton>Все акции</TextArrowButton>
+            </NuxtLink>
+          </div>
+          <div class="schools-sales__sales">
+            <Slider
+              v-if="!pendingRender && !pendingSales"
+              class="schools-sales__slider"
+              desktop-off
+              :mobile-off="extended"
+              :wrapper-styles="sliderWrapperStyles"
+            >
+              <Slide class="schools-sales__slider-slide" v-for="sale in templateSales">
+                <SaleCard
+                  class="schools-sales__sales-card"
+                  :class="{ 'schools-sales__sales-card--extended': extended }"
+                  :content="sale"
+                  :black="sale.black"
+                />
+              </Slide>
+            </Slider>
+            <Transition name="fade">
+              <RingPreloader class="schools-sales__loading" v-if="pendingSales" />
+            </Transition>
+          </div>
+          <div class="sb-container desktop-hidden" v-if="!extended">
+            <NuxtLink to="/schools-sales">
+              <MainButton arrow type="3">Все акции</MainButton>
+            </NuxtLink>
+          </div>
+          <div v-else>
+            <div
+              class="schools-sales__load-more"
+              v-if="
+                (totalItems > itemsPerPage && currentPage !== totalPages) ||
+                pendingLoadMore
+              "
+            >
+              <Transition name="fade">
+                <MainButton
+                  type="3"
+                  @click.native="loadMore"
+                  v-if="!pendingLoadMore && !pendingSales"
+                  >Показать еще</MainButton
+                >
+              </Transition>
+              <Transition name="fade">
+                <RingPreloader
+                  class="schools-sales__loading schools-sales__loading"
+                  v-if="pendingLoadMore"
+                />
+              </Transition>
+            </div>
+            <div
+              class="schools-sales__pagination sb-container"
+              v-show="totalItems > itemsPerPage"
+            >
+              <Pagination
+                v-if="totalItems"
+                :total-items="totalItems"
+                :items-per-page="itemsPerPage"
+                @page-changed="handlePageChange"
+                @total-pages="setTotalPages"
+              />
+            </div>
+          </div>
+        </div>
+      </Transition>
+      <Transition name="fade">
+        <RingPreloader class="schools-sales__loading" v-show="pendingRender" />
+      </Transition>
+    </div>
+  </section>
+</template>
+
+<script>
+import mediaQueryMixin from "~/mixins/mediaQueryMixin";
+import TextArrowButton from "~/components/Buttons/TextArrowButton.vue";
+import SaleCard from "~/components/Others/SaleCard.vue";
+import Slider from "~/components/Slider/Slider.vue";
+import Slide from "~/components/Slider/Slide.vue";
+import MainButton from "~/components/Buttons/MainButton.vue";
+import RingPreloader from "~/components/Preloaders/RingPreloader";
+import Pagination from "~/components/Others/Pagination";
+
+export default {
+  name: "SchoolsSalesSection",
+  mixins: [mediaQueryMixin],
+  components: {
+    TextArrowButton,
+    SaleCard,
+    Slider,
+    Slide,
+    MainButton,
+    RingPreloader,
+    Pagination,
+  },
+  props: {
+    extended: {
+      type: Boolean,
+      default: false,
+    },
+    injectedTitle: {
+      type: String,
+    },
+  },
+  data: () => ({
+    render: false,
+    templateSales: [],
+    totalPending: 0,
+    pendingRender: true,
+    pendingSales: false,
+    pendingLoadMore: false,
+    itemsPerPage: null,
+    totalItems: null,
+    currentPage: 1,
+    totalPages: null,
+  }),
+  computed: {
+    sliderWrapperStyles() {
+      if (this.extended) {
+        return !this.isMobile
+          ? "display:grid; grid-template-columns: repeat(3, 1fr); column-gap: 20rem; row-gap: 40rem; margin-bottom: 40rem;"
+          : "display: flex; flex-direction: column; gap: 16rem;";
+      } else {
+        return !this.isMobile
+          ? "display:grid; grid-template-columns: repeat(3, 1fr); column-gap: 20rem; row-gap: 40rem;"
+          : "";
+      }
+    },
+  },
+  methods: {
+    async fetchData() {
+      this.totalPending++;
+      const data = await this.$axios.$get(
+        `/wp-json/get/schools_sales?&page=${this.currentPage}&per_page=${this.itemsPerPage}`
+      );
+      this.totalItems = data.total_pages * this.itemsPerPage;
+      const sales = data.schools_sales;
+
+      this.templateSales = [];
+      sales.forEach((i, index) => {
+        this.templateSales.push({
+          ...i,
+          black: index % 2 !== 0,
+        });
+      });
+
+      this.totalPending--;
+    },
+    async loadMore() {
+      this.itemsPerPage += 6;
+      this.pendingLoadMore = true;
+      await this.fetchData();
+      this.pendingLoadMore = false;
+    },
+    async handlePageChange({ curr, total }) {
+      if (curr !== this.currentPage) {
+        this.currentPage = curr;
+        this.totalPages = total;
+        this.pendingSales = true;
+        await this.fetchData();
+        this.pendingSales = this.totalPending !== 0;
+      }
+    },
+    setTotalPages(payload) {
+      this.totalPages = payload;
+    },
+  },
+  async created() {
+    this.itemsPerPage = this.extended ? 6 : 3;
+    await this.fetchData();
+    this.pendingRender = false;
+  },
+  mounted() {
+    this.mediaQueryHook();
+  },
+};
+</script>
+
+<style scoped lang="scss">
+.schools-sales {
+  &__inner {
+    position: relative;
+    background: $color_bg;
+    border-radius: 50rem;
+    padding: 60rem 50rem;
+    min-height: 600rem;
+    @media screen and (max-width: $brakepoint) {
+      border-radius: 30rem;
+      padding: 30rem 0;
+      min-height: 200rem;
+    }
+  }
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 50rem;
+    @media screen and (max-width: $brakepoint) {
+      padding: 0 15rem;
+      margin-bottom: 24rem;
+    }
+  }
+  &__sales {
+    min-height: 300rem;
+    &-card {
+      height: 100%;
+      &--extended {
+        width: 100%;
+      }
+    }
+    @media screen and (max-width: $brakepoint) {
+      margin-bottom: 24rem;
+    }
+  }
+  &__slider {
+    &-slide {
+      width: 100%;
+      @media screen and (max-width: $brakepoint) {
+        margin-right: 15rem;
+      }
+    }
+  }
+  &__loading {
+    width: min-content;
+    position: absolute;
+    margin-bottom: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+  }
+  &__load-more {
+    margin: 0 auto;
+    margin-bottom: 30rem;
+    width: 240rem;
+    height: 70rem;
+    position: relative;
+    @media screen and (max-width: $brakepoint) {
+      width: 100%;
+      padding: 0 15rem;
+      height: 47rem;
+      margin-bottom: 24rem;
+    }
+  }
+}
+</style>

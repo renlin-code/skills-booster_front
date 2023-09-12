@@ -46,5 +46,8 @@ export default {
 <style scoped lang="scss">
 main {
   min-height: calc(100vh - 325rem);
+  @media screen and (max-width: $brakepoint) {
+    min-height: unset;
+  }
 }
 </style>

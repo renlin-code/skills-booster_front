@@ -18,7 +18,7 @@ export default {
     height: 42rem;
     border-radius: 50%;
     border: 5rem solid $color_primary;
-    border-top-color: $color_gray;
+    border-top-color: $color_gray !important;
     animation: spin 0.75s linear infinite;
     @media screen and (max-width: $brakepoint) {
       width: 25rem;

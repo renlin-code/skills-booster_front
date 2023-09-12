@@ -37,7 +37,6 @@ export default {
     const id = splittedSlug[splittedSlug.length - 1];
 
     const page = await $axios.$get(`/wp-json/get/articles/${id}`);
-    console.log(page);
     return { page };
   },
 };

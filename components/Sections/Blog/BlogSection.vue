@@ -34,7 +34,7 @@
               </li>
             </ul>
             <Transition name="fade">
-              <RingPreloader class="blog__loading blog__loading" v-if="pendingArticles" />
+              <RingPreloader class="blog__loading" v-if="pendingArticles" />
             </Transition>
             <NoResultsView class="blog__no-results" v-if="templateArticles.length === 0">
               Извините, но по вашему запросу нет статей. Попробуйте изменить запрос
@@ -75,7 +75,7 @@
         </div>
       </Transition>
       <Transition name="fade">
-        <RingPreloader class="blog__loading blog__loading" v-show="pendingRender" />
+        <RingPreloader class="blog__loading" v-show="pendingRender" />
       </Transition>
     </div>
   </section>
@@ -113,7 +113,6 @@ export default {
     },
   },
   data: () => ({
-    render: false,
     templateArticles: [],
     allCategories: [],
     selectedCatId: "",
@@ -285,7 +284,7 @@ export default {
       flex-direction: column;
       row-gap: 16rem;
       padding: 0 15rem;
-      margin-bottom: 12rem;
+      margin-bottom: 24rem;
     }
   }
   &__no-results {
@@ -310,6 +309,7 @@ export default {
     position: relative;
     @media screen and (max-width: $brakepoint) {
       width: 100%;
+      height: 47rem;
       padding: 0 15rem;
       margin-bottom: 24rem;
     }

@@ -3,7 +3,7 @@
     <HomeHeroSection :content="pageContent.main_banner" />
     <BlogSection :injected-title="pageContent.blog_section.title" />
     <TestSection :content="pageContent.test_section" />
-    <SchoolsSalesShortSection :injected-title="pageContent.schools_sales_section.title" />
+    <SchoolsSalesSection :injected-title="pageContent.schools_sales_section.title" />
   </Page>
 </template>
 
@@ -14,7 +14,7 @@ import Page from "~/components/Layout/Page.vue";
 import HomeHeroSection from "~/components/Sections/Home/HomeHeroSection.vue";
 import BlogSection from "~/components/Sections/Blog/BlogSection.vue";
 import TestSection from "~/components/Sections/Common/TestSection.vue";
-import SchoolsSalesShortSection from "~/components/Sections/Common/SchoolsSalesShortSection.vue";
+import SchoolsSalesSection from "~/components/Sections/Common/SchoolsSalesSection.vue";
 
 export default {
   name: "IndexPage",
@@ -24,7 +24,7 @@ export default {
     HomeHeroSection,
     BlogSection,
     TestSection,
-    SchoolsSalesShortSection,
+    SchoolsSalesSection,
   },
 };
 </script>
