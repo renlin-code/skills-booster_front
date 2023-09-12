@@ -2,6 +2,9 @@
   <section class="policy-content">
     <div class="policy-content__inner sb-container">
       <h1 class="policy-content__title sb-noselect">{{ content.title }}</h1>
+      <h2 class="policy-content__subtitle sb-noselect" v-if="content.subtitle">
+        {{ content.subtitle }}
+      </h2>
       <div class="policy-content__html" v-html="content.content"></div>
     </div>
   </section>
@@ -37,12 +40,20 @@ export default {
       margin-bottom: 16rem;
     }
   }
+  &__subtitle {
+    @include fontStyles($font_2, 26rem, 41.6rem, 600);
+    margin-bottom: 30rem;
+    @media screen and (max-width: $brakepoint) {
+      @include fontStyles($font_2, 16rem, 25.6rem, 600);
+      margin-bottom: 24rem;
+    }
+  }
   &__html {
     @include fontStyles($font_3, 20rem, 30rem, 400, 1rem);
     @media screen and (max-width: $brakepoint) {
       @include fontStyles($font_3, 14rem, 21rem, 400, 0.7rem);
     }
-    em {
+    em, a {
       color: $color_primary;
     }
     h4 {

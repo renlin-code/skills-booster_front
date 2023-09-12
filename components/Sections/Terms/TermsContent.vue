@@ -42,7 +42,7 @@ export default {
     @media screen and (max-width: $brakepoint) {
       @include fontStyles($font_3, 14rem, 21rem, 400, 0.7rem);
     }
-    em {
+    em, a {
       color: $color_primary;
     }
     h4 {
@@ -52,6 +52,17 @@ export default {
       @media screen and (max-width: $brakepoint) {
         @include fontStyles($font_3, 16rem, unset, 600);
         margin-top: 6rem;
+      }
+    }
+    ul {
+      li {
+        padding-left: 14rem;
+        position: relative;
+        &::before {
+          content: "\2022";
+          position: absolute;
+          left: 0;
+        }
       }
     }
   }

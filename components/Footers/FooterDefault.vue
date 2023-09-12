@@ -95,6 +95,10 @@ export default {
         name: "О проекте",
         route: "/about",
       },
+      {
+        name: "Контакты",
+        route: "/contacts",
+      },
     ],
   }),
   created() {
