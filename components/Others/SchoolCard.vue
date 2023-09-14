@@ -3,7 +3,7 @@
     <div class="school-card__inner">
       <div class="school-card__top">
         <div class="school-card__logo-name">
-          <NuxtLink to="/">
+          <NuxtLink :to="`/schools-reviews/${content.slug}-${content.id}`">
             <img :src="content.logo" alt="" />
             <span>{{ content.title }}</span>
           </NuxtLink>
