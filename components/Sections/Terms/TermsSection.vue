@@ -1,18 +1,15 @@
 <template>
-  <section class="policy-content">
-    <div class="policy-content__inner sb-container">
-      <h1 class="policy-content__title sb-noselect">{{ content.title }}</h1>
-      <h2 class="policy-content__subtitle sb-noselect" v-if="content.subtitle">
-        {{ content.subtitle }}
-      </h2>
-      <div class="policy-content__html" v-html="content.content"></div>
+  <section class="terms-content">
+    <div class="terms-content__inner sb-container">
+      <h1 class="terms-content__title sb-noselect">{{ content.title }}</h1>
+      <div class="terms-content__html" v-html="content.content"></div>
     </div>
   </section>
 </template>
 
 <script>
 export default {
-  name: "PolicyContent",
+  name: "TermsSection",
   props: {
     content: {
       type: Object,
@@ -22,7 +19,7 @@ export default {
 </script>
 
 <style lang="scss">
-.policy-content {
+.terms-content {
   &__inner {
     background: $color_bg;
     padding: 60rem 50rem;
@@ -40,14 +37,6 @@ export default {
       margin-bottom: 16rem;
     }
   }
-  &__subtitle {
-    @include fontStyles($font_2, 26rem, 41.6rem, 600);
-    margin-bottom: 30rem;
-    @media screen and (max-width: $brakepoint) {
-      @include fontStyles($font_2, 16rem, 25.6rem, 600);
-      margin-bottom: 24rem;
-    }
-  }
   &__html {
     @include fontStyles($font_3, 20rem, 30rem, 400, 1rem);
     @media screen and (max-width: $brakepoint) {
@@ -63,6 +52,17 @@ export default {
       @media screen and (max-width: $brakepoint) {
         @include fontStyles($font_3, 16rem, unset, 600);
         margin-top: 6rem;
+      }
+    }
+    ul {
+      li {
+        padding-left: 14rem;
+        position: relative;
+        &::before {
+          content: "\2022";
+          position: absolute;
+          left: 0;
+        }
       }
     }
   }

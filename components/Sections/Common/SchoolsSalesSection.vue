@@ -139,9 +139,12 @@ export default {
   methods: {
     async fetchData() {
       this.totalPending++;
-      const data = await this.$axios.$get(
-        `/wp-json/get/schools_sales?&page=${this.currentPage}&per_page=${this.itemsPerPage}`
-      );
+      const data = await this.$axios.$get("/wp-json/get/schools_sales", {
+        params: {
+          page: this.currentPage,
+          per_page: this.itemsPerPage,
+        },
+      });
       this.totalItems = data.total_pages * this.itemsPerPage;
       const sales = data.schools_sales;
 

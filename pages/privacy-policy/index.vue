@@ -5,7 +5,7 @@
     :breadcrumbs-routes="breadcrumbsRoutes"
     breadcrumbs-page-name="Политика конфиденциальности"
   >
-    <PolicyContent :content="pageContent" />
+    <PolicySection :content="pageContent" />
   </Page>
 </template>
 
@@ -13,14 +13,14 @@
 import { pageAsyncDataMixin } from "~/mixins/pageAsyncDataMixin";
 
 import Page from "~/components/Layout/Page.vue";
-import PolicyContent from "~/components/Sections/Policy/PolicyContent.vue";
+import PolicySection from "~/components/Sections/Policy/PolicySection.vue";
 
 export default {
   name: "IndexPage",
   mixins: [pageAsyncDataMixin(140)],
   components: {
     Page,
-    PolicyContent,
+    PolicySection,
   },
   data: () => ({
     breadcrumbsRoutes: [

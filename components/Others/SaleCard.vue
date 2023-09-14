@@ -129,6 +129,7 @@ export default {
       width: 60rem;
       height: 60rem;
       object-fit: cover;
+      background-color: $color_white;
       @media screen and (max-width: $brakepoint) {
         width: 40rem;
         height: 40rem;

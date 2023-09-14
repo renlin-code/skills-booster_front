@@ -5,7 +5,7 @@
     :breadcrumbs-routes="breadcrumbsRoutes"
     breadcrumbs-page-name="Пользовательское соглашение"
   >
-    <TermsContent :content="pageContent" />
+    <TermsSection :content="pageContent" />
   </Page>
 </template>
 
@@ -13,14 +13,14 @@
 import { pageAsyncDataMixin } from "~/mixins/pageAsyncDataMixin";
 
 import Page from "~/components/Layout/Page.vue";
-import TermsContent from "~/components/Sections/Terms/TermsContent.vue";
+import TermsSection from "~/components/Sections/Terms/TermsSection.vue";
 
 export default {
   name: "IndexPage",
   mixins: [pageAsyncDataMixin(142)],
   components: {
     Page,
-    TermsContent,
+    TermsSection,
   },
   data: () => ({
     breadcrumbsRoutes: [

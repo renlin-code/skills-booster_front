@@ -39,6 +39,11 @@ export default {
 
 <style scoped lang="scss">
 .chips {
+  &__inner {
+    @media screen and (max-width: $brakepoint) {
+      padding: 3rem 0;
+    }
+  }
   &__list {
     display: flex;
     gap: 16rem;

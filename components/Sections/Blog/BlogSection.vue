@@ -48,10 +48,16 @@
           <div v-else>
             <div
               class="blog__load-more"
-              v-if="totalItems > itemsPerPage && currentPage !== totalPages || pendingLoadMore"
+              v-if="
+                (totalItems > itemsPerPage && currentPage !== totalPages) ||
+                pendingLoadMore
+              "
             >
               <Transition name="fade">
-                <MainButton type="3" @click.native="loadMore" v-if="!pendingLoadMore && !pendingArticles"
+                <MainButton
+                  type="3"
+                  @click.native="loadMore"
+                  v-if="!pendingLoadMore && !pendingArticles"
                   >Показать еще</MainButton
                 >
               </Transition>
@@ -145,9 +151,14 @@ export default {
     },
     async fetchData() {
       this.totalPending++;
-      const data = await this.$axios.$get(
-        `/wp-json/get/articles/?category_id=${this.selectedCatId}&search=${this.searchQuery}&page=${this.currentPage}&per_page=${this.itemsPerPage}`
-      );
+      const data = await this.$axios.$get("/wp-json/get/articles/", {
+        params: {
+          category_id: this.selectedCatId,
+          search: this.searchQuery,
+          page: this.currentPage,
+          per_page: this.itemsPerPage,
+        },
+      });
       this.allCategories = data.all_categories;
       this.totalItems = data.total_pages * this.itemsPerPage;
       const { articles } = data;
