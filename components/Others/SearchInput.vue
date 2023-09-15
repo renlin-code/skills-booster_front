@@ -9,6 +9,8 @@
     />
     <button class="search-input__button">
       <svg
+        class="loupe"
+        v-if="!value.length"
         width="100%"
         height="100%"
         viewBox="0 0 18 18"
@@ -22,6 +24,23 @@
           fill="none"
         />
       </svg>
+      <svg
+        class="close"
+        @click="clear"
+        v-if="value.length"
+        width="100%"
+        height="100%"
+        viewBox="0 0 18 18"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+          <path
+            d="M0.884766 17.1129L17.115 0.887207M0.884766 0.887207L17.115 17.1129"
+            stroke="none"
+            stroke-width="1.2"
+            stroke-linecap="round"
+          />
+      </svg>
     </button>
   </div>
 </template>
@@ -34,8 +53,13 @@ export default {
       type: String,
     },
     value: {
-      type: String
+      type: String,
     },
+  },
+  methods: {
+    clear() {
+      this.$emit('input', '');
+    }
   },
 };
 </script>
@@ -78,10 +102,25 @@ export default {
       top: 12rem;
       right: 10rem;
     }
-    svg {
+    .loupe,
+    .close {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 18rem;
+      height: 18rem;
+      path {
+        transition: all $transition_base;
+      }
+    }
+    .loupe {
       path {
         fill: $color_gray;
-        transition: all $transition_base;
+      }
+    }
+    .close {
+      path {
+        stroke: $color_gray;
       }
     }
   }
@@ -91,9 +130,14 @@ export default {
         border-color: $color_black;
       }
       &__button {
-        svg {
+        .loupe {
           path {
             fill: $color_black;
+          }
+        }
+        .close {
+          path {
+            stroke: $color_black;
           }
         }
       }

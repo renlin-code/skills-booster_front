@@ -117,8 +117,6 @@ export default {
     totalPages(value) {
       this.$emit("total-pages", value);
     },
-    currentPage(value) {
-    },
   },
   mounted() {
     this.$emit("total-pages", this.totalPages);
@@ -147,8 +145,8 @@ export default {
     width: 60rem;
     height: 60rem;
     @media screen and (max-width: $brakepoint) {
-      width: 36rem;
-      height: 36rem;
+      width: 30rem;
+      height: 30rem;
     }
     button {
       width: 100%;
@@ -160,7 +158,7 @@ export default {
       color: $color_gray;
       @include fontStyles($font_2, 32rem, 32rem, 300);
       @media screen and (max-width: $brakepoint) {
-        @include fontStyles($font_2, 20rem, 20rem, 300);
+        @include fontStyles($font_2, 16rem, 16rem, 300);
       }
       transition: all $transition_base;
       &:disabled {

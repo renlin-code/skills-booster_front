@@ -70,7 +70,7 @@ export default {
   }),
   mounted() {
     this.mediaQueryHook(() => {
-      this.scrumbsPageName = this.isMobile && this.sliced
+      this.scrumbsPageName = this.isMobile && this.sliced && this.pageName.length > 30
         ? this.pageName.slice(0, 30).concat("...")
         : this.pageName;
     });

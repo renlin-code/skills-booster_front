@@ -23,7 +23,9 @@
               />
             </div>
           </div>
-          <div class="blog__body">
+          <div class="blog__body"
+            :class="{ 'blog__body--loading': pendingArticles }"
+          >
             <ul class="blog__articles" v-if="!pendingArticles">
               <li
                 class="blog__articles-element"
@@ -274,7 +276,12 @@ export default {
   &__body {
     width: 100%;
     position: relative;
-    min-height: 470rem;
+    &--loading {
+      min-height: 470rem;
+      @media screen and (max-width: $brakepoint) {
+        min-height: 160vh;
+      }
+    }
   }
   &__loading {
     width: min-content;

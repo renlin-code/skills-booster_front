@@ -20,7 +20,10 @@
               <Chips :items="sortOptions" @select-chip="switchSortOption" />
             </div>
           </div>
-          <div class="reviews-section__body">
+          <div
+            class="reviews-section__body"
+            :class="{ 'reviews-section__body--loading': pendingSchools }"
+          >
             <ul class="reviews-section__schools" v-if="!pendingSchools">
               <li
                 class="reviews-section__schools-element"
@@ -36,7 +39,7 @@
               class="reviews-section__no-results"
               v-if="templateSchools.length === 0"
             >
-              Извините, но по вашему запросу нет статей. Попробуйте изменить запрос
+              Извините, но по вашему запросу нет школ. Попробуйте изменить запрос
             </NoResultsView>
           </div>
           <div
@@ -111,7 +114,6 @@ export default {
     sortOptions: ["Рейтинг", "Отзывы", "Название"],
     sortQuery: "",
     templateSchools: [],
-    allSchools: [],
     totalPending: 0,
     pendingRender: true,
     pendingSchools: false,
@@ -135,7 +137,6 @@ export default {
           break;
       }
       this.pendingSchools = true;
-      console.log(this.sortQuery);
       await this.fetchData();
       this.pendingSchools = this.totalPending !== 0;
     },
@@ -260,9 +261,14 @@ export default {
   &__body {
     width: 100%;
     position: relative;
-    min-height: 470rem;
     @media screen and (max-width: $brakepoint) {
       padding: 0 15rem;
+    }
+    &--loading {
+      min-height: 470rem;
+      @media screen and (max-width: $brakepoint) {
+        min-height: 160vh;
+      }
     }
   }
   &__schools {
