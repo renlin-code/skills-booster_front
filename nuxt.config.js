@@ -1,58 +1,49 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'SkillsBooster',
+    title: "SkillsBooster",
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
-      { name: 'format-detection', content: 'telephone=no' },
-      { name: 'google', content: 'notranslate' }
+      { charset: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { hid: "description", name: "description", content: "" },
+      { name: "format-detection", content: "telephone=no" },
+      { name: "google", content: "notranslate" },
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ],
-    script: [
-      { src: "/js/rem.js", ssr: false },
-    ],
+    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+    script: [{ src: "/js/rem.js", ssr: false }],
     bodyAttrs: {
-      content: 'notranslate',
+      content: "notranslate",
     },
   },
 
   server: {
-    port: 3050
+    port: 3050,
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [
-    '~/static/scss/main.scss',
-  ],
+  css: ["~/static/scss/main.scss"],
   styleResources: {
-    scss: [
-      '~/static/scss/_vars.scss',
-      '~/static/scss/_mixins.scss',
-    ],
+    scss: ["~/static/scss/_vars.scss", "~/static/scss/_mixins.scss"],
   },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '~/plugins/typed.js', mode: 'client' }
+    { src: "~/plugins/typed.js", mode: "client" },
+    { src: "~/plugins/vuelidate.js" },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [
-  ],
+  buildModules: [],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios',
+    "@nuxtjs/axios",
     // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa',
-    '@nuxtjs/style-resources'
+    "@nuxtjs/pwa",
+    "@nuxtjs/style-resources",
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -63,17 +54,16 @@ export default {
 
   loading: {
     color: "#F26F6F",
-    height: "4rem"
+    height: "4rem",
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
-      lang: 'en'
-    }
+      lang: "en",
+    },
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-  }
-}
+  build: {},
+};

@@ -865,7 +865,7 @@
 
 <script>
 import MainButton from "~/components/Buttons/MainButton.vue";
-import BreadCrumbs from "~/components/Others/BreadCrumbs.vue";
+import BreadCrumbs from "~/components/Navigation/BreadCrumbs.vue";
 
 export default {
   name: "Page404",

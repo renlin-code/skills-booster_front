@@ -1,5 +1,18 @@
 <template>
   <section class="school-content sb-noselect">
+    <Transition name="fade">
+      <SendReviewModal
+        v-if="showModal"
+        @close="showModal = false"
+        @success="showModalSuccess = true"
+      />
+    </Transition>
+    <Transition name="fade">
+      <SuccessModal v-if="showModalSuccess" @close="showModalSuccess = false"
+        >Спасибо за оставленный отзыв. Ваш отзыв будет размещён на сайте после проверки
+        модератором</SuccessModal
+      >
+    </Transition>
     <div class="school-content__inner">
       <div class="school-content__banner sb-container">
         <div class="school-content__banner-top">
@@ -162,7 +175,9 @@
                 <Accordion :items="sortOptions" @select-item="switchSortOption" />
               </div>
               <div class="school-content__reviews-appeal">
-                <MainButton type="1">Оставить отзыв о школе</MainButton>
+                <MainButton type="1" @click.native="showModal = true"
+                  >Оставить отзыв о школе</MainButton
+                >
               </div>
             </div>
             <div class="school-content__reviews-body">
@@ -228,21 +243,33 @@
 </template>
 
 <script>
+import SendReviewModal from "~/components/Modals/ModalsInstances/SendReviewModal.vue";
 import MainButton from "~/components/Buttons/MainButton.vue";
 import Accordion from "~/components/Others/Accordion.vue";
 import Pagination from "~/components/Others/Pagination.vue";
 import ReviewCard from "~/components/Others/ReviewCard.vue";
 import RingPreloader from "~/components/Preloaders/RingPreloader.vue";
+import SuccessModal from "~/components/Modals/ModalsInstances/SuccessModal.vue";
 
 export default {
   name: "SchoolContent",
-  components: { MainButton, Accordion, ReviewCard, RingPreloader, Pagination },
+  components: {
+    SendReviewModal,
+    MainButton,
+    Accordion,
+    ReviewCard,
+    RingPreloader,
+    Pagination,
+    SuccessModal,
+  },
   props: {
     content: {
       type: Object,
     },
   },
   data: () => ({
+    showModal: false,
+    showModalSuccess: false,
     showFullDescription: false,
     showReadMoreButton: false,
     showHint: false,

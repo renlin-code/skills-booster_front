@@ -36,7 +36,7 @@ export default {
       if (value) {
         documentEl.style.overflowY = "hidden";
       } else {
-        documentEl.style.overflowY = "scroll";
+        documentEl.style.overflowY = "unset";
       }
     },
   },

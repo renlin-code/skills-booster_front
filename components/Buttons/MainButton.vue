@@ -7,6 +7,7 @@
       'main-button--type3': type === '3',
       'main-button--type4': type === '4',
     }"
+    :disabled="disabled"
   >
     <slot />
     <div class="main-button__arrow" v-if="arrow">
@@ -41,6 +42,10 @@ export default {
       type: String,
       default: "1",
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
 };
 </script>
@@ -55,7 +60,7 @@ export default {
   gap: 6rem;
   text-align: center;
   border-radius: 30rem;
-  border: 1rem solid transparent;
+  border: 2rem solid transparent;
   @include fontStyles($font_3, 22rem, 26rem, 500);
   transition: all $transition_base;
   @media screen and (max-width: $brakepoint) {
@@ -75,13 +80,6 @@ export default {
     svg {
       path {
         transition: all $transition_base;
-      }
-    }
-  }
-  &:hover {
-    .main-button {
-      &__arrow {
-        // transform: translate(4rem, -4rem);
       }
     }
   }
@@ -183,6 +181,12 @@ export default {
         }
       }
     }
+  }
+  &:disabled {
+    cursor: default;
+    background: $color_gray;
+    border-color: $color_gray;
+    color: $color_light-gray;
   }
 }
 </style>

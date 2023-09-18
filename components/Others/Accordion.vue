@@ -76,10 +76,18 @@ export default {
       width: 24rem;
       height: 24rem;
       transition: all $transition_base;
+      path {
+        transition: all $transition_base;
+      }
     }
     &:hover {
       border-color: $color_black;
       border-width: 1.5rem;
+      svg {
+        path {
+          stroke: $color_black;
+        }
+      }
       @media screen and (max-width: $brakepoint) {
         border-width: 1rem;
       }
@@ -110,7 +118,7 @@ export default {
         @include fontStyles($font_3, 14rem, 21rem, 500);
       }
       &:hover {
-        background: #E3D4CD;
+        background: rgba($color_primary, 0.3);
       }
     }
   }

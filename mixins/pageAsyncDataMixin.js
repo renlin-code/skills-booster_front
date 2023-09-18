@@ -4,7 +4,4 @@ export const pageAsyncDataMixin = (id) => ({
     const pageContent = page.wp_content;
     return { page, pageContent }
   },
-  mounted() {
-    console.log("CONTENT", this.pageContent)
-  },
 })

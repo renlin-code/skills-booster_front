@@ -1,19 +1,38 @@
 <template>
   <section class="contacts-section sb-noselect">
+    <Transition name="fade">
+      <SendAppealModal
+        v-if="showModal"
+        @close="showModal = false"
+        @success="showModalSuccess = true"
+      />
+    </Transition>
+    <Transition name="fade">
+      <SuccessModal v-if="showModalSuccess" @close="showModalSuccess = false"
+        >Спасибо за оставленный вопрос. Мы с вами свяжемся в близжайшее
+        время</SuccessModal
+      >
+    </Transition>
     <div class="contacts-section__inner sb-container">
       <div class="contacts-section__grid">
         <div class="contacts-section__left">
           <h1 class="contacts-section__title">{{ content.title }}</h1>
           <p class="contacts-section__description">
-            {{ content.description }} <a class="underline-primary" :href="`mailto:${content.email}`" target="_blank">{{ content.email }}</a>
+            {{ content.description }}
+            <a
+              class="underline-primary"
+              :href="`mailto:${content.email}`"
+              target="_blank"
+              >{{ content.email }}</a
+            >
           </p>
           <div class="contacts-section__button">
-            <MainButton type="1">Написать нам</MainButton>
+            <MainButton type="1" @click.native="showModal = true">Написать нам</MainButton>
           </div>
         </div>
         <div class="contacts-section__right">
           <div class="contacts-section__figure">
-            <img :src="content.image" alt="">
+            <img :src="content.image" alt="" />
           </div>
         </div>
       </div>
@@ -22,18 +41,26 @@
 </template>
 
 <script>
-import MainButton from '~/components/Buttons/MainButton.vue';
+import MainButton from "~/components/Buttons/MainButton.vue";
+import SendAppealModal from "~/components/Modals/ModalsInstances/SendAppealModal.vue";
+import SuccessModal from "~/components/Modals/ModalsInstances/SuccessModal.vue";
 
 export default {
   name: "ContactsSection",
   components: {
-    MainButton
+    MainButton,
+    SendAppealModal,
+    SuccessModal,
   },
   props: {
     content: {
       type: Object,
     },
   },
+  data: () => ({
+    showModal: false,
+    showModalSuccess: false,
+  }),
 };
 </script>
 

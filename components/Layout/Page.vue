@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import BreadCrumbs from '../Others/BreadCrumbs.vue';
+import BreadCrumbs from '~/components/Navigation/BreadCrumbs.vue';
 
 export default {
     name: "Page",
