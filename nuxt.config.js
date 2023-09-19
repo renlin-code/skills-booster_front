@@ -20,6 +20,10 @@ export default {
     port: 3050,
   },
 
+  serverMiddleware: [
+    { path: '/api/mailer', handler: '~/api/mailer.js' }
+  ],
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ["~/static/scss/main.scss"],
   styleResources: {
@@ -29,6 +33,7 @@ export default {
   plugins: [
     { src: "~/plugins/typed.js", mode: "client" },
     { src: "~/plugins/vuelidate.js" },
+    { src: "~/plugins/internal-api.js" },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

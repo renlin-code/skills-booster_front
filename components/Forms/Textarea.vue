@@ -28,7 +28,7 @@ export default {
     autoResize() {
       const textareaEl = this.$refs.textareaEl;
       textareaEl.style.height = "auto";
-      textareaEl.style.height = `${textareaEl.scrollHeight}rem`;
+      textareaEl.style.height = `${textareaEl.scrollHeight}px`;
     },
     inputHandler(event) {
       this.autoResize();

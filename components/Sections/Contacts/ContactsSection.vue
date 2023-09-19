@@ -21,9 +21,9 @@
             {{ content.description }}
             <a
               class="underline-primary"
-              :href="`mailto:${content.email}`"
+              :href="'mailto:skillsbooster.info@mail.ru'"
               target="_blank"
-              >{{ content.email }}</a
+              >skillsbooster.info@mail.ru</a
             >
           </p>
           <div class="contacts-section__button">

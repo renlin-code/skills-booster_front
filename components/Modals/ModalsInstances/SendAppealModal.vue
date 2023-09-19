@@ -127,7 +127,8 @@ export default {
       this.$v.$touch();
       if (!this.$v.$invalid) {
         this.pending = true;
-        await this.$axios.$post(`/wp-json/post/send_appeal/?name=${this.form.name}&email=${this.form.email}&message=${this.form.question}`);
+
+        await this.$internalApi.post(`/mailer?name=${this.form.name}&email=${this.form.email}&message=${this.form.question}`);
         this.pending = false;
         this.$emit("close");
         this.$emit("success");
