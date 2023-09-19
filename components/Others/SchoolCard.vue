@@ -3,7 +3,7 @@
     <div class="school-card__inner">
       <div class="school-card__top">
         <div class="school-card__logo-name">
-          <NuxtLink :to="`/schools-reviews/${content.slug}-${content.id}`">
+          <NuxtLink :to="`/schools-reviews/${content.slug}`">
             <img :src="content.logo" alt="" />
             <span>{{ content.title }}</span>
           </NuxtLink>
@@ -25,7 +25,7 @@
           </div>
         </div>
         <div class="school-card__reviews-button mobile-hidden">
-          <NuxtLink :to="`/schools-reviews/${content.slug}-${content.id}`">
+          <NuxtLink :to="`/schools-reviews/${content.slug}`">
             <MainButton type="1">{{ reviewsFormatted }}</MainButton>
           </NuxtLink>
         </div>
@@ -35,7 +35,7 @@
           {{ content.description }}
         </p>
         <div class="school-card__reviews-button desktop-hidden">
-          <NuxtLink :to="`/schools-reviews/${content.slug}-${content.id}`">
+          <NuxtLink :to="`/schools-reviews/${content.slug}`">
             <MainButton type="1">{{ reviewsFormatted }}</MainButton>
           </NuxtLink>
         </div>

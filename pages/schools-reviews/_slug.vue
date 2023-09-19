@@ -33,10 +33,9 @@ export default {
     ],
   }),
   async asyncData({ $axios, params }) {
-    const splittedSlug = params.slug.split("-");
-    const id = splittedSlug[splittedSlug.length - 1];
+    const { slug } = params;
 
-    const page = await $axios.$get(`/wp-json/get/schools/${id}`);
+    const page = await $axios.$get(`/wp-json/get/schools/${slug}`);
     return { page };
   },
 };

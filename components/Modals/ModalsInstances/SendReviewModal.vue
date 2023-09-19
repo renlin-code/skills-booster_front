@@ -86,6 +86,11 @@ export default {
     Checkbox,
     RingPreloader,
   },
+  props: {
+    schoolId: {
+      type: Number
+    }
+  },
   data: () => ({
     pending: false,
     firstClick: false,
@@ -146,11 +151,10 @@ export default {
       this.firstClick = true;
       this.$v.$touch();
       if (!this.$v.$invalid) {
-        const splittedSlug = this.$route.params.slug.split("-");
-        const schoolId = splittedSlug[splittedSlug.length - 1];
+        const { slug } = this.$route.params;
 
         this.pending = true;
-        await this.$axios.$post(`/wp-json/post/send_review/${schoolId}?name=${this.form.name}&email=${this.form.email}&rate=${this.form.rate}&text=${this.form.review}`);
+        await this.$axios.$post(`/wp-json/post/send_review/${this.schoolId}?name=${this.form.name}&email=${this.form.email}&rate=${this.form.rate}&text=${this.form.review}`);
         this.pending = false;
         this.$emit("close");
         this.$emit("success");

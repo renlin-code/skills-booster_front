@@ -3,6 +3,7 @@
     <Transition name="fade">
       <SendReviewModal
         v-if="showModal"
+        :school-id="content.id"
         @close="showModal = false"
         @success="showModalSuccess = true"
       />
@@ -348,7 +349,7 @@ export default {
     },
     async fetchData() {
       this.totalPending++;
-      const data = await this.$axios.$get(`/wp-json/get/schools/${this.content.id}`, {
+      const data = await this.$axios.$get(`/wp-json/get/schools/${this.content.slug}`, {
         params: {
           page: this.currentPage,
           per_page: this.itemsPerPage,
