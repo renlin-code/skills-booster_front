@@ -88,8 +88,8 @@ export default {
   },
   props: {
     schoolId: {
-      type: Number
-    }
+      type: Number,
+    },
   },
   data: () => ({
     pending: false,
@@ -154,12 +154,22 @@ export default {
         const { slug } = this.$route.params;
 
         this.pending = true;
-        await this.$axios.$post(`/wp-json/post/send_review/${this.schoolId}?name=${this.form.name}&email=${this.form.email}&rate=${this.form.rate}&text=${this.form.review}`);
+        await this.$axios.$post(
+          `/wp-json/post/send_review/${this.schoolId}?name=${this.form.name}&email=${this.form.email}&rate=${this.form.rate}&text=${this.form.review}`
+        );
         this.pending = false;
         this.$emit("close");
         this.$emit("success");
       }
     },
+    enterKeyListen() {
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") this.submitForm();
+      });
+    },
+  },
+  mounted() {
+    this.enterKeyListen();
   },
 };
 </script>

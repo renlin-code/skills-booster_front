@@ -128,12 +128,22 @@ export default {
       if (!this.$v.$invalid) {
         this.pending = true;
 
-        await this.$internalApi.post(`/mailer?name=${this.form.name}&email=${this.form.email}&message=${this.form.question}`);
+        await this.$internalApi.post(
+          `/mailer?name=${this.form.name}&email=${this.form.email}&message=${this.form.question}`
+        );
         this.pending = false;
         this.$emit("close");
         this.$emit("success");
       }
     },
+    enterKeyListen() {
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") this.submitForm();
+      });
+    },
+  },
+  mounted() {
+    this.enterKeyListen();
   },
 };
 </script>
