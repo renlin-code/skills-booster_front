@@ -8,6 +8,7 @@ export default {
       { hid: "description", name: "description", content: "" },
       { name: "format-detection", content: "telephone=no" },
       { name: "google", content: "notranslate" },
+      { name: "robots", content: "noindex" },
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
     script: [{ src: "/js/rem.js", ssr: false }],
@@ -20,9 +21,7 @@ export default {
     port: 3050,
   },
 
-  serverMiddleware: [
-    { path: '/api/mailer', handler: '~/api/mailer.js' }
-  ],
+  serverMiddleware: [{ path: "/api/mailer", handler: "~/api/mailer.js" }],
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ["~/static/scss/main.scss"],
@@ -46,8 +45,6 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     "@nuxtjs/axios",
-    // https://go.nuxtjs.dev/pwa
-    "@nuxtjs/pwa",
     "@nuxtjs/style-resources",
   ],
 
@@ -61,13 +58,6 @@ export default {
     color: "#F26F6F",
     height: "4rem",
   },
-
-  // PWA module configuration: https://go.nuxtjs.dev/pwa
-  // pwa: {
-  //   manifest: {
-  //     lang: "en",
-  //   },
-  // },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},

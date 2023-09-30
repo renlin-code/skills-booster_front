@@ -34,12 +34,12 @@
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-          <path
-            d="M0.884766 17.1129L17.115 0.887207M0.884766 0.887207L17.115 17.1129"
-            stroke="none"
-            stroke-width="1.2"
-            stroke-linecap="round"
-          />
+        <path
+          d="M0.884766 17.1129L17.115 0.887207M0.884766 0.887207L17.115 17.1129"
+          stroke="none"
+          stroke-width="1.2"
+          stroke-linecap="round"
+        />
       </svg>
     </button>
   </div>
@@ -58,8 +58,8 @@ export default {
   },
   methods: {
     clear() {
-      this.$emit('input', '');
-    }
+      this.$emit("input", "");
+    },
   },
 };
 </script>
@@ -109,6 +109,10 @@ export default {
       left: 0;
       width: 18rem;
       height: 18rem;
+      @media screen and (max-width: $brakepoint) {
+        width: 14rem;
+        height: 14rem;
+      }
       path {
         transition: all $transition_base;
       }
