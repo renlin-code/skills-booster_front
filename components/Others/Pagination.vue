@@ -68,6 +68,10 @@ export default {
       type: Number,
       default: 5,
     },
+    forcedCurrentPage: {
+      type: Number,
+      default: 1
+    }
   },
   data: () => ({
     currentPage: 1,
@@ -117,6 +121,9 @@ export default {
     totalPages(value) {
       this.$emit("total-pages", value);
     },
+    forcedCurrentPage(value) {
+      this.changePage(value);
+    }
   },
   mounted() {
     this.$emit("total-pages", this.totalPages);

@@ -2,7 +2,7 @@
   <article class="article-content">
     <div class="article-content__inner">
       <div
-        class="article-content__banner banner sb-container"
+        class="article-content__banner banner sb-container sb-observe sb-observe--fade"
         :style="`background-image: url(${content.category.image})`"
       >
         <h1 class="banner__title">
@@ -15,7 +15,7 @@
           {{ content.category.title }}
         </div>
       </div>
-      <div class="article-content__body body sb-container">
+      <div class="article-content__body body sb-container sb-observe sb-observe--fade-up">
         <div class="body__left">
           <div class="body__left-index index" :class="{ 'index--close': indexClose }">
             <button
@@ -343,7 +343,7 @@
         </div>
       </div>
 
-      <div class="article-content__others mobile-hidden sb-noselect">
+      <div class="article-content__others mobile-hidden sb-noselect sb-observe sb-observe--fade-up">
         <h4 class="article-content__others-title sb-container">Еще статьи на эту тему</h4>
         <Slider
           class="article-content__others-slider"
@@ -363,8 +363,10 @@
 </template>
 
 <script>
-import AutorCard from "~/components/Others/AutorCard.vue";
 import mediaQueryMixin from "~/mixins/mediaQueryMixin";
+import animateOnScrollMixin from "~/mixins/animateOnScrollMixin";
+
+import AutorCard from "~/components/Others/AutorCard.vue";
 import TestSection from "../Common/TestSection.vue";
 import AdCard from "~/components/Others/AdCard.vue";
 import Slider from "~/components/Slider/Slider.vue";
@@ -372,7 +374,7 @@ import Slide from "~/components/Slider/Slide.vue";
 import ArticleCard from "~/components/Others/ArticleCard.vue";
 export default {
   name: "ArticleContent",
-  mixins: [mediaQueryMixin],
+  mixins: [mediaQueryMixin, animateOnScrollMixin],
   props: {
     content: {
       type: Object,
@@ -444,7 +446,7 @@ export default {
       border-radius: 20rem;
       @media screen and (max-width: $brakepoint) {
         padding: 8rem 20rem;
-        @include fontStyles($font_3, 14rem, 21rem, 500);
+        @include fontStyles($font_3, 14rem, 21rem, 400);
       }
     }
   }
@@ -642,7 +644,7 @@ export default {
         &-html {
           @include fontStyles($font_3, 20rem, 30rem, 400, 1rem);
           @media screen and (max-width: $brakepoint) {
-            @include fontStyles($font_3, 14rem, 21rem, 500);
+            @include fontStyles($font_3, 14rem, 21rem, 400);
             padding: 0 15rem;
           }
           em {
@@ -718,7 +720,7 @@ export default {
           &-body {
             @include fontStyles($font_3, 20rem, 30rem, 400, 1rem);
             @media screen and (max-width: $brakepoint) {
-              @include fontStyles($font_3, 14rem, 21rem, 500);
+              @include fontStyles($font_3, 14rem, 21rem, 400);
             }
             em {
               display: inline;

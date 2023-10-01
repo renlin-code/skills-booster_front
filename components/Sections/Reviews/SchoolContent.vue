@@ -186,9 +186,9 @@
                 class="school-content__reviews-body-content--loading"
                 :class="{ 'blog__body--loading': pendingReviews }"
               >
-                <ul v-if="!pendingReviews" class="school-content__reviews-elements">
+                <ul v-show="!pendingReviews" class="school-content__reviews-elements">
                   <li
-                    class="school-content__reviews-elements-element"
+                    class="school-content__reviews-elements-element sb-observe sb-observe--fade-up"
                     v-for="review in templateReviews"
                   >
                     <ReviewCard :content="review" />
@@ -244,6 +244,8 @@
 </template>
 
 <script>
+import animateOnScrollMixin from "~/mixins/animateOnScrollMixin";
+
 import SendReviewModal from "~/components/Modals/ModalsInstances/SendReviewModal.vue";
 import MainButton from "~/components/Buttons/MainButton.vue";
 import Accordion from "~/components/Others/Accordion.vue";
@@ -254,6 +256,7 @@ import SuccessModal from "~/components/Modals/ModalsInstances/SuccessModal.vue";
 
 export default {
   name: "SchoolContent",
+  mixins: [animateOnScrollMixin],
   components: {
     SendReviewModal,
     MainButton,
@@ -360,6 +363,7 @@ export default {
       this.totalItems = data.reviews.total_pages * this.itemsPerPage;
       this.templateReviews = data.reviews.reviews;
       this.totalPending--;
+      this.observerReset();
     },
     async loadMore() {
       this.itemsPerPage += 10;

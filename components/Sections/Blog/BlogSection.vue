@@ -26,9 +26,9 @@
           <div class="blog__body"
             :class="{ 'blog__body--loading': pendingArticles }"
           >
-            <ul class="blog__articles" v-if="!pendingArticles">
+            <ul class="blog__articles" v-show="!pendingArticles">
               <li
-                class="blog__articles-element"
+                class="blog__articles-element sb-observe sb-observe--fade-up"
                 v-for="article in templateArticles"
                 :key="article.id"
               >
@@ -75,6 +75,7 @@
                 v-if="totalItems"
                 :total-items="totalItems"
                 :items-per-page="itemsPerPage"
+                :forced-current-page="forcedCurrentPage"
                 @page-changed="handlePageChange"
                 @total-pages="setTotalPages"
               />
@@ -90,6 +91,8 @@
 </template>
 
 <script>
+import animateOnScrollMixin from "~/mixins/animateOnScrollMixin";
+
 import Chips from "~/components/Others/Chips";
 import TextArrowButton from "~/components/Buttons/TextArrowButton";
 import ArticleCard from "~/components/Others/ArticleCard";
@@ -101,6 +104,7 @@ import NoResultsView from "~/components/Others/NoResultsView.vue";
 
 export default {
   name: "BlogSection",
+  mixins: [animateOnScrollMixin],
   components: {
     Chips,
     TextArrowButton,
@@ -132,6 +136,7 @@ export default {
     itemsPerPage: 6,
     totalItems: null,
     currentPage: 1,
+    forcedCurrentPage: null,
     totalPages: null,
   }),
   computed: {
@@ -146,10 +151,13 @@ export default {
   },
   methods: {
     async switchCategory(index) {
+      this.forcedCurrentPage = 1;
       this.selectedCatId = index > 0 ? this.allCategories[index - 1].id : "";
       this.pendingArticles = true;
+      await this.$nextTick();
       await this.fetchData();
       this.pendingArticles = this.totalPending !== 0;
+      this.forcedCurrentPage = null;
     },
     async fetchData() {
       this.totalPending++;
@@ -176,6 +184,7 @@ export default {
       });
 
       this.totalPending--;
+      this.observerReset();
     },
     async loadMore() {
       this.itemsPerPage += 6;
@@ -198,9 +207,12 @@ export default {
   },
   watch: {
     async searchQuery() {
+      this.forcedCurrentPage = 1;
       if (this.templateArticles.length !== 0) this.pendingArticles = true;
+      await this.$nextTick();
       await this.fetchData();
       this.pendingArticles = false;
+      this.forcedCurrentPage = null;
     },
   },
   async created() {

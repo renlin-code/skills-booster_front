@@ -60,10 +60,10 @@ body {
   background-size: 0% 2rem;
   transition: all $transition_base !important;
   &:hover {
-      background-size: 100% 2rem;
-      @media only screen and (max-width: 650px) {
-          background-size: 100% 1rem;
-      }
+    background-size: 100% 2rem;
+    @media only screen and (max-width: 650px) {
+      background-size: 100% 1rem;
+    }
   }
 }
 .underline-white {
@@ -74,10 +74,10 @@ body {
   background-size: 0% 2rem;
   transition: all $transition_base !important;
   &:hover {
-      background-size: 100% 2rem;
-      @media only screen and (max-width: 650px) {
-          background-size: 100% 1rem;
-      }
+    background-size: 100% 2rem;
+    @media only screen and (max-width: 650px) {
+      background-size: 100% 1rem;
+    }
   }
 }
 .underline-light-gray {
@@ -88,15 +88,16 @@ body {
   background-size: 0% 2rem;
   transition: all $transition_base !important;
   &:hover {
-      background-size: 100% 2rem;
-      @media only screen and (max-width: 650px) {
-          background-size: 100% 1rem;
-      }
+    background-size: 100% 2rem;
+    @media only screen and (max-width: 650px) {
+      background-size: 100% 1rem;
+    }
   }
 }
 
 //TRANSITIONS
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity $transition_base;
   transition-delay: 0.2s;
 }
@@ -115,5 +116,25 @@ body {
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+/Edge */
     user-select: none; /* Standard */
+  }
+}
+
+//ANIMATION OBSERVER
+
+.sb-observe {
+  transition: all 0.6s ease-in-out;
+  &.sb-observe--fade {
+    opacity: 0;
+    &.sb-observe--active {
+      opacity: 1;
+    }
+  }
+  &.sb-observe--fade-up {
+    opacity: 0;
+    transform: translateY(100rem);
+    &.sb-observe--active {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }

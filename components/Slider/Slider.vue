@@ -73,6 +73,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    init: {
+      type: Boolean,
+      default: true,
+    }
   },
   data: () => ({
     slider: null,
@@ -106,12 +110,21 @@ export default {
       this.slider?.slideNext();
     },
   },
+  watch: {
+    init(value) {
+      if (value) {
+        this.sliderInit();
+      }
+    }
+  },
   mounted() {
     this.mediaQueryHook(() => {
       if ((this.mobileOff && this.isMobile) || (this.desktopOff && !this.isMobile)) {
         this.sliderDestroy();
       } else {
-        this.sliderInit();
+        if (this.init) {
+          this.sliderInit();
+        }
       }
     });
   },

@@ -12,6 +12,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+
 import HeaderDefault from "~/components/Headers/HeaderDefault.vue";
 import FooterDefault from "~/components/Footers/FooterDefault.vue";
 import OfflineView from "~/components/Others/OfflineView.vue";
