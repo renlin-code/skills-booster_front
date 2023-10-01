@@ -12,7 +12,7 @@
           <div class="schools-sales__sales">
             <Slider
               v-show="!pendingRender && !pendingSales"
-              :init="!pendingRender && !pendingSales"
+              :init="!pendingRender && !pendingSales && !extended"
               class="schools-sales__slider"
               desktop-off
               :mobile-off="extended"
