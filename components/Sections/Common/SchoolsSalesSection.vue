@@ -21,7 +21,6 @@
               <Slide
                 class="schools-sales__slider-slide"
                 v-for="sale in templateSales"
-                :class="{ 'sb-observe sb-observe--fade-up': extended }"
               >
                 <SaleCard
                   class="schools-sales__sales-card"
@@ -87,8 +86,6 @@
 
 <script>
 import mediaQueryMixin from "~/mixins/mediaQueryMixin";
-import animateOnScrollMixin from "~/mixins/animateOnScrollMixin";
-
 import TextArrowButton from "~/components/Buttons/TextArrowButton.vue";
 import SaleCard from "~/components/Others/SaleCard.vue";
 import Slider from "~/components/Slider/Slider.vue";
@@ -99,7 +96,7 @@ import Pagination from "~/components/Others/Pagination";
 
 export default {
   name: "SchoolsSalesSection",
-  mixins: [mediaQueryMixin, animateOnScrollMixin],
+  mixins: [mediaQueryMixin],
   components: {
     TextArrowButton,
     SaleCard,
@@ -164,7 +161,6 @@ export default {
       });
 
       this.totalPending--;
-      this.observerReset();
     },
     async loadMore() {
       this.itemsPerPage += 6;
@@ -225,7 +221,7 @@ export default {
     &-card {
       height: 100%;
       &--extended {
-        width: 100%;
+        width: 100% !important;
       }
     }
     @media screen and (max-width: $brakepoint) {

@@ -161,8 +161,8 @@ export default {
       border-radius: 50%;
       display: grid;
       place-content: center;
-      border: 1rem solid $color_gray;
-      color: $color_gray;
+      border: 1rem solid $color_black;
+      color: $color_black;
       @include fontStyles($font_2, 32rem, 32rem, 300);
       @media screen and (max-width: $brakepoint) {
         @include fontStyles($font_2, 16rem, 16rem, 300);
@@ -171,6 +171,7 @@ export default {
       &:disabled {
         border-color: $color_light-gray !important;
         color: $color_light-gray !important;
+        background: transparent !important;
         cursor: default !important;
         svg {
           path {
@@ -180,10 +181,11 @@ export default {
       }
       &:hover {
         border-color: $color_black;
-        color: $color_black;
+        color: $color_white;
+        background: $color_black;
         svg {
           path {
-            stroke: $color_black;
+            stroke: $color_white;
           }
         }
       }
@@ -196,7 +198,7 @@ export default {
         }
 
         path {
-          stroke: $color_gray;
+          stroke: $color_black;
           transition: all $transition_base;
         }
       }

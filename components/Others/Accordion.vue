@@ -111,6 +111,7 @@ export default {
     background: $color_white;
     li {
       padding: 13rem 15rem;
+      text-align: start;
       @include fontStyles($font_3, 20rem, 32rem, 500);
       transition: all $transition_base;
       @media screen and (max-width: $brakepoint) {

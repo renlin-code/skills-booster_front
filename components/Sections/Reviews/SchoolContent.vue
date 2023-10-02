@@ -188,7 +188,7 @@
               >
                 <ul v-show="!pendingReviews" class="school-content__reviews-elements">
                   <li
-                    class="school-content__reviews-elements-element sb-observe sb-observe--fade-up"
+                    class="school-content__reviews-elements-element"
                     v-for="review in templateReviews"
                   >
                     <ReviewCard :content="review" />
@@ -363,7 +363,6 @@ export default {
       this.totalItems = data.reviews.total_pages * this.itemsPerPage;
       this.templateReviews = data.reviews.reviews;
       this.totalPending--;
-      this.observerReset();
     },
     async loadMore() {
       this.itemsPerPage += 10;

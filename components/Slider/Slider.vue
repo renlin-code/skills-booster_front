@@ -158,7 +158,7 @@ export default {
       display: grid;
       place-content: center;
       svg path {
-        stroke: $color_gray;
+        stroke: $color_dark-black;
         transition: all $transition_base;
       }
       @media screen and (max-width: $brakepoint) {

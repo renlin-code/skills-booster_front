@@ -4,7 +4,10 @@
     :class="{ 'test-section--minified': minified }"
   >
     <div class="test-section__inner sb-container">
-      <div class="test-section__bg" :class="{ 'mobile-hidden': minified }"></div>
+      <div
+        class="test-section__bg"
+        v-show="!minified"
+      ></div>
       <div class="test-section__content">
         <div class="test-section__left">
           <h2 class="test-section__title">{{ content.title }}</h2>

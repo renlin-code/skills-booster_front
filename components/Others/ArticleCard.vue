@@ -60,6 +60,7 @@ export default {
   width: 770rem;
   border-radius: 30rem;
   border: 1rem solid $color_gray;
+  background: $color_bg;
   @media screen and (max-width: $brakepoint) {
     width: 100%;
   }
@@ -139,7 +140,7 @@ export default {
     }
   }
   &__description {
-    @include fontStyles($font_3, 16rem, 24rem, 400);
+    @include fontStyles($font_3, 18rem, 24rem, 400);
     margin-bottom: 20rem;
     min-height: 72rem;
     @media screen and (max-width: $brakepoint) {

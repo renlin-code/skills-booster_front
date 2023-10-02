@@ -26,7 +26,7 @@
           >
             <ul class="reviews-section__schools" v-show="!pendingSchools">
               <li
-                class="reviews-section__schools-element sb-observe sb-observe--fade-up"
+                class="reviews-section__schools-element"
                 v-for="school in templateSchools"
               >
                 <SchoolCard :content="school" />
@@ -85,8 +85,6 @@
 </template>
 
 <script>
-import animateOnScrollMixin from "~/mixins/animateOnScrollMixin";
-
 import SearchInput from "~/components/Others/SearchInput.vue";
 import Chips from "~/components/Others/Chips.vue";
 import SchoolCard from "~/components/Others/SchoolCard.vue";
@@ -97,7 +95,6 @@ import NoResultsView from "~/components/Others/NoResultsView.vue";
 
 export default {
   name: "ReviewsSection",
-  mixins: [animateOnScrollMixin],
   components: {
     SearchInput,
     Chips,
@@ -156,7 +153,6 @@ export default {
       this.totalItems = data.total_pages * this.itemsPerPage;
       this.templateSchools = data.schools;
       this.totalPending--;
-      this.observerReset();
     },
     async loadMore() {
       this.itemsPerPage += 6;

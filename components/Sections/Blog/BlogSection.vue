@@ -28,7 +28,7 @@
           >
             <ul class="blog__articles" v-show="!pendingArticles">
               <li
-                class="blog__articles-element sb-observe sb-observe--fade-up"
+                class="blog__articles-element"
                 v-for="article in templateArticles"
                 :key="article.id"
               >
@@ -91,8 +91,6 @@
 </template>
 
 <script>
-import animateOnScrollMixin from "~/mixins/animateOnScrollMixin";
-
 import Chips from "~/components/Others/Chips";
 import TextArrowButton from "~/components/Buttons/TextArrowButton";
 import ArticleCard from "~/components/Others/ArticleCard";
@@ -104,7 +102,6 @@ import NoResultsView from "~/components/Others/NoResultsView.vue";
 
 export default {
   name: "BlogSection",
-  mixins: [animateOnScrollMixin],
   components: {
     Chips,
     TextArrowButton,
@@ -184,7 +181,6 @@ export default {
       });
 
       this.totalPending--;
-      this.observerReset();
     },
     async loadMore() {
       this.itemsPerPage += 6;

@@ -4,7 +4,6 @@
       class="header-default__header"
       :class="{
         'header-default__header--up': headerUp,
-        'header-default__header--colored': headerColored,
       }"
     >
       <div class="header-default__inner sb-container">
@@ -26,7 +25,6 @@ export default {
   },
   data: () => ({
     headerUp: false,
-    headerColored: false,
   }),
   methods: {
     headerScrollHandler() {
@@ -37,7 +35,7 @@ export default {
         this.headerUp = currentScrollPosition > lastScrollPosition;
         lastScrollPosition = currentScrollPosition;
 
-        this.headerColored = lastScrollPosition > 0;
+        // this.headerColored = lastScrollPosition > 0;
       });
     },
   },
@@ -58,9 +56,6 @@ export default {
     transition-delay: 0.2s;
     &--up {
       transform: translateY(-100%);
-    }
-    &--colored {
-      background: $color_bg;
     }
   }
   &__inner {

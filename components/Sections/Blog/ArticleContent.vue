@@ -343,7 +343,9 @@
         </div>
       </div>
 
-      <div class="article-content__others mobile-hidden sb-noselect sb-observe sb-observe--fade-up">
+      <div
+        class="article-content__others mobile-hidden sb-noselect sb-observe sb-observe--fade-up"
+      >
         <h4 class="article-content__others-title sb-container">Еще статьи на эту тему</h4>
         <Slider
           class="article-content__others-slider"
@@ -471,7 +473,8 @@ export default {
         margin-bottom: 24rem;
       }
       &-title {
-        @include fontStyles($font_3, 22rem, 35.2rem, 600, 2.2rem);
+        color: $color_dark-black;
+        @include fontStyles($font_3, 21rem, 35.2rem, 600, 2.2rem);
         text-transform: uppercase;
         margin-bottom: 30rem;
         @media screen and (max-width: $brakepoint) {
@@ -544,6 +547,7 @@ export default {
       }
       span {
         @include fontStyles($font_2, 36rem, 57.6rem, 600);
+        color: $color_dark-black;
         @media screen and (max-width: $brakepoint) {
           @include fontStyles($font_2, 18rem, 28.8rem, 600);
         }
@@ -594,7 +598,8 @@ export default {
         }
         span,
         a {
-          @include fontStyles($font_2, 22rem, 35.2rem, 400, 1.1rem);
+          @include fontStyles($font_2, 21rem, 35.2rem, 400, 1.1rem);
+          color: $color_dark-black;
           transition: all $transition_base;
           @media screen and (max-width: $brakepoint) {
             @include fontStyles($font_2, 14rem, 21rem, 400, 0.7rem);
@@ -629,6 +634,7 @@ export default {
       }
       &__title {
         @include fontStyles($font_3, 22rem, 35.2rem, 600, 2.2rem);
+        color: $color_dark-black;
         text-transform: uppercase;
         margin-bottom: 30rem;
         @media screen and (max-width: $brakepoint) {
@@ -642,7 +648,8 @@ export default {
         flex-direction: column;
         gap: 20rem;
         &-html {
-          @include fontStyles($font_3, 20rem, 30rem, 400, 1rem);
+          color: $color_dark-black;
+          @include fontStyles($font_3, 21rem, 30rem, 400, 1rem);
           @media screen and (max-width: $brakepoint) {
             @include fontStyles($font_3, 14rem, 21rem, 400);
             padding: 0 15rem;
@@ -661,8 +668,8 @@ export default {
           }
           strong {
             display: inline;
-            color: $color_black;
-            font-weight: 600;
+            color: $color_dark-black;
+            font-weight: 500;
           }
           &--backgrounded {
             padding: 20rem;
@@ -695,7 +702,7 @@ export default {
             padding: 0 15rem;
           }
           &-title {
-            @include fontStyles($font_3, 20rem, 32rem, 600, 1rem);
+            @include fontStyles($font_3, 22rem, 32rem, 600, 1rem);
             @media screen and (max-width: $brakepoint) {
               @include fontStyles($font_3, 15rem, 24rem, 600);
             }
@@ -713,12 +720,12 @@ export default {
             }
             strong {
               display: inline;
-              color: $color_black;
               font-weight: 600;
             }
           }
           &-body {
-            @include fontStyles($font_3, 20rem, 30rem, 400, 1rem);
+            @include fontStyles($font_3, 21rem, 30rem, 400, 1rem);
+            color: $color_dark-black;
             @media screen and (max-width: $brakepoint) {
               @include fontStyles($font_3, 14rem, 21rem, 400);
             }
@@ -736,8 +743,8 @@ export default {
             }
             strong {
               display: inline;
-              color: $color_black;
-              font-weight: 600;
+              color: $color_dark-black;
+              font-weight: 500;
             }
           }
           &-item {
@@ -757,7 +764,7 @@ export default {
               border-radius: 50%;
               background: $color_primary;
               color: $color_white;
-              @include fontStyles($font_2, 20rem, 30rem, 700, 1rem);
+              @include fontStyles($font_2, 21rem, 30rem, 700, 1rem);
               @media screen and (max-width: $brakepoint) {
                 width: 25rem;
                 height: 25rem;
@@ -802,9 +809,9 @@ export default {
         }
 
         .table {
-          border-radius: 20rem;
-          overflow: hidden;
-          border: 1rem solid $color_gray;
+          // border-radius: 20rem;
+          // overflow: hidden;
+          // border: 1rem solid $color_gray;
           @media screen and (max-width: $brakepoint) {
             border-radius: unset;
             border: none;
@@ -812,10 +819,12 @@ export default {
           }
           &__header {
             display: grid;
+            border-radius: 20rem 20rem 0 0;
+            overflow: hidden;
             &-cell {
               width: 100%;
               padding: 20rem;
-              @include fontStyles($font_3, 20rem, 32rem, 700, 2rem);
+              @include fontStyles($font_3, 21rem, 32rem, 700, 2rem);
               color: $color_white;
               background: $color_primary;
               text-transform: uppercase;
@@ -846,6 +855,8 @@ export default {
           }
           &__row {
             display: grid;
+            border-left: 1rem solid $color_gray;
+            border-right: 1rem solid $color_gray;
             border-bottom: 1rem solid $color_gray;
             @media screen and (max-width: $brakepoint) {
               display: flex;
@@ -853,31 +864,50 @@ export default {
               justify-content: space-between;
               min-width: 270rem;
               max-width: 270rem;
-              border: 1rem solid $color_gray !important;
-              border-radius: 15rem;
-              overflow: hidden;
+              border: none;
             }
             &:last-child {
-              border-bottom: none;
+              border-radius: 0 0 20rem 20rem;
             }
             &--bg {
               background: $color_bg;
+              @media screen and (max-width: $brakepoint) {
+                background: transparent;
+                .table__row-cell-inner {
+                  background: $color_bg;
+                }
+              }
             }
             &-cell {
               border-right: 1rem solid $color_gray;
               @media screen and (max-width: $brakepoint) {
                 border-right: none;
               }
+              &:first-child {
+                @media screen and (max-width: $brakepoint) {
+                  border-radius: 15rem 15rem 0 0;
+                  overflow: hidden;
+                }
+              }
               &:last-child {
                 border-right: none;
+                @media screen and (max-width: $brakepoint) {
+                  .table__row-cell-inner {
+                    border-bottom: 1rem solid $color_gray;
+                    border-radius: 0 0 15rem 15rem;
+                  }
+                }
               }
               &-inner {
                 padding: 20rem;
                 @include fontStyles($font_3, 18rem, 28rem, 400);
+                color: $color_dark-black;
                 @media screen and (max-width: $brakepoint) {
                   padding: 10rem;
                   @include fontStyles($font_3, 14rem, 22rem, 400);
                   text-align: center;
+                  border-left: 1rem solid $color_gray;
+                  border-right: 1rem solid $color_gray;
                 }
                 em {
                   display: inline;
@@ -885,8 +915,8 @@ export default {
                 }
                 strong {
                   display: inline;
-                  color: $color_black;
-                  font-weight: 600;
+                  color: $color_dark-black;
+                  font-weight: 500;
                 }
                 a {
                   position: relative;
@@ -898,7 +928,7 @@ export default {
                   padding: 15rem;
                   border-radius: 30rem;
                   margin-top: 20rem;
-                  @include fontStyles($font_3, 22rem, 26rem, 500);
+                  @include fontStyles($font_3, 21rem, 26rem, 500);
                   transition: all $transition_base;
                   @media screen and (max-width: $brakepoint) {
                     @include fontStyles($font_3, 16rem, 16rem, 500);
@@ -919,6 +949,7 @@ export default {
                   li {
                     position: relative;
                     padding-left: 28rem;
+                    color: $color_dark-black;
                     @include fontStyles($font_3, 18rem, 28rem, 400);
                     @media screen and (max-width: $brakepoint) {
                       padding-left: 16rem;
@@ -945,8 +976,8 @@ export default {
                     }
                     strong {
                       display: inline;
-                      color: $color_black;
-                      font-weight: 600;
+                      color: $color_dark-black;
+                      font-weight: 500;
                     }
                   }
                 }
@@ -963,23 +994,16 @@ export default {
                   text-transform: unset;
                   text-align: start;
                   border-bottom: 1rem solid $color_white;
+                  border-right: none;
                   @media screen and (max-width: $brakepoint) {
                     width: 100%;
-                    padding: 20rem;
-                    @include fontStyles($font_3, 20rem, 32rem, 700, 2rem);
+                    padding: 12rem 15rem;
+                    @include fontStyles($font_3, 13rem, 13rem, 600, 0.6rem);
                     color: $color_white;
                     background: $color_primary;
                     text-transform: uppercase;
                     text-align: center;
-                    border-right: 1rem solid $color_white;
-                    @media screen and (max-width: $brakepoint) {
-                      padding: 12rem 15rem;
-                      @include fontStyles($font_3, 13rem, 13rem, 600, 0.6rem);
-                      border-right: none;
-                    }
-                    &:last-child {
-                      border-right: none;
-                    }
+                    border-bottom: none;
                   }
                 }
               }
@@ -990,9 +1014,7 @@ export default {
                 width: 100%;
                 display: flex;
                 flex-direction: column;
-                border-radius: 20rem;
-                border: 1rem solid $color_gray;
-                overflow: hidden;
+                border: none;
                 @media screen and (max-width: $brakepoint) {
                   min-width: 100%;
                   max-width: 100%;
@@ -1005,14 +1027,47 @@ export default {
                     display: flex;
                     flex-direction: column;
                   }
-                  &:last-child {
-                    .table__header-cell,
+                  &:first-child {
+                    .table__header-cell {
+                      border-radius: 20rem 0 0 0;
+                    }
                     .table__row-cell-inner {
+                      border-top: 1rem solid $color_gray;
+                      border-radius: 0 20rem 0 0;
+                      @media screen and (max-width: $brakepoint) {
+                        border-radius: unset;
+                        border-top: none;
+                      }
+                    }
+                  }
+                  &:last-child {
+                    .table__header-cell {
+                      border-radius: 0 0 0 20rem;
                       border-bottom: none;
+                      @media screen and (max-width: $brakepoint) {
+                        border-radius: unset;
+                      }
+                    }
+                    .table__row-cell-inner {
+                      border-radius: 0 0 20rem 0;
+                      @media screen and (max-width: $brakepoint) {
+                        border-radius: 0 0 20rem 20rem;
+                      }
                     }
                   }
                   &-inner {
                     border-bottom: 1rem solid $color_gray;
+                    border-right: 1rem solid $color_gray;
+                    @media screen and (max-width: $brakepoint) {
+                      border-bottom: none;
+                      border-top: none;
+                    }
+                  }
+                }
+                &--bg {
+                  background: transparent;
+                  .table__row-cell-inner {
+                    background: $color_bg;
                   }
                 }
               }
@@ -1028,6 +1083,7 @@ export default {
       margin-bottom: 16rem;
     }
     &-title {
+      color: $color_dark-black;
       @include fontStyles($font_2, 36rem, 57.6rem, 600);
       margin-bottom: 30rem;
       @media screen and (max-width: $brakepoint) {
