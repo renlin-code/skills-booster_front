@@ -1,10 +1,10 @@
 <template>
-  <button class="accordion no-select"
+  <button class="select no-select"
     @blur="open = false"
   >
     <div
-      class="accordion__header"
-      :class="{ 'accordion__header--open': open }"
+      class="select__header"
+      :class="{ 'select__header--open': open }"
       @click="open = !open"
     >
       {{ items[selectedIndex] }}
@@ -19,8 +19,8 @@
       </svg>
     </div>
     <Transition name="fade">
-      <ul class="accordion__list" v-if="open">
-        <li class="accordion__list-item"
+      <ul class="select__list" v-if="open">
+        <li class="select__list-item"
           v-for="(item, index) in items"
           @click="selectItem(index)"
         >
@@ -33,7 +33,7 @@
 
 <script>
 export default {
-  name: "Accordion",
+  name: "Select",
   props: {
     items: {
       type: Array
@@ -54,7 +54,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.accordion {
+.select {
   width: 100%;
   position: relative;
   &__header {

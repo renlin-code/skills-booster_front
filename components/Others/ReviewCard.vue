@@ -18,7 +18,7 @@
             ></div>
           </div>
         </div>
-        <div class="review-card__top-autor mobile-hidden">
+        <div class="review-card__top-autor" v-if="!isMobile">
           {{ content.autor }}
         </div>
         <div class="review-card__top-date">
@@ -34,7 +34,7 @@
         >
           {{ showFullText ? "Скрыть" : "Читать полностью" }}
         </button>
-        <div class="review-card__top-autor desktop-hidden">
+        <div class="review-card__top-autor" v-if="isMobile">
           {{ content.autor }}
         </div>
       </div>

@@ -1,7 +1,10 @@
 <template>
   <section
     class="test-section sb-noselect"
-    :class="{ 'test-section--minified': minified }"
+    :class="{
+      'test-section--minified': minified,
+      'test-section--onslider': onSlider,
+    }"
   >
     <div class="test-section__inner sb-container">
       <div
@@ -77,6 +80,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    onSlider: {
+      type: Boolean,
+      default: false,
+    }
   },
 };
 </script>
@@ -286,7 +293,6 @@ export default {
         padding: 30rem 20rem;
         @media screen and (max-width: $brakepoint) {
           min-height: unset;
-          width: 270rem;
           height: 300rem;
           padding: 20rem;
         }
@@ -360,7 +366,7 @@ export default {
           color: $color_black;
           padding: 6rem 20rem 4rem;
           border-radius: 20rem;
-          background: $color_white;
+          background: $color_bg;
           display: inline-block;
           position: absolute;
           width: max-content;
@@ -415,6 +421,15 @@ export default {
               bottom: 122rem;
             }
           }
+        }
+      }
+    }
+  }
+  &--onslider {
+    .test-section {
+      &__inner {
+        @media screen and (max-width: $brakepoint) {
+          width: 270rem;
         }
       }
     }

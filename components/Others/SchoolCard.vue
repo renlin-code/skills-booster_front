@@ -24,7 +24,7 @@
             ></div>
           </div>
         </div>
-        <div class="school-card__reviews-button mobile-hidden">
+        <div class="school-card__reviews-button" v-if="!isMobile">
           <NuxtLink :to="`/schools-reviews/${content.slug}`">
             <MainButton type="1">{{ reviewsFormatted }}</MainButton>
           </NuxtLink>
@@ -34,7 +34,7 @@
         <p class="school-card__description">
           {{ content.description }}
         </p>
-        <div class="school-card__reviews-button desktop-hidden">
+        <div class="school-card__reviews-button" v-if="isMobile">
           <NuxtLink :to="`/schools-reviews/${content.slug}`">
             <MainButton type="1">{{ reviewsFormatted }}</MainButton>
           </NuxtLink>
@@ -45,10 +45,12 @@
 </template>
 
 <script>
+import mediaQueryMixin from '~/mixins/mediaQueryMixin';
 import MainButton from "../Buttons/MainButton.vue";
 
 export default {
   name: "SchoolCard",
+  mixins: [mediaQueryMixin],
   components: { MainButton },
   props: {
     content: {
@@ -81,6 +83,9 @@ export default {
       }
       return `${number} ${words[2]}`;
     },
+  },
+  mounted() {
+    this.mediaQueryHook();
   },
 };
 </script>

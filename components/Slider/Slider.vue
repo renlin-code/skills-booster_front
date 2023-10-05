@@ -1,6 +1,6 @@
 <template>
   <div class="slider sb-container">
-    <div class="slider__arrows" v-if="showArrows && !forceHideArrows">
+    <div class="slider__arrows" v-if="showArrows && !forceHideArrows && init">
       <button ref="prevElButton" class="slider__arrows-left"
         @click="prev"
         :disabled="disablePrev"

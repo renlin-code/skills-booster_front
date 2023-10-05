@@ -2,14 +2,18 @@
   <div class="article-card" :class="{ 'article-card--minified': minified }">
     <div class="article-card__top">
       <NuxtLink
-        class="article-card__top-link-layer mobile-hidden"
+        class="article-card__top-link-layer"
+        v-if="!isMobile"
         :to="`/blog/${content.slug}`"
       ></NuxtLink>
-      <div class="article-card__top-bg mobile-hidden"></div>
-      <div class="article-card__top-content"
+      <div class="article-card__top-bg" v-if="!isMobile"></div>
+      <div
+        class="article-card__top-content"
         :style="`background-image: url(${content.category.image});`"
       >
-        <div class="article-card__cat" :style="`background: ${content.category.color}`">{{ content.category.title }}</div>
+        <div class="article-card__cat" :style="`background: ${content.category.color}`">
+          {{ content.category.title }}
+        </div>
         <h6 class="article-card__title">
           {{ content.title }}
         </h6>
@@ -41,17 +45,23 @@
 </template>
 
 <script>
+import mediaQueryMixin from '~/mixins/mediaQueryMixin';
+
 export default {
   name: "ArticleCard",
+  mixins: [mediaQueryMixin],
   props: {
     minified: {
       type: Boolean,
       default: false,
     },
     content: {
-      type: Object
-    }
+      type: Object,
+    },
   },
+  mounted() {
+    this.mediaQueryHook();
+  }
 };
 </script>
 

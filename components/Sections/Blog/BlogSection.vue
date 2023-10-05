@@ -5,17 +5,17 @@
         <div v-show="!pendingRender">
           <div class="blog__header">
             <h2 class="blog__title sb-section-title">
-              <span class="mobile-hidden">&nbsp &nbsp &nbsp &nbsp &nbsp</span
+              <span v-if="!isMobile">&nbsp &nbsp &nbsp &nbsp &nbsp</span
               >{{ injectedTitle }}
             </h2>
-            <div class="blog__vector mobile-hidden"></div>
+            <div class="blog__vector" v-if="!isMobile"></div>
           </div>
           <div class="blog__subheader">
             <Chips :items="chipsOptions" @select-chip="switchCategory" />
-            <NuxtLink v-if="!extended" to="/blog" class="mobile-hidden">
+            <NuxtLink v-if="!extended && !isMobile" to="/blog">
               <TextArrowButton>Все статьи</TextArrowButton>
             </NuxtLink>
-            <div v-else class="blog__search">
+            <div v-if="extended" class="blog__search">
               <SearchInput
                 class="blog__search-el"
                 placeholder="Поиск"
@@ -23,9 +23,7 @@
               />
             </div>
           </div>
-          <div class="blog__body"
-            :class="{ 'blog__body--loading': pendingArticles }"
-          >
+          <div class="blog__body" :class="{ 'blog__body--loading': pendingArticles }">
             <ul class="blog__articles" v-show="!pendingArticles">
               <li
                 class="blog__articles-element"
@@ -91,6 +89,8 @@
 </template>
 
 <script>
+import mediaQueryMixin from '~/mixins/mediaQueryMixin';
+
 import Chips from "~/components/Others/Chips";
 import TextArrowButton from "~/components/Buttons/TextArrowButton";
 import ArticleCard from "~/components/Others/ArticleCard";
@@ -102,6 +102,7 @@ import NoResultsView from "~/components/Others/NoResultsView.vue";
 
 export default {
   name: "BlogSection",
+  mixins: [mediaQueryMixin],
   components: {
     Chips,
     TextArrowButton,
@@ -214,6 +215,9 @@ export default {
   async created() {
     await this.fetchData();
     this.pendingRender = false;
+  },
+  mounted() {
+    this.mediaQueryHook();
   },
 };
 </script>

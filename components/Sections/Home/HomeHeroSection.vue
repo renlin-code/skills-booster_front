@@ -4,9 +4,7 @@
       <div class="home-hero__grid">
         <div class="home-hero__texts">
           <h1 class="home-hero__title">
-            <span class="home-hero__title-spaceholder"
-              >{{ content.title }}</span
-            >
+            <span class="home-hero__title-spaceholder">{{ content.title }}</span>
             <span class="home-hero__title-typing">
               <span ref="typingText"></span>
             </span>
@@ -25,7 +23,7 @@
             :class="{ active: currImgIndex === index }"
           />
         </figure>
-        <div class="home-hero__fig-spaceholder desktop-hidden"></div>
+        <div class="home-hero__fig-spaceholder" v-if="isMobile"></div>
       </div>
     </div>
   </section>
@@ -39,8 +37,8 @@ export default {
   mixins: [mediaQueryMixin],
   props: {
     content: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   data: () => ({
     parallaxListener: null,
@@ -62,7 +60,9 @@ export default {
       if (this.content.images.length > 0) {
         setInterval(() => {
           this.currImgIndex =
-            this.currImgIndex < this.content.images.length - 1 ? this.currImgIndex + 1 : 0;
+            this.currImgIndex < this.content.images.length - 1
+              ? this.currImgIndex + 1
+              : 0;
         }, 6000);
       }
     },

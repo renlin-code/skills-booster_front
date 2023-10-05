@@ -63,9 +63,9 @@
               v-for="(section, index) in content.sections"
               :id="`section-${index + 1}`"
             >
-              <h3 class="section__title">
+              <h2 class="section__title">
                 {{ section.article_section_title }}
-              </h3>
+              </h2>
               <div class="section__content">
                 <div
                   class="section__content-block"
@@ -147,7 +147,8 @@
                     v-if="block._type === 'table' && !block.horizontal"
                   >
                     <div
-                      class="table__header mobile-hidden"
+                      class="table__header"
+                      v-if="!isMobile"
                       :style="`grid-template-columns: repeat(${block.content_table_cols.length}, 1fr)`"
                     >
                       <div
@@ -168,7 +169,7 @@
                           class="table__row-cell"
                           v-for="(cell, cellIndex) in row.content_table_row_cells"
                         >
-                          <div class="table__header-cell desktop-hidden">
+                          <div class="table__header-cell" v-if="isMobile">
                             {{
                               block.content_table_cols[cellIndex].content_table_col_name
                             }}
@@ -205,12 +206,58 @@
                       </div>
                     </div>
                   </div>
+
+                  <div
+                    v-if="block._type === 'content_link'"
+                    class="section__content-link"
+                    :style="`justify-content: ${block.content_link_justify}`"
+                  >
+                    <a
+                      :href="block.content_link_url"
+                      target="_blank"
+                      :style="`width: ${
+                        block.content_link_full_width ? '100%' : 'fit-content'
+                      }`"
+                    >
+                      <MainButton type="1" arrow>{{
+                        block.content_link_text
+                      }}</MainButton>
+                    </a>
+                  </div>
+
+                  <ul
+                    v-if="block._type === 'content_accordions'"
+                    class="section__content-accordions"
+                  >
+                    <li
+                      class="content_accordions-accordion"
+                      v-for="(accordion, index) in block.accordions"
+                    >
+                      <button
+                        class="accordion"
+                        :class="{ 'accordion--open': openAccordionIndex === index }"
+                        @click="openAccordion(index)"
+                        @blur="openAccordionIndex = null"
+                      >
+                        <div class="accordion__header">
+                          {{ accordion.accordion_title }}
+                          <div class="accordion__header-icon">
+                            <div></div>
+                            <div></div>
+                          </div>
+                        </div>
+                        <div class="accordion__body">
+                          {{ accordion.accordion_content }}
+                        </div>
+                      </button>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </section>
           </div>
           <div class="body__share sb-noselect">
-            <h3 class="body__share-title">Поделится статьей</h3>
+            <div class="body__share-title">Поделится статьей</div>
             <ul class="body__share-links">
               <li class="body__share-links-item">
                 <a
@@ -293,23 +340,18 @@
               </li>
             </ul>
           </div>
-          <AutorCard
-            class="desktop-hidden"
-            title="Автор статьи"
-            :autors="[content.autor]"
-          />
+          <AutorCard v-if="isMobile" title="Автор статьи" :autors="[content.autor]" />
         </div>
         <div class="body__right">
           <AutorCard
-            class="mobile-hidden"
+            v-if="!isMobile"
             title="Автор статьи"
             :autors="[content.autor]"
           />
-
-          <div class="article-content__others desktop-hidden">
-            <h4 class="article-content__others-title sb-container">
+          <div class="article-content__others" v-if="isMobile">
+            <div class="article-content__others-title sb-container">
               Еще статьи на эту тему
-            </h4>
+            </div>
             <Slider
               class="article-content__others-slider"
               show-arrows
@@ -325,28 +367,49 @@
           </div>
 
           <div class="body__ads">
-            <h4 class="body__ads-title desktop-hidden">Специальные предложения</h4>
+            <div class="body__ads-title" v-if="isMobile && content.ads_banners.length">
+              Вас может заинтересовать
+            </div>
             <Slider
+              v-if="content.ads_banners.length"
               class="body__ads-slider"
               desktop-off
               :wrapper-styles="adsWrapperStyles"
               :show-arrows="isMobile"
             >
               <Slide class="body__ads-slider-slide">
-                <TestSection :content="content.test_card" minified />
+                <TestSection :content="content.test_card" minified on-slider />
               </Slide>
+              <ReviewsLinkCard v-if="!isMobile" />
               <Slide class="body__ads-slider-slide" v-for="ad in content.ads_banners">
                 <AdCard :ad="ad" />
               </Slide>
             </Slider>
+            <TestSection
+              class="body__ads-test"
+              minified
+              :content="content.test_card"
+              v-if="!content.ads_banners.length"
+            />
+            <ReviewsLinkCard
+              class="body__ads-reviews"
+              v-if="!isMobile && !content.ads_banners.length"
+            />
+            <ReviewsLinkCard
+              class="body__ads-reviews"
+              v-if="isMobile && content.ads_banners.length"
+            />
           </div>
         </div>
       </div>
 
       <div
-        class="article-content__others mobile-hidden sb-noselect sb-observe sb-observe--fade-up"
+        class="article-content__others sb-noselect sb-observe sb-observe--fade-up"
+        v-if="!isMobile"
       >
-        <h4 class="article-content__others-title sb-container">Еще статьи на эту тему</h4>
+        <div class="article-content__others-title sb-container">
+          Еще статьи на эту тему
+        </div>
         <Slider
           class="article-content__others-slider"
           show-arrows
@@ -369,14 +432,27 @@ import mediaQueryMixin from "~/mixins/mediaQueryMixin";
 import animateOnScrollMixin from "~/mixins/animateOnScrollMixin";
 
 import AutorCard from "~/components/Others/AutorCard.vue";
-import TestSection from "../Common/TestSection.vue";
+import TestSection from "~/components/Sections/Common/TestSection.vue";
+import ReviewsLinkCard from "~/components/Others/ReviewsLinkCard.vue";
 import AdCard from "~/components/Others/AdCard.vue";
 import Slider from "~/components/Slider/Slider.vue";
 import Slide from "~/components/Slider/Slide.vue";
 import ArticleCard from "~/components/Others/ArticleCard.vue";
+import MainButton from "~/components/Buttons/MainButton.vue";
+
 export default {
   name: "ArticleContent",
   mixins: [mediaQueryMixin, animateOnScrollMixin],
+  components: {
+    AutorCard,
+    ReviewsLinkCard,
+    TestSection,
+    AdCard,
+    Slider,
+    Slide,
+    ArticleCard,
+    MainButton,
+  },
   props: {
     content: {
       type: Object,
@@ -386,6 +462,7 @@ export default {
     indexHover: null,
     indexClose: false,
     urlForShare: "",
+    openAccordionIndex: null,
   }),
   computed: {
     sectionsTitles() {
@@ -398,11 +475,15 @@ export default {
       return !this.isMobile ? "width: 1660rem; margin: 0 auto;" : "";
     },
   },
+  methods: {
+    openAccordion(index) {
+      this.openAccordionIndex = this.openAccordionIndex === index ? null : index;
+    },
+  },
   mounted() {
     this.mediaQueryHook();
     this.urlForShare = window.location.href;
   },
-  components: { AutorCard, TestSection, AdCard, Slider, Slide, ArticleCard },
 };
 </script>
 
@@ -465,6 +546,9 @@ export default {
       display: flex;
       flex-direction: column;
       gap: 40rem;
+      @media screen and (max-width: $brakepoint) {
+        gap: 0;
+      }
     }
     &__share {
       margin-bottom: 40rem;
@@ -524,6 +608,15 @@ export default {
             margin-right: 15rem;
           }
         }
+      }
+      &-test {
+        @media screen and (max-width: $brakepoint) {
+          padding: 0 10rem;
+        }
+      }
+      &-reviews {
+        padding: 0 10rem;
+        margin-top: 16rem;
       }
     }
   }
@@ -671,6 +764,20 @@ export default {
             color: $color_dark-black;
             font-weight: 500;
           }
+          h3,
+          h4,
+          h5,
+          h6 {
+            @include fontStyles($font_3, 22rem, 35.2rem, 600, 2.2rem);
+            color: $color_dark-black;
+            text-transform: uppercase;
+            margin-bottom: 20rem;
+            @media screen and (max-width: $brakepoint) {
+              @include fontStyles($font_3, 16rem, 25.6rem, 600, 0.8rem);
+              margin-bottom: 16rem;
+              padding: 0 15rem;
+            }
+          }
           &--backgrounded {
             padding: 20rem;
             border-radius: 20rem;
@@ -702,6 +809,7 @@ export default {
             padding: 0 15rem;
           }
           &-title {
+            color: $color_dark-black;
             @include fontStyles($font_3, 22rem, 32rem, 600, 1rem);
             @media screen and (max-width: $brakepoint) {
               @include fontStyles($font_3, 15rem, 24rem, 600);
@@ -743,8 +851,7 @@ export default {
             }
             strong {
               display: inline;
-              color: $color_dark-black;
-              font-weight: 500;
+              font-weight: 600;
             }
           }
           &-item {
@@ -809,9 +916,6 @@ export default {
         }
 
         .table {
-          // border-radius: 20rem;
-          // overflow: hidden;
-          // border: 1rem solid $color_gray;
           @media screen and (max-width: $brakepoint) {
             border-radius: unset;
             border: none;
@@ -1068,6 +1172,139 @@ export default {
                   background: transparent;
                   .table__row-cell-inner {
                     background: $color_bg;
+                  }
+                }
+              }
+            }
+          }
+        }
+        &-link {
+          display: flex;
+          a {
+            display: inline-block;
+            @media screen and (max-width: $brakepoint) {
+              width: 100% !important;
+              display: block;
+              margin: 0 10rem;
+            }
+          }
+        }
+        &-accordions {
+          display: flex;
+          flex-direction: column;
+          gap: 16rem;
+          @media screen and (max-width: $brakepoint) {
+            padding: 0 10rem;
+            gap: 8rem;
+          }
+          .accordion {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 20rem 40rem;
+            background: $color_bg;
+            border-radius: 30rem;
+            cursor: pointer;
+            transition: all $transition_base;
+            @media screen and (max-width: $brakepoint) {
+              padding: 12rem 16rem;
+              border-radius: 20rem;
+            }
+            &:hover {
+              background: rgba($color_bg, 0.5);
+            }
+            &__header {
+              width: 100%;
+              text-align: start;
+              display: grid;
+              grid-template-columns: 1fr auto;
+              gap: 20rem;
+              @include fontStyles($font_2, 22rem, 40rem, 500, 1.1rem);
+              color: $color_dark-black;
+              transition: all $transition_base;
+              @media screen and (max-width: $brakepoint) {
+                @include fontStyles($font_2, 15rem, 24rem, 500);
+              }
+              &-icon {
+                width: 40rem;
+                height: 40rem;
+                background: $color_primary;
+                border-radius: 50%;
+                position: relative;
+                transition: all $transition_base;
+                @media screen and (max-width: $brakepoint) {
+                  width: 30rem;
+                  height: 30rem;
+                }
+                div {
+                  width: 16rem;
+                  height: 3rem;
+                  border-radius: 3rem;
+                  background: $color_white;
+                  position: absolute;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                  transition: all $transition_base;
+                  &:first-child {
+                    transform: translate(-50%, -50%) rotate(90deg);
+                  }
+                }
+              }
+            }
+            &__body {
+              color: $color_dark-black;
+              width: 100%;
+              text-align: start;
+              max-height: 0;
+              overflow: hidden;
+              border-top: 1rem solid transparent;
+              @include fontStyles($font_3, 18rem, 30rem, 400, 1rem);
+              transition: all $transition_base;
+              @media screen and (max-width: $brakepoint) {
+                @include fontStyles($font_3, 14rem, 21rem, 400);
+              }
+              em {
+                display: inline;
+                color: $color_primary;
+              }
+              a {
+                display: inline;
+                color: $color_primary;
+                transition: all $transition_base;
+                &:hover {
+                  opacity: 0.8;
+                }
+              }
+              strong {
+                display: inline;
+                color: $color_dark-black;
+                font-weight: 500;
+              }
+            }
+            &--open {
+              .accordion {
+                &__header {
+                  padding-bottom: 10rem;
+                  @media screen and (max-width: $brakepoint) {
+                    padding-bottom: 8rem;
+                  }
+                  &-icon {
+                    transform: rotate(90deg);
+                    div {
+                      &:last-child {
+                        opacity: 0;
+                        transform: translate(-50%, -50%) rotate(-90deg);
+                      }
+                    }
+                  }
+                }
+                &__body {
+                  border-color: $color_light-gray;
+                  max-height: 400rem;
+                  padding-top: 20rem;
+                  @media screen and (max-width: $brakepoint) {
+                    padding-top: 8rem;
                   }
                 }
               }

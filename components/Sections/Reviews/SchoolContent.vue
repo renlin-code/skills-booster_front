@@ -22,7 +22,7 @@
             <span>{{ content.title }}</span>
           </div>
           <div class="school-content__banner-words">отзывы, рейтинги</div>
-          <div class="school-content__banner-link mobile-hidden">
+          <div class="school-content__banner-link" v-if="!isMobile">
             <a :href="content.link" target="_blank">
               <MainButton type="3">Перейти на сайт школы</MainButton>
             </a>
@@ -161,7 +161,7 @@
             {{ showFullDescription ? "Скрыть" : "Читать полностью" }}
           </button>
         </div>
-        <div class="school-content__banner-link desktop-hidden">
+        <div class="school-content__banner-link" v-if="isMobile">
           <a :href="content.link" target="_blank">
             <MainButton type="3">Перейти на сайт школы</MainButton>
           </a>
@@ -172,8 +172,8 @@
           <div v-show="!pendingRender">
             <div class="school-content__reviews-header">
               <h2 class="school-content__reviews-title">Отзывы</h2>
-              <div class="school-content__reviews-accordion">
-                <Accordion :items="sortOptions" @select-item="switchSortOption" />
+              <div class="school-content__reviews-select">
+                <Select :items="sortOptions" @select-item="switchSortOption" />
               </div>
               <div class="school-content__reviews-appeal">
                 <MainButton type="1" @click.native="showModal = true"
@@ -245,10 +245,11 @@
 
 <script>
 import animateOnScrollMixin from "~/mixins/animateOnScrollMixin";
+import mediaQueryMixin from '~/mixins/mediaQueryMixin';
 
 import SendReviewModal from "~/components/Modals/ModalsInstances/SendReviewModal.vue";
 import MainButton from "~/components/Buttons/MainButton.vue";
-import Accordion from "~/components/Others/Accordion.vue";
+import Select from "~/components/Others/Select.vue";
 import Pagination from "~/components/Others/Pagination.vue";
 import ReviewCard from "~/components/Others/ReviewCard.vue";
 import RingPreloader from "~/components/Preloaders/RingPreloader.vue";
@@ -256,11 +257,11 @@ import SuccessModal from "~/components/Modals/ModalsInstances/SuccessModal.vue";
 
 export default {
   name: "SchoolContent",
-  mixins: [animateOnScrollMixin],
+  mixins: [animateOnScrollMixin, mediaQueryMixin],
   components: {
     SendReviewModal,
     MainButton,
-    Accordion,
+    Select,
     ReviewCard,
     RingPreloader,
     Pagination,
@@ -386,6 +387,9 @@ export default {
   async created() {
     await this.fetchData();
     this.pendingRender = false;
+  },
+  mounted() {
+    this.mediaQueryHook();
   },
 };
 </script>
@@ -665,7 +669,7 @@ export default {
         margin-bottom: 16rem;
       }
     }
-    &-accordion {
+    &-select {
       width: 350rem;
       @media screen and (max-width: $brakepoint) {
         width: 100%;

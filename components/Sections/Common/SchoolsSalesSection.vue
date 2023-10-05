@@ -5,7 +5,7 @@
         <div v-show="!pendingRender">
           <div class="schools-sales__top">
             <h2 class="schools-sales__title sb-section-title">{{ injectedTitle }}</h2>
-            <NuxtLink to="/schools-sales" class="mobile-hidden" v-if="!extended">
+            <NuxtLink to="/schools-sales" v-if="!extended">
               <TextArrowButton>Все акции</TextArrowButton>
             </NuxtLink>
           </div>
@@ -34,12 +34,12 @@
               <RingPreloader class="schools-sales__loading" v-if="pendingSales" />
             </Transition>
           </div>
-          <div class="sb-container desktop-hidden" v-if="!extended">
+          <div class="sb-container" v-if="!extended && isMobile">
             <NuxtLink to="/schools-sales">
               <MainButton arrow type="3">Все акции</MainButton>
             </NuxtLink>
           </div>
-          <div v-else>
+          <div v-if="extended">
             <div
               class="schools-sales__load-more"
               v-if="

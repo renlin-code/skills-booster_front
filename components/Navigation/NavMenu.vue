@@ -1,7 +1,8 @@
 <template>
   <nav class="nav-menu">
     <Burger
-      class="nav-menu__burger desktop-hidden"
+      class="nav-menu__burger"
+      v-if="isMobile"
       @click.native="open = true"
       :open="open"
     />
@@ -16,7 +17,8 @@
           @click.native="open = false"
         ></NuxtLink>
         <button
-          class="mobile-menu__header-close desktop-hidden"
+          class="mobile-menu__header-close"
+          v-if="isMobile"
           @click="open = false"
         ></button>
       </div>
@@ -37,7 +39,7 @@
             >
           </li>
         </ul>
-        <div class="mobile-menu__bottom desktop-hidden"></div>
+        <div class="mobile-menu__bottom" v-if="isMobile"></div>
       </div>
     </div>
   </nav>
@@ -45,10 +47,12 @@
 
 <script>
 import { mapMutations } from "vuex";
+import mediaQueryMixin from '~/mixins/mediaQueryMixin';
 
 import Burger from "~/components/Navigation/Burger.vue";
 export default {
   name: "NavMenu",
+  mixins: [mediaQueryMixin],
   components: {
     Burger,
   },
@@ -87,6 +91,9 @@ export default {
       "page-path-name",
       (pagePathName) => (this.selectedItemRoute = `/${pagePathName}`)
     );
+  },
+  mounted() {
+    this.mediaQueryHook();
   },
 };
 </script>

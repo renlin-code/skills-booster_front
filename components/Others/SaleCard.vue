@@ -2,11 +2,12 @@
   <div class="sale-card" :class="{ 'sale-card--black': black }">
     <div class="sale-card__top">
       <a
-        class="sale-card__top-link-layer mobile-hidden"
+        class="sale-card__top-link-layer"
+        v-if="!isMobile"
         target="_blank"
         :href="content.sale_link"
       ></a>
-      <div class="sale-card__top-bg mobile-hidden"></div>
+      <div class="sale-card__top-bg" v-if="!isMobile"></div>
       <div class="sale-card__top-content">
         <div class="sale-card__logo-name">
           <img :src="content.school_logo" alt="" />
@@ -39,10 +40,12 @@
 </template>
 
 <script>
+import mediaQueryMixin from '~/mixins/mediaQueryMixin';
 import MainButton from "../Buttons/MainButton.vue";
 
 export default {
-  name: "sale-card",
+  name: "SaleCard",
+  mixins: [mediaQueryMixin],
   components: { MainButton },
   props: {
     black: {
@@ -63,6 +66,9 @@ export default {
         : "";
     },
   },
+  mounted() {
+    this.mediaQueryHook();
+  }
 };
 </script>
 

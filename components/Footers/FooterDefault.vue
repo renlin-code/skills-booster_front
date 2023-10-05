@@ -38,7 +38,7 @@
             >
           </li>
         </ul>
-        <p class="footer__imgs-links desktop-hidden">
+        <p class="footer__imgs-links" v-if="isMobile">
           Все фотографии на сайте взяты с сайта:
           <a href="https://freepik.com" target="_blank" class="underline-light-gray"
             >freepik.com</a
@@ -49,7 +49,7 @@
         </p>
       </div>
       <div class="footer__other-links">
-        <p class="footer__imgs-links mobile-hidden">
+        <p class="footer__imgs-links" v-if="!isMobile">
           Все фотографии на сайте взяты с сайта:
           <a href="https://freepik.com" target="_blank" class="underline-light-gray"
             >freepik.com</a
@@ -74,8 +74,11 @@
 </template>
 
 <script>
+import mediaQueryMixin from '~/mixins/mediaQueryMixin';
+
 export default {
   name: "FooterDefault",
+  mixins: [mediaQueryMixin],
   data: () => ({
     selectedItemRoute: null,
     menuItems: [
@@ -106,6 +109,9 @@ export default {
       "page-path-name",
       (pagePathName) => (this.selectedItemRoute = `/${pagePathName}`)
     );
+  },
+  mounted() {
+    this.mediaQueryHook();
   },
 };
 </script>
