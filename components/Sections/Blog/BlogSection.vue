@@ -2,7 +2,7 @@
   <section class="blog sb-noselect">
     <div class="blog__inner sb-container">
       <Transition name="fade">
-        <div v-show="!pendingRender">
+        <div v-if="!pending">
           <div class="blog__header">
             <h2 class="blog__title sb-section-title">
               <span v-if="!isMobile">&nbsp &nbsp &nbsp &nbsp &nbsp</span
@@ -23,8 +23,11 @@
               />
             </div>
           </div>
-          <div class="blog__body" :class="{ 'blog__body--loading': pendingArticles }">
-            <ul class="blog__articles" v-show="!pendingArticles">
+          <div
+            class="blog__body"
+            :class="{ 'blog__body--loading': pendingListQueue !== 0 }"
+          >
+            <ul class="blog__articles" v-show="pendingListQueue === 0">
               <li
                 class="blog__articles-element"
                 v-for="article in templateArticles"
@@ -33,10 +36,11 @@
                 <ArticleCard :minified="article.minified" :content="article" />
               </li>
             </ul>
-            <Transition name="fade">
-              <RingPreloader class="blog__loading" v-if="pendingArticles" />
-            </Transition>
-            <NoResultsView class="blog__no-results" v-if="templateArticles.length === 0">
+            <RingPreloader class="blog__loading" v-if="pendingListQueue !== 0" />
+            <NoResultsView
+              class="blog__no-results"
+              v-if="!templateArticles.length && pendingListQueue === 0"
+            >
               Извините, но по вашему запросу нет статей. Попробуйте изменить запрос
             </NoResultsView>
           </div>
@@ -53,50 +57,30 @@
                 pendingLoadMore
               "
             >
-              <Transition name="fade">
-                <MainButton
-                  type="3"
-                  @click.native="loadMore"
-                  v-if="!pendingLoadMore && !pendingArticles"
-                  >Показать еще</MainButton
-                >
-              </Transition>
-              <Transition name="fade">
-                <RingPreloader
-                  class="blog__loading blog__loading"
-                  v-if="pendingLoadMore"
-                />
-              </Transition>
-            </div>
-            <div class="blog__pagination sb-container" v-show="totalItems > itemsPerPage">
-              <Pagination
-                v-if="totalItems"
-                :total-items="totalItems"
-                :items-per-page="itemsPerPage"
-                :forced-current-page="forcedCurrentPage"
-                @page-changed="handlePageChange"
-                @total-pages="setTotalPages"
-              />
+              <MainButton
+                type="3"
+                @click.native="loadMore"
+                v-if="!pendingLoadMore && pendingListQueue === 0"
+                >Показать еще</MainButton
+              >
+              <RingPreloader class="blog__loading blog__loading" v-if="pendingLoadMore" />
             </div>
           </div>
         </div>
       </Transition>
-      <Transition name="fade">
-        <RingPreloader class="blog__loading" v-show="pendingRender" />
-      </Transition>
+      <RingPreloader class="blog__loading" v-if="pending" />
     </div>
   </section>
 </template>
 
 <script>
-import mediaQueryMixin from '~/mixins/mediaQueryMixin';
+import mediaQueryMixin from "~/mixins/mediaQueryMixin";
 
 import Chips from "~/components/Others/Chips";
 import TextArrowButton from "~/components/Buttons/TextArrowButton";
 import ArticleCard from "~/components/Others/ArticleCard";
 import MainButton from "~/components/Buttons/MainButton.vue";
 import SearchInput from "~/components/Others/SearchInput";
-import Pagination from "~/components/Others/Pagination";
 import RingPreloader from "~/components/Preloaders/RingPreloader";
 import NoResultsView from "~/components/Others/NoResultsView.vue";
 
@@ -109,7 +93,6 @@ export default {
     ArticleCard,
     MainButton,
     SearchInput,
-    Pagination,
     RingPreloader,
     NoResultsView,
   },
@@ -127,14 +110,13 @@ export default {
     allCategories: [],
     selectedCatId: "",
     searchQuery: "",
-    totalPending: 0,
-    pendingRender: true,
-    pendingArticles: false,
+    pending: true,
     pendingLoadMore: false,
+    pendingList: false,
+    pendingListQueue: 0,
     itemsPerPage: 6,
     totalItems: null,
     currentPage: 1,
-    forcedCurrentPage: null,
     totalPages: null,
   }),
   computed: {
@@ -149,16 +131,12 @@ export default {
   },
   methods: {
     async switchCategory(index) {
-      this.forcedCurrentPage = 1;
       this.selectedCatId = index > 0 ? this.allCategories[index - 1].id : "";
-      this.pendingArticles = true;
-      await this.$nextTick();
+      this.pendingListQueue++;
       await this.fetchData();
-      this.pendingArticles = this.totalPending !== 0;
-      this.forcedCurrentPage = null;
+      this.pendingListQueue--;
     },
     async fetchData() {
-      this.totalPending++;
       const data = await this.$axios.$get("/wp-json/get/articles/", {
         params: {
           category_id: this.selectedCatId,
@@ -180,8 +158,6 @@ export default {
         });
         minifiedCounter = minifiedCounter < 5 ? minifiedCounter + 1 : 0;
       });
-
-      this.totalPending--;
     },
     async loadMore() {
       this.itemsPerPage += 6;
@@ -189,32 +165,19 @@ export default {
       await this.fetchData();
       this.pendingLoadMore = false;
     },
-    async handlePageChange({ curr, total }) {
-      if (curr !== this.currentPage) {
-        this.currentPage = curr;
-        this.totalPages = total;
-        this.pendingArticles = true;
-        await this.fetchData();
-        this.pendingArticles = this.totalPending !== 0;
-      }
-    },
-    setTotalPages(payload) {
-      this.totalPages = payload;
-    },
   },
   watch: {
     async searchQuery() {
-      this.forcedCurrentPage = 1;
-      if (this.templateArticles.length !== 0) this.pendingArticles = true;
-      await this.$nextTick();
+      this.pendingList = true;
+      this.pendingListQueue++;
       await this.fetchData();
-      this.pendingArticles = false;
-      this.forcedCurrentPage = null;
+      this.pendingList = false;
+      this.pendingListQueue--;
     },
   },
   async created() {
     await this.fetchData();
-    this.pendingRender = false;
+    this.pending = false;
   },
   mounted() {
     this.mediaQueryHook();
@@ -291,7 +254,7 @@ export default {
     &--loading {
       min-height: 470rem;
       @media screen and (max-width: $brakepoint) {
-        min-height: 160vh;
+        min-height: 40vh;
       }
     }
   }
@@ -318,9 +281,9 @@ export default {
     }
   }
   &__no-results {
-    margin-top: 150rem;
+    margin: 70rem 0;
     @media screen and (max-width: $brakepoint) {
-      margin-top: 70rem;
+      margin: 40rem 0;
     }
   }
   &__link-to-all {
@@ -333,7 +296,6 @@ export default {
   }
   &__load-more {
     margin: 0 auto;
-    margin-bottom: 30rem;
     width: 240rem;
     height: 70rem;
     position: relative;
@@ -341,7 +303,6 @@ export default {
       width: 100%;
       height: 47rem;
       padding: 0 15rem;
-      margin-bottom: 24rem;
     }
   }
 }
