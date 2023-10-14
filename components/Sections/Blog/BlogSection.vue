@@ -27,16 +27,20 @@
             class="blog__body"
             :class="{ 'blog__body--loading': pendingListQueue !== 0 }"
           >
-            <ul class="blog__articles" v-show="pendingListQueue === 0">
-              <li
-                class="blog__articles-element"
-                v-for="article in templateArticles"
-                :key="article.id"
-              >
-                <ArticleCard :minified="article.minified" :content="article" />
-              </li>
-            </ul>
-            <RingPreloader class="blog__loading" v-if="pendingListQueue !== 0" />
+            <Transition name="fade">
+              <ul class="blog__articles" v-show="pendingListQueue === 0">
+                <li
+                  class="blog__articles-element"
+                  v-for="article in templateArticles"
+                  :key="article.id"
+                >
+                  <ArticleCard :minified="article.minified" :content="article" />
+                </li>
+              </ul>
+            </Transition>
+            <Transition name="fade">
+              <RingPreloader class="blog__loading blog__loading--list" v-if="pendingListQueue !== 0" />
+            </Transition>
             <NoResultsView
               class="blog__no-results"
               v-if="!templateArticles.length && pendingListQueue === 0"
@@ -265,6 +269,20 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
     top: 50%;
+    &--list {
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      padding-top: 240rem;
+      background: rgba($color-bg, 0.6);
+      transform: unset;
+      @media screen and (max-width: $brakepoint) {
+        padding-top: 100rem;
+      }
+    }
   }
   &__articles {
     display: flex;
@@ -281,9 +299,9 @@ export default {
     }
   }
   &__no-results {
-    margin: 70rem 0;
+    margin: 150rem 0;
     @media screen and (max-width: $brakepoint) {
-      margin: 40rem 0;
+      margin: 100rem 0;
     }
   }
   &__link-to-all {
