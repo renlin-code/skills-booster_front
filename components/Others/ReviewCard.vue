@@ -28,7 +28,7 @@
       <div class="review-card__bottom">
         <p class="review-card__bottom-text">{{ shownText }}</p>
         <button
-          v-if="showReadMoreButton"
+          v-if="isLongText"
           @click="showFullText = !showFullText"
           class="review-card__bottom-open"
         >
@@ -55,18 +55,30 @@ export default {
   },
   data: () => ({
     showFullText: false,
-    showReadMoreButton: false,
   }),
   computed: {
+    maxLength() {
+      return this.isMobile ? 200 : 450;
+    },
+    isLongText() {
+      const fullDescription = this.content.text;
+      return fullDescription.length > this.maxLength;
+    },
     shownText() {
       const fullDescription = this.content.text;
-      const maxLength = this.isMobile ? 200 : 450;
-
-      if (fullDescription.length > maxLength) this.showReadMoreButton = true;
-      return this.showFullText || !this.showReadMoreButton
+      if (this.isLongText) {
+        return (this.showFullText)
         ? fullDescription
-        : `${fullDescription.slice(0, maxLength)}...`;
+        : `${fullDescription.slice(0, this.maxLength)}...`;
+      } else {
+        return fullDescription;
+      }
     },
+  },
+  watch: {
+    content() {
+      this.showFullText = false;
+    }
   },
   mounted() {
     this.mediaQueryHook();

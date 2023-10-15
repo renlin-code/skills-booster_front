@@ -169,7 +169,7 @@
       </div>
       <div class="school-content__reviews sb-container">
         <Transition name="fade">
-          <div v-show="!pendingRender">
+          <div v-show="!pending">
             <div class="school-content__reviews-header">
               <h2 class="school-content__reviews-title">Отзывы</h2>
               <div class="school-content__reviews-select">
@@ -184,18 +184,20 @@
             <div class="school-content__reviews-body">
               <div
                 class="school-content__reviews-body-content--loading"
-                :class="{ 'blog__body--loading': pendingReviews }"
+                :class="{ 'blog__body--loading': pendingGridQueue !== 0 }"
               >
-                <ul v-show="!pendingReviews" class="school-content__reviews-elements">
-                  <li
-                    class="school-content__reviews-elements-element"
-                    v-for="review in templateReviews"
-                  >
-                    <ReviewCard :content="review" />
-                  </li>
-                </ul>
                 <Transition name="fade">
-                  <RingPreloader class="school-content__loading" v-if="pendingReviews" />
+                  <ul v-show="pendingGridQueue === 0" class="school-content__reviews-elements">
+                    <li
+                      class="school-content__reviews-elements-element"
+                      v-for="review in templateReviews"
+                    >
+                      <ReviewCard :content="review" />
+                    </li>
+                  </ul>
+                </Transition>
+                <Transition name="fade">
+                  <RingPreloader class="school-content__loading" v-if="pendingGridQueue !== 0" />
                 </Transition>
               </div>
               <div
@@ -209,7 +211,7 @@
                   <MainButton
                     type="3"
                     @click.native="loadMore"
-                    v-if="!pendingLoadMore && !pendingReviews"
+                    v-if="!pendingLoadMore && pendingGridQueue === 0"
                     >Показать еще</MainButton
                   >
                 </Transition>
@@ -220,24 +222,10 @@
                   />
                 </Transition>
               </div>
-              <div
-                class="school-content__pagination sb-container"
-                v-show="totalItems > itemsPerPage"
-              >
-                <Pagination
-                  v-if="totalItems"
-                  :total-items="totalItems"
-                  :items-per-page="itemsPerPage"
-                  @page-changed="handlePageChange"
-                  @total-pages="setTotalPages"
-                />
-              </div>
             </div>
           </div>
         </Transition>
-        <Transition name="fade">
-          <RingPreloader class="school-content__loading" v-show="pendingRender" />
-        </Transition>
+        <RingPreloader class="school-content__loading" v-show="pending" />
       </div>
     </div>
   </section>
@@ -245,7 +233,7 @@
 
 <script>
 import animateOnScrollMixin from "~/mixins/animateOnScrollMixin";
-import mediaQueryMixin from '~/mixins/mediaQueryMixin';
+import mediaQueryMixin from "~/mixins/mediaQueryMixin";
 
 import SendReviewModal from "~/components/Modals/ModalsInstances/SendReviewModal.vue";
 import MainButton from "~/components/Buttons/MainButton.vue";
@@ -282,10 +270,10 @@ export default {
     sortByQuery: "date",
     sortOrderQuery: "DESC",
     templateReviews: [],
-    totalPending: 0,
-    pendingRender: true,
-    pendingReviews: false,
+    pending: true,
     pendingLoadMore: false,
+    pendingGrid: false,
+    pendingGridQueue: 0,
     itemsPerPage: 10,
     totalItems: null,
     currentPage: 1,
@@ -347,12 +335,11 @@ export default {
           this.sortOrderQuery = "ASC";
           break;
       }
-      this.pendingReviews = true;
+      this.pendingGridQueue++;
       await this.fetchData();
-      this.pendingReviews = this.totalPending !== 0;
+      this.pendingGridQueue--;
     },
     async fetchData() {
-      this.totalPending++;
       const data = await this.$axios.$get(`/wp-json/get/schools/${this.content.slug}`, {
         params: {
           page: this.currentPage,
@@ -363,7 +350,6 @@ export default {
       });
       this.totalItems = data.reviews.total_pages * this.itemsPerPage;
       this.templateReviews = data.reviews.reviews;
-      this.totalPending--;
     },
     async loadMore() {
       this.itemsPerPage += 10;
@@ -371,22 +357,10 @@ export default {
       await this.fetchData();
       this.pendingLoadMore = false;
     },
-    async handlePageChange({ curr, total }) {
-      if (curr !== this.currentPage) {
-        this.currentPage = curr;
-        this.totalPages = total;
-        this.pendingReviews = true;
-        await this.fetchData();
-        this.pendingReviews = this.totalPending !== 0;
-      }
-    },
-    setTotalPages(payload) {
-      this.totalPages = payload;
-    },
   },
   async created() {
     await this.fetchData();
-    this.pendingRender = false;
+    this.pending = false;
   },
   mounted() {
     this.mediaQueryHook();
@@ -703,7 +677,7 @@ export default {
   }
   &__load-more {
     margin: 0 auto;
-    margin-bottom: 30rem;
+    margin-top: 30rem;
     width: 240rem;
     height: 70rem;
     position: relative;
@@ -711,7 +685,7 @@ export default {
       width: 100%;
       height: 47rem;
       padding: 0 15rem;
-      margin-bottom: 24rem;
+      margin-top: 24rem;
     }
   }
 }

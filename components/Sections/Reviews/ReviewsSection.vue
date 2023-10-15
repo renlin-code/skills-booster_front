@@ -2,7 +2,7 @@
   <section class="reviews-section sb-noselect">
     <div class="reviews-section__inner sb-container">
       <Transition name="fade">
-        <div v-show="!pendingRender">
+        <div v-if="!pending">
           <h1 class="reviews-section__title">{{ content.title }}</h1>
           <h2 class="reviews-section__subtitle">{{ content.subtitle }}</h2>
           <p class="reviews-section__text">{{ content.text }}</p>
@@ -22,22 +22,27 @@
           </div>
           <div
             class="reviews-section__body"
-            :class="{ 'reviews-section__body--loading': pendingSchools }"
+            :class="{ 'reviews-section__body--loading': pendingGridQueue !== 0 }"
           >
-            <ul class="reviews-section__schools" v-show="!pendingSchools">
-              <li
-                class="reviews-section__schools-element"
-                v-for="school in templateSchools"
-              >
-                <SchoolCard :content="school" />
-              </li>
-            </ul>
             <Transition name="fade">
-              <RingPreloader class="reviews-section__loading" v-if="pendingSchools" />
+              <ul class="reviews-section__schools" v-show="pendingGridQueue === 0">
+                <li
+                  class="reviews-section__schools-element"
+                  v-for="school in templateSchools"
+                >
+                  <SchoolCard :content="school" />
+                </li>
+              </ul>
+            </Transition>
+            <Transition name="fade">
+              <RingPreloader
+                class="reviews-section__loading reviews-section__loading--grid"
+                v-if="pendingGridQueue !== 0"
+              />
             </Transition>
             <NoResultsView
               class="reviews-section__no-results"
-              v-if="!templateSchools.length"
+              v-if="!templateSchools.length && pendingGridQueue === 0"
             >
               Извините, но по вашему запросу нет школ. Попробуйте изменить запрос
             </NoResultsView>
@@ -52,7 +57,7 @@
               <MainButton
                 type="3"
                 @click.native="loadMore"
-                v-if="!pendingLoadMore && !pendingSchools"
+                v-if="!pendingLoadMore && pendingGridQueue === 0"
                 >Показать еще</MainButton
               >
             </Transition>
@@ -63,23 +68,9 @@
               />
             </Transition>
           </div>
-          <div
-            class="reviews-section__pagination sb-container"
-            v-show="totalItems > itemsPerPage"
-          >
-            <Pagination
-              v-if="totalItems"
-              :total-items="totalItems"
-              :items-per-page="itemsPerPage"
-              @page-changed="handlePageChange"
-              @total-pages="setTotalPages"
-            />
-          </div>
         </div>
       </Transition>
-      <Transition name="fade">
-        <RingPreloader class="reviews-section__loading" v-show="pendingRender" />
-      </Transition>
+      <RingPreloader class="reviews-section__loading" v-if="pending" />
     </div>
   </section>
 </template>
@@ -110,14 +101,14 @@ export default {
     },
   },
   data: () => ({
-    searchQuery: "",
+    templateSchools: [],
     sortOptions: ["Рейтинг", "Отзывы", "Название"],
     sortQuery: "",
-    templateSchools: [],
-    totalPending: 0,
-    pendingRender: true,
-    pendingSchools: false,
+    searchQuery: "",
+    pending: true,
     pendingLoadMore: false,
+    pendingGrid: false,
+    pendingGridQueue: 0,
     itemsPerPage: 6,
     totalItems: null,
     currentPage: 1,
@@ -136,12 +127,11 @@ export default {
           this.sortQuery = "name";
           break;
       }
-      this.pendingSchools = true;
+      this.pendingGridQueue++;
       await this.fetchData();
-      this.pendingSchools = this.totalPending !== 0;
+      this.pendingGridQueue--;
     },
     async fetchData() {
-      this.totalPending++;
       const data = await this.$axios.$get("/wp-json/get/schools", {
         params: {
           page: this.currentPage,
@@ -152,7 +142,6 @@ export default {
       });
       this.totalItems = data.total_pages * this.itemsPerPage;
       this.templateSchools = data.schools;
-      this.totalPending--;
     },
     async loadMore() {
       this.itemsPerPage += 6;
@@ -160,29 +149,19 @@ export default {
       await this.fetchData();
       this.pendingLoadMore = false;
     },
-    async handlePageChange({ curr, total }) {
-      if (curr !== this.currentPage) {
-        this.currentPage = curr;
-        this.totalPages = total;
-        this.pendingSchools = true;
-        await this.fetchData();
-        this.pendingSchools = this.totalPending !== 0;
-      }
-    },
-    setTotalPages(payload) {
-      this.totalPages = payload;
-    },
   },
   watch: {
     async searchQuery() {
-      if (this.templateSchools.length !== 0) this.pendingSchools = true;
+      this.pendingGrid = true;
+      this.pendingGridQueue++;
       await this.fetchData();
-      this.pendingSchools = false;
+      this.pendingGrid = false;
+      this.pendingGridQueue--;
     },
   },
   async created() {
     await this.fetchData();
-    this.pendingRender = false;
+    this.pending = false;
   },
 };
 </script>
@@ -193,6 +172,7 @@ export default {
     min-height: 600rem;
     @media screen and (max-width: $brakepoint) {
       padding: 0;
+      min-height: 400rem;
     }
   }
   &__title {
@@ -275,10 +255,8 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 40rem;
-    margin-bottom: 30rem;
     @media screen and (max-width: $brakepoint) {
       gap: 16rem;
-      margin-bottom: 24rem;
     }
   }
   &__loading {
@@ -288,16 +266,30 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
     top: 50%;
+    &--grid {
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      padding-top: 240rem;
+      background: rgba($color-white, 0.6);
+      transform: unset;
+      @media screen and (max-width: $brakepoint) {
+        padding-top: 100rem;
+      }
+    }
   }
   &__no-results {
-    margin-top: 150rem;
+    margin: 150rem 0;
     @media screen and (max-width: $brakepoint) {
-      margin-top: 70rem;
+      margin: 100rem 0;
     }
   }
   &__load-more {
     margin: 0 auto;
-    margin-bottom: 30rem;
+    margin-top: 30rem;
     width: 240rem;
     height: 70rem;
     position: relative;
@@ -305,7 +297,7 @@ export default {
       width: 100%;
       height: 47rem;
       padding: 0 15rem;
-      margin-bottom: 24rem;
+      margin-top: 24rem;
     }
   }
 }
