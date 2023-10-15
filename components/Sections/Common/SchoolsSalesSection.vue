@@ -2,39 +2,38 @@
   <section class="schools-sales sb-noselect">
     <div class="schools-sales__inner sb-container">
       <Transition name="fade">
-        <div v-show="!pendingRender">
+        <div v-if="!pending">
           <div class="schools-sales__top">
             <h2 class="schools-sales__title sb-section-title">{{ injectedTitle }}</h2>
-            <NuxtLink to="/schools-sales" v-if="!extended">
+            <NuxtLink to="/schools-sales" v-if="!isMobile && !extended">
               <TextArrowButton>Все акции</TextArrowButton>
             </NuxtLink>
           </div>
           <div class="schools-sales__sales">
-            <Slider
-              v-show="!pendingRender && !pendingSales"
-              :init="!pendingRender && !pendingSales && !extended"
-              class="schools-sales__slider"
-              desktop-off
-              :mobile-off="extended"
-              :wrapper-styles="sliderWrapperStyles"
-            >
-              <Slide
-                class="schools-sales__slider-slide"
-                v-for="sale in templateSales"
-              >
-                <SaleCard
-                  class="schools-sales__sales-card"
-                  :class="{ 'schools-sales__sales-card--extended': extended }"
-                  :content="sale"
-                  :black="sale.black"
-                />
-              </Slide>
-            </Slider>
             <Transition name="fade">
-              <RingPreloader class="schools-sales__loading" v-if="pendingSales" />
+              <Slider
+                v-show="pendingGridQueue === 0"
+                :init="pendingGridQueue === 0 && !extended"
+                class="schools-sales__slider"
+                desktop-off
+                :mobile-off="extended"
+                :wrapper-styles="sliderWrapperStyles"
+              >
+                <Slide class="schools-sales__slider-slide" v-for="sale in templateSales">
+                  <SaleCard
+                    class="schools-sales__sales-card"
+                    :class="{ 'schools-sales__sales-card--extended': extended }"
+                    :content="sale"
+                    :black="sale.black"
+                  />
+                </Slide>
+              </Slider>
+            </Transition>
+            <Transition name="fade">
+              <RingPreloader class="schools-sales__loading" v-if="pendingGridQueue !== 0" />
             </Transition>
           </div>
-          <div class="sb-container" v-if="!extended && isMobile">
+          <div class="sb-container schools-sales__link-to-all" v-if="!extended && isMobile">
             <NuxtLink to="/schools-sales">
               <MainButton arrow type="3">Все акции</MainButton>
             </NuxtLink>
@@ -51,7 +50,7 @@
                 <MainButton
                   type="3"
                   @click.native="loadMore"
-                  v-if="!pendingLoadMore && !pendingSales"
+                  v-if="!pendingLoadMore && pendingGridQueue === 0"
                   >Показать еще</MainButton
                 >
               </Transition>
@@ -62,24 +61,10 @@
                 />
               </Transition>
             </div>
-            <div
-              class="schools-sales__pagination sb-container"
-              v-show="totalItems > itemsPerPage"
-            >
-              <Pagination
-                v-if="totalItems"
-                :total-items="totalItems"
-                :items-per-page="itemsPerPage"
-                @page-changed="handlePageChange"
-                @total-pages="setTotalPages"
-              />
-            </div>
           </div>
         </div>
       </Transition>
-      <Transition name="fade">
-        <RingPreloader class="schools-sales__loading" v-show="pendingRender" />
-      </Transition>
+      <RingPreloader class="schools-sales__loading" v-show="pending" />
     </div>
   </section>
 </template>
@@ -116,12 +101,11 @@ export default {
     },
   },
   data: () => ({
-    render: false,
     templateSales: [],
-    totalPending: 0,
-    pendingRender: true,
-    pendingSales: false,
+    pending: true,
     pendingLoadMore: false,
+    pendingGrid: false,
+    pendingGridQueue: 0,
     itemsPerPage: null,
     totalItems: null,
     currentPage: 1,
@@ -131,7 +115,7 @@ export default {
     sliderWrapperStyles() {
       if (this.extended) {
         return !this.isMobile
-          ? "display:grid; grid-template-columns: repeat(3, 1fr); column-gap: 20rem; row-gap: 40rem; margin-bottom: 40rem;"
+          ? "display:grid; grid-template-columns: repeat(3, 1fr); column-gap: 20rem; row-gap: 40rem;"
           : "display: flex; flex-direction: column; gap: 16rem;";
       } else {
         return !this.isMobile
@@ -142,7 +126,6 @@ export default {
   },
   methods: {
     async fetchData() {
-      this.totalPending++;
       const data = await this.$axios.$get("/wp-json/get/schools_sales", {
         params: {
           page: this.currentPage,
@@ -159,8 +142,6 @@ export default {
           black: index % 2 !== 0,
         });
       });
-
-      this.totalPending--;
     },
     async loadMore() {
       this.itemsPerPage += 6;
@@ -168,23 +149,11 @@ export default {
       await this.fetchData();
       this.pendingLoadMore = false;
     },
-    async handlePageChange({ curr, total }) {
-      if (curr !== this.currentPage) {
-        this.currentPage = curr;
-        this.totalPages = total;
-        this.pendingSales = true;
-        await this.fetchData();
-        this.pendingSales = this.totalPending !== 0;
-      }
-    },
-    setTotalPages(payload) {
-      this.totalPages = payload;
-    },
   },
   async created() {
     this.itemsPerPage = this.extended ? 6 : 3;
     await this.fetchData();
-    this.pendingRender = false;
+    this.pending = false;
   },
   mounted() {
     this.mediaQueryHook();
@@ -203,7 +172,7 @@ export default {
     @media screen and (max-width: $brakepoint) {
       border-radius: 30rem;
       padding: 30rem 0;
-      min-height: 200rem;
+      min-height: 400rem;
     }
   }
   &__top {
@@ -224,9 +193,6 @@ export default {
         width: 100% !important;
       }
     }
-    @media screen and (max-width: $brakepoint) {
-      margin-bottom: 24rem;
-    }
   }
   &__slider {
     &-slide {
@@ -246,15 +212,21 @@ export default {
   }
   &__load-more {
     margin: 0 auto;
-    margin-bottom: 30rem;
     width: 240rem;
     height: 70rem;
     position: relative;
+    margin-top: 30rem;
     @media screen and (max-width: $brakepoint) {
       width: 100%;
       padding: 0 15rem;
       height: 47rem;
-      margin-bottom: 24rem;
+      margin-top: 24rem;
+    }
+  }
+  &__link-to-all {
+    margin-top: 30rem;
+    @media screen and (max-width: $brakepoint) {
+      margin-top: 24rem;
     }
   }
 }

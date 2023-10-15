@@ -25,10 +25,10 @@
           </div>
           <div
             class="blog__body"
-            :class="{ 'blog__body--loading': pendingListQueue !== 0 }"
+            :class="{ 'blog__body--loading': pendingGridQueue !== 0 }"
           >
             <Transition name="fade">
-              <ul class="blog__articles" v-show="pendingListQueue === 0">
+              <ul class="blog__articles" v-show="pendingGridQueue === 0">
                 <li
                   class="blog__articles-element"
                   v-for="article in templateArticles"
@@ -39,11 +39,14 @@
               </ul>
             </Transition>
             <Transition name="fade">
-              <RingPreloader class="blog__loading blog__loading--list" v-if="pendingListQueue !== 0" />
+              <RingPreloader
+                class="blog__loading blog__loading--list"
+                v-if="pendingGridQueue !== 0"
+              />
             </Transition>
             <NoResultsView
               class="blog__no-results"
-              v-if="!templateArticles.length && pendingListQueue === 0"
+              v-if="!templateArticles.length && pendingGridQueue === 0"
             >
               Извините, но по вашему запросу нет статей. Попробуйте изменить запрос
             </NoResultsView>
@@ -61,13 +64,20 @@
                 pendingLoadMore
               "
             >
-              <MainButton
-                type="3"
-                @click.native="loadMore"
-                v-if="!pendingLoadMore && pendingListQueue === 0"
-                >Показать еще</MainButton
-              >
-              <RingPreloader class="blog__loading blog__loading" v-if="pendingLoadMore" />
+              <Transition name="fade">
+                <MainButton
+                  type="3"
+                  @click.native="loadMore"
+                  v-if="!pendingLoadMore && pendingGridQueue === 0"
+                  >Показать еще</MainButton
+                >
+              </Transition>
+              <Transition name="fade">
+                <RingPreloader
+                  class="blog__loading blog__loading"
+                  v-if="pendingLoadMore"
+                />
+              </Transition>
             </div>
           </div>
         </div>
@@ -116,8 +126,8 @@ export default {
     searchQuery: "",
     pending: true,
     pendingLoadMore: false,
-    pendingList: false,
-    pendingListQueue: 0,
+    pendingGrid: false,
+    pendingGridQueue: 0,
     itemsPerPage: 6,
     totalItems: null,
     currentPage: 1,
@@ -136,9 +146,9 @@ export default {
   methods: {
     async switchCategory(index) {
       this.selectedCatId = index > 0 ? this.allCategories[index - 1].id : "";
-      this.pendingListQueue++;
+      this.pendingGridQueue++;
       await this.fetchData();
-      this.pendingListQueue--;
+      this.pendingGridQueue--;
     },
     async fetchData() {
       const data = await this.$axios.$get("/wp-json/get/articles/", {
@@ -172,11 +182,11 @@ export default {
   },
   watch: {
     async searchQuery() {
-      this.pendingList = true;
-      this.pendingListQueue++;
+      this.pendingGrid = true;
+      this.pendingGridQueue++;
       await this.fetchData();
-      this.pendingList = false;
-      this.pendingListQueue--;
+      this.pendingGrid = false;
+      this.pendingGridQueue--;
     },
   },
   async created() {
@@ -201,6 +211,7 @@ export default {
     @media screen and (max-width: $brakepoint) {
       border-radius: 30rem;
       padding: 30rem 0;
+      min-height: 400rem;
     }
   }
   &__header {
@@ -289,13 +300,11 @@ export default {
     flex-wrap: wrap;
     column-gap: 20rem;
     row-gap: 40rem;
-    margin-bottom: 30rem;
     @media screen and (max-width: $brakepoint) {
       flex-wrap: nowrap;
       flex-direction: column;
       row-gap: 16rem;
       padding: 0 15rem;
-      margin-bottom: 24rem;
     }
   }
   &__no-results {
@@ -317,10 +326,18 @@ export default {
     width: 240rem;
     height: 70rem;
     position: relative;
+    margin-top: 30rem;
     @media screen and (max-width: $brakepoint) {
       width: 100%;
       height: 47rem;
       padding: 0 15rem;
+      margin-top: 24rem;
+    }
+  }
+  &__link-to-all {
+    margin-top: 30rem;
+    @media screen and (max-width: $brakepoint) {
+      margin-top: 24rem;
     }
   }
 }
