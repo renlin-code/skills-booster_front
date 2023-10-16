@@ -1329,23 +1329,23 @@ export default {
       }
     }
     .article-card {
-      width: 684rem;
+      width: 684rem !important;
       @media screen and (max-width: $brakepoint) {
-        width: 270rem;
-        height: 100%;
-        display: grid;
-        grid-template-rows: auto 1fr;
+        width: 270rem !important;
+        height: 100% !important;
+        display: grid !important;
+        grid-template-rows: auto 1fr !important;
       }
       &__title {
-        min-height: 124rem;
+        min-height: 124rem !important;
         @media screen and (max-width: $brakepoint) {
-          min-height: 138rem;
+          min-height: 138rem !important;
         }
       }
       &__bottom {
         @media screen and (max-width: $brakepoint) {
-          display: grid;
-          grid-template-rows: 1fr auto;
+          display: grid !important;
+          grid-template-rows: 1fr auto !important;
         }
       }
     }

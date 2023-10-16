@@ -1,7 +1,7 @@
 <template>
-  <div class="autor-card" :class="{ 'autor-card--many': autors.length > 1 }">
+  <div class="autor-card sb-noselect" :class="{ 'autor-card--many': autors.length > 1 }">
     <div class="autor-card__inner">
-      <span class="autor-card__title sb-noselect">{{ title }}</span>
+      <span class="autor-card__title">{{ title }}</span>
       <div class="autor-card__figures">
         <figure class="autor-card__figure">
           <img :src="autors[0].image" alt="" />
