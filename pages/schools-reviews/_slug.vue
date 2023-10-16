@@ -6,16 +6,19 @@
     :breadcrumbs-page-name="page.title"
     breadcrumbsSliced
   >
-    <SchoolContent :content="page" />
+    <SchoolContent class="sb-observe sb-observe--fade" :content="page" />
   </Page>
 </template>
 
 <script>
+import animateOnScrollMixin from "~/mixins/animateOnScrollMixin";
+
 import Page from "~/components/Layout/Page.vue";
 import SchoolContent from "~/components/Sections/Reviews/SchoolContent.vue";
 
 export default {
   name: "SchoolPage",
+  mixins: [animateOnScrollMixin],
   components: {
     Page,
     SchoolContent,

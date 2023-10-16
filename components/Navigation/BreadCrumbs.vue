@@ -98,7 +98,7 @@ export default {
     }
     & span,
     &:deep a {
-      @include fontStyles($font_3, 15rem, 18.2rem, 400);
+      @include fontStyles($font_3, 17rem, 18.2rem, 400);
       @media screen and (max-width: $brakepoint) {
         @include fontStyles($font_3, 13rem, 19.5rem, 400);
       }

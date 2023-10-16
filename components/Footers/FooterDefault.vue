@@ -229,10 +229,10 @@ export default {
   }
   &__imgs-links {
     color: $color_white;
-    @include fontStyles($font_2, 16rem, 24rem, 400);
+    @include fontStyles($font_3, 16rem, 24rem, 400);
     margin-bottom: 30rem;
     @media screen and (max-width: $brakepoint) {
-      @include fontStyles($font_2, 13rem, 20rem, 400);
+      @include fontStyles($font_3, 13rem, 20rem, 400);
       margin-bottom: 0;
     }
     & :deep a {
@@ -242,19 +242,19 @@ export default {
   &__year {
     display: block;
     color: $color_white;
-    @include fontStyles($font_2, 16rem, 24rem, 400);
+    @include fontStyles($font_3, 16rem, 24rem, 400);
     margin-bottom: 15rem;
     @media screen and (max-width: $brakepoint) {
-      @include fontStyles($font_2, 13rem, 20rem, 400);
+      @include fontStyles($font_3, 13rem, 20rem, 400);
       margin-bottom: 12rem;
     }
   }
   &__developer {
     display: block;
     color: $color_white;
-    @include fontStyles($font_2, 16rem, 24rem, 400);
+    @include fontStyles($font_3, 16rem, 24rem, 400);
     @media screen and (max-width: $brakepoint) {
-      @include fontStyles($font_2, 13rem, 20rem, 400);
+      @include fontStyles($font_3, 13rem, 20rem, 400);
     }
     & :deep a {
       color: $color_primary;

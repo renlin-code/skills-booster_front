@@ -187,7 +187,10 @@
                 :class="{ 'blog__body--loading': pendingGridQueue !== 0 }"
               >
                 <Transition name="fade">
-                  <ul v-show="pendingGridQueue === 0" class="school-content__reviews-elements">
+                  <ul
+                    v-show="pendingGridQueue === 0"
+                    class="school-content__reviews-elements"
+                  >
                     <li
                       class="school-content__reviews-elements-element"
                       v-for="review in templateReviews"
@@ -197,7 +200,10 @@
                   </ul>
                 </Transition>
                 <Transition name="fade">
-                  <RingPreloader class="school-content__loading" v-if="pendingGridQueue !== 0" />
+                  <RingPreloader
+                    class="school-content__loading"
+                    v-if="pendingGridQueue !== 0"
+                  />
                 </Transition>
               </div>
               <div
@@ -232,6 +238,7 @@
 </template>
 
 <script>
+import { REQUEST_MIN_DELAY } from "~/utils/constants.js";
 import animateOnScrollMixin from "~/mixins/animateOnScrollMixin";
 import mediaQueryMixin from "~/mixins/mediaQueryMixin";
 
@@ -336,8 +343,10 @@ export default {
           break;
       }
       this.pendingGridQueue++;
-      await this.fetchData();
-      this.pendingGridQueue--;
+      setTimeout(async () => {
+        await this.fetchData();
+        this.pendingGridQueue--;
+      }, REQUEST_MIN_DELAY);
     },
     async fetchData() {
       const data = await this.$axios.$get(`/wp-json/get/schools/${this.content.slug}`, {
@@ -354,13 +363,17 @@ export default {
     async loadMore() {
       this.itemsPerPage += 10;
       this.pendingLoadMore = true;
-      await this.fetchData();
-      this.pendingLoadMore = false;
+      setTimeout(async () => {
+        await this.fetchData();
+        this.pendingLoadMore = false;
+      }, REQUEST_MIN_DELAY);
     },
   },
   async created() {
-    await this.fetchData();
-    this.pending = false;
+    setTimeout(async () => {
+      await this.fetchData();
+      this.pending = false;
+    }, REQUEST_MIN_DELAY);
   },
   mounted() {
     this.mediaQueryHook();

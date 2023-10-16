@@ -76,6 +76,8 @@
 </template>
 
 <script>
+import { REQUEST_MIN_DELAY } from "~/utils/constants.js";
+
 import SearchInput from "~/components/Others/SearchInput.vue";
 import Chips from "~/components/Others/Chips.vue";
 import SchoolCard from "~/components/Others/SchoolCard.vue";
@@ -128,8 +130,10 @@ export default {
           break;
       }
       this.pendingGridQueue++;
-      await this.fetchData();
-      this.pendingGridQueue--;
+      setTimeout(async () => {
+        await this.fetchData();
+        this.pendingGridQueue--;
+      }, REQUEST_MIN_DELAY);
     },
     async fetchData() {
       const data = await this.$axios.$get("/wp-json/get/schools", {
@@ -146,22 +150,28 @@ export default {
     async loadMore() {
       this.itemsPerPage += 6;
       this.pendingLoadMore = true;
-      await this.fetchData();
-      this.pendingLoadMore = false;
+      setTimeout(async () => {
+        await this.fetchData();
+        this.pendingLoadMore = false;
+      }, REQUEST_MIN_DELAY);
     },
   },
   watch: {
     async searchQuery() {
       this.pendingGrid = true;
       this.pendingGridQueue++;
-      await this.fetchData();
-      this.pendingGrid = false;
-      this.pendingGridQueue--;
+      setTimeout(async () => {
+        await this.fetchData();
+        this.pendingGrid = false;
+        this.pendingGridQueue--;
+      }, REQUEST_MIN_DELAY);
     },
   },
   async created() {
-    await this.fetchData();
-    this.pending = false;
+    setTimeout(async () => {
+      await this.fetchData();
+      this.pending = false;
+    }, REQUEST_MIN_DELAY);
   },
 };
 </script>

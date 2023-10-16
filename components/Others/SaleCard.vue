@@ -26,9 +26,9 @@
       </div>
     </div>
     <div class="sale-card__bottom">
-      <h6 class="sale-card__bottom-title">
+      <div class="sale-card__bottom-title">
         {{ content.sale_title }}
-      </h6>
+      </div>
       <p class="sale-card__bottom-text">
         {{ content.sale_description }}
       </p>

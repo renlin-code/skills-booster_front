@@ -30,10 +30,16 @@
               </Slider>
             </Transition>
             <Transition name="fade">
-              <RingPreloader class="schools-sales__loading" v-if="pendingGridQueue !== 0" />
+              <RingPreloader
+                class="schools-sales__loading"
+                v-if="pendingGridQueue !== 0"
+              />
             </Transition>
           </div>
-          <div class="sb-container schools-sales__link-to-all" v-if="!extended && isMobile">
+          <div
+            class="sb-container schools-sales__link-to-all"
+            v-if="!extended && isMobile"
+          >
             <NuxtLink to="/schools-sales">
               <MainButton arrow type="3">Все акции</MainButton>
             </NuxtLink>
@@ -70,6 +76,8 @@
 </template>
 
 <script>
+import { REQUEST_MIN_DELAY } from "~/utils/constants.js";
+
 import mediaQueryMixin from "~/mixins/mediaQueryMixin";
 import TextArrowButton from "~/components/Buttons/TextArrowButton.vue";
 import SaleCard from "~/components/Others/SaleCard.vue";
@@ -146,14 +154,18 @@ export default {
     async loadMore() {
       this.itemsPerPage += 6;
       this.pendingLoadMore = true;
-      await this.fetchData();
-      this.pendingLoadMore = false;
+      setTimeout(async () => {
+        await this.fetchData();
+        this.pendingLoadMore = false;
+      }, REQUEST_MIN_DELAY);
     },
   },
   async created() {
     this.itemsPerPage = this.extended ? 6 : 3;
-    await this.fetchData();
-    this.pending = false;
+    setTimeout(async () => {
+      await this.fetchData();
+      this.pending = false;
+    }, REQUEST_MIN_DELAY);
   },
   mounted() {
     this.mediaQueryHook();

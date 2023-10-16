@@ -14,9 +14,9 @@
         <div class="article-card__cat" :style="`background: ${content.category.color}`">
           {{ content.category.title }}
         </div>
-        <h6 class="article-card__title">
+        <div class="article-card__title">
           {{ content.title }}
-        </h6>
+        </div>
       </div>
     </div>
     <div class="article-card__bottom">
@@ -71,6 +71,9 @@ export default {
   border-radius: 30rem;
   border: 1rem solid $color_gray;
   background: $color_bg;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr auto;
   @media screen and (max-width: $brakepoint) {
     width: 100%;
   }
