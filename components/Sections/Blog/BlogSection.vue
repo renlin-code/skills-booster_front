@@ -290,7 +290,7 @@ export default {
     transform: translate(-50%, -50%);
     top: 50%;
     &--grid {
-      width: 100%;
+      width: 100% !important;
       height: 100%;
       top: 0;
       left: 0;
