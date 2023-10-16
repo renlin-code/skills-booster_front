@@ -136,7 +136,7 @@ export default {
   }),
   computed: {
     chipsOptions() {
-      return ["Все категории", ...this.allCategories.map((cat) => cat.title).reverse()];
+      return ["Все категории", ...this.allCategories.map((cat) => cat.title)];
     },
     displayedItems() {
       const startIndex = (this.currentPage - 1) * this.itemsPerPage;
