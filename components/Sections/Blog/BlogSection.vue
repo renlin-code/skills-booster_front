@@ -12,7 +12,7 @@
           </div>
           <div class="blog__subheader">
             <Chips :items="chipsOptions" @select-chip="switchCategory" />
-            <NuxtLink v-if="!extended && !isMobile" to="/blog">
+            <NuxtLink class="blog__subheader-link" v-if="!extended && !isMobile" to="/blog">
               <TextArrowButton>Все статьи</TextArrowButton>
             </NuxtLink>
             <div v-if="extended" class="blog__search">
@@ -136,7 +136,7 @@ export default {
   }),
   computed: {
     chipsOptions() {
-      return ["Все категории", ...this.allCategories.map((cat) => cat.title)];
+      return ["Все категории", ...this.allCategories.map((cat) => cat.title).reverse()];
     },
     displayedItems() {
       const startIndex = (this.currentPage - 1) * this.itemsPerPage;
@@ -248,12 +248,15 @@ export default {
     display: grid;
     grid-template-columns: 1200rem auto;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: flex-start;
     margin-bottom: 30rem;
     @media screen and (max-width: $brakepoint) {
       display: flex;
       flex-direction: column-reverse;
       margin-bottom: 24rem;
+    }
+    &-link {
+      margin-top: 10rem;
     }
   }
   &__search {

@@ -97,6 +97,7 @@ export default {
       background-repeat: no-repeat;
       background-size: 232rem auto;
       padding: 25rem 30rem;
+      height: 100%;
       @media screen and (max-width: $brakepoint) {
         padding: 16rem;
         background-size: 110rem 87rem;
