@@ -265,12 +265,6 @@ export default {
       padding: 0 15rem;
       margin-bottom: 16rem;
     }
-    &-el {
-      height: 100%;
-      @media screen and (max-width: $brakepoint) {
-        height: auto;
-      }
-    }
   }
   &__body {
     width: 100%;
