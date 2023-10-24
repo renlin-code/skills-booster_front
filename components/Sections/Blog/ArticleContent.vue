@@ -71,6 +71,9 @@
                   class="section__content-block"
                   v-for="block in section.article_section_content"
                 >
+                  <h3 class="section__content-h3" v-if="block._type === 'content_h3'">
+                    {{ block.content_h3 }}
+                  </h3>
                   <div
                     class="section__content-html"
                     :class="{ 'section__content-html--backgrounded': block.backgrounded }"
@@ -80,11 +83,12 @@
 
                   <figure
                     class="section__content-img"
+                    :class="{'section__content-img--mobile-contained' : block.mob_contained }"
                     v-if="block._type === 'content_img'"
                   >
                     <img
                       :src="isMobile ? block.content_img_mob : block.content_img"
-                      alt=""
+                      :alt="block.img_alt"
                     />
                   </figure>
 
@@ -343,11 +347,7 @@
           <AutorCard v-if="isMobile" title="Автор статьи" :autors="[content.autor]" />
         </div>
         <div class="body__right">
-          <AutorCard
-            v-if="!isMobile"
-            title="Автор статьи"
-            :autors="[content.autor]"
-          />
+          <AutorCard v-if="!isMobile" title="Автор статьи" :autors="[content.autor]" />
           <div class="article-content__others" v-if="isMobile">
             <div class="article-content__others-title sb-container">
               Еще статьи на эту тему
@@ -721,17 +721,17 @@ export default {
       margin-bottom: 40rem;
     }
     .section {
-      padding-top: 40rem;
+      padding-top: 50rem;
       @media screen and (max-width: $brakepoint) {
-        padding-top: 24rem;
+        padding-top: 30rem;
       }
       &__title {
-        @include fontStyles($font_3, 22rem, 35.2rem, 600, 2.2rem);
+        @include fontStyles($font_3, 22rem, 35.2rem, 600, 1.2rem);
         color: $color_dark-black;
         text-transform: uppercase;
         margin-bottom: 30rem;
         @media screen and (max-width: $brakepoint) {
-          @include fontStyles($font_3, 16rem, 25.6rem, 600, 0.8rem);
+          @include fontStyles($font_3, 16rem, 25.6rem, 600, 0.6rem);
           margin-bottom: 16rem;
           padding: 0 15rem;
         }
@@ -740,6 +740,17 @@ export default {
         display: flex;
         flex-direction: column;
         gap: 20rem;
+
+        &-h3 {
+          margin-top: 14rem;
+          @include fontStyles($font_3, 22rem, 35.2rem, 600, 1rem);
+          color: $color_dark-black;
+          @media screen and (max-width: $brakepoint) {
+            margin-top: 6rem;
+            @include fontStyles($font_3, 16rem, 25.6rem, 600, 0.5rem);
+            padding: 0 15rem;
+          }
+        }
         &-html {
           color: $color_dark-black;
           @include fontStyles($font_3, 21rem, 30rem, 400, 1rem);
@@ -764,20 +775,6 @@ export default {
             color: $color_dark-black;
             font-weight: 500;
           }
-          h3,
-          h4,
-          h5,
-          h6 {
-            @include fontStyles($font_3, 22rem, 35.2rem, 600, 2.2rem);
-            color: $color_dark-black;
-            text-transform: uppercase;
-            margin-bottom: 20rem;
-            @media screen and (max-width: $brakepoint) {
-              @include fontStyles($font_3, 16rem, 25.6rem, 600, 0.8rem);
-              margin-bottom: 16rem;
-              padding: 0 15rem;
-            }
-          }
           &--backgrounded {
             padding: 20rem;
             border-radius: 20rem;
@@ -798,6 +795,11 @@ export default {
           img {
             width: 100%;
             object-fit: contain;
+          }
+          &--mobile-contained {
+            @media screen and (max-width: $brakepoint) {
+              padding: 0 12rem;
+            }
           }
         }
         &-list {
@@ -1038,9 +1040,10 @@ export default {
                     @include fontStyles($font_3, 16rem, 16rem, 500);
                   }
                   &:hover {
-                    background: transparent;
-                    border-color: $color_primary;
-                    color: $color_black;
+                    background: rgba($color_black, 0.8);
+                    // background: transparent;
+                    // border-color: $color_primary;
+                    // color: $color_black;
                   }
                 }
                 ul {
@@ -1052,27 +1055,12 @@ export default {
                   }
                   li {
                     position: relative;
-                    padding-left: 28rem;
                     color: $color_dark-black;
                     @include fontStyles($font_3, 18rem, 28rem, 400);
                     @media screen and (max-width: $brakepoint) {
                       padding-left: 16rem;
                       @include fontStyles($font_3, 14rem, 22rem, 400);
                       text-align: start;
-                    }
-                    &::before {
-                      position: absolute;
-                      left: 0;
-                      top: 3rem;
-                      content: "";
-                      width: 20rem;
-                      height: 20rem;
-                      background: url("/images/icons/breadcrumbs_icon.svg") center/contain
-                        no-repeat;
-                      @media screen and (max-width: $brakepoint) {
-                        width: 12rem;
-                        height: 12rem;
-                      }
                     }
                     em {
                       display: inline;

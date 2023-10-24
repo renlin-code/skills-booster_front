@@ -54,8 +54,8 @@
           <a href="https://freepik.com" target="_blank" class="underline-light-gray"
             >freepik.com</a
           >
-          и <a href="https://unsplash.ru" target="_blank" class="underline-light-gray"
-            >unsplash.ru</a
+          и <a href="https://unsplash.com" target="_blank" class="underline-light-gray"
+            >unsplash.com</a
           >
         </p>
         <span class="footer__year">© Skills_Booster {{ new Date().getFullYear() }}</span>
