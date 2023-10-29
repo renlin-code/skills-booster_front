@@ -3,7 +3,6 @@
     <div class="article-card__top">
       <NuxtLink
         class="article-card__top-link-layer"
-        v-if="!isMobile"
         :to="`/blog/${content.slug}`"
       ></NuxtLink>
       <div class="article-card__top-bg" v-if="!isMobile"></div>
