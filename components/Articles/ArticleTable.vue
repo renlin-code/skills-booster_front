@@ -160,7 +160,7 @@ export default {
             color: $color_dark-black;
             @include fontStyles($font_3, 18rem, 28rem, 400);
             @media screen and (max-width: $brakepoint) {
-              @include fontStyles($font_3, 12rem, 18rem, 400);
+              @include fontStyles($font_3, 10rem, 17rem, 400);
               text-align: start;
             }
             em {
