@@ -155,7 +155,7 @@ export default {
   &__description {
     @include fontStyles($font_3, 18rem, 24rem, 400);
     margin-bottom: 20rem;
-    min-height: 72rem;
+    min-height: 100rem;
     @media screen and (max-width: $brakepoint) {
       margin-bottom: 12rem;
       min-height: unset;

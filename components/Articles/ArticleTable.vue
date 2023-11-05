@@ -116,9 +116,9 @@ export default {
         color: $color_dark-black;
         @media screen and (max-width: $brakepoint) {
           padding: 10rem;
-          @include fontStyles($font_3, 12rem, 18rem, 400);
-          text-align: center;
+          @include fontStyles($font_3, 10rem, 17rem, 400);
           height: 100%;
+          word-break: break-word;
         }
         em {
           display: inline;
