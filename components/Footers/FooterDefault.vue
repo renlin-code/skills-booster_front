@@ -17,7 +17,7 @@
             }"
           >
             <NuxtLink
-              class="underline-primary"
+              class="sb-internal-link underline-primary"
               :to="item.route"
               @click.native="open = false"
               >{{ item.name }}</NuxtLink
@@ -28,12 +28,12 @@
       <div class="footer__policy">
         <ul class="footer__policy-list">
           <li class="footer__policy-list-item">
-            <NuxtLink to="/privacy-policy" class="underline-light-gray"
+            <NuxtLink to="/privacy-policy" class="sb-internal-link underline-light-gray"
               >Политика конфедициальности</NuxtLink
             >
           </li>
           <li class="footer__policy-list-item">
-            <NuxtLink to="/terms-of-use" class="underline-light-gray"
+            <NuxtLink to="/terms-of-use" class="sb-internal-link underline-light-gray"
               >Пользовательское соглашение</NuxtLink
             >
           </li>

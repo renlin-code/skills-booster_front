@@ -46,6 +46,7 @@
                   <span class="sb-noselect">{{ index + 1 }}.&nbsp;</span>
                   <div>
                     <a
+                      class="sb-internal-link"
                       :href="`#section-${index + 1}`"
                       @mouseover="indexHover = index"
                       @mouseout="indexHover = null"
@@ -416,13 +417,6 @@ export default {
     },
   },
   methods: {
-    formatTableData(data) {
-      if (this.isMobile) {
-        return {};
-      } else {
-        return data;
-      }
-    },
     openAccordion(index) {
       setTimeout(() => {
         this.openAccordionIndex = this.openAccordionIndex === index ? null : index;
@@ -433,10 +427,20 @@ export default {
         this.openAccordionIndex = null;
       }, 200);
     },
+    addTargetBlankToLinks() {
+      const allLinksDOM = document.querySelectorAll("a");
+      allLinksDOM.forEach((linkEl) => {
+        console.log(linkEl.classList)
+        if (!linkEl.getAttribute('target') && !Array.from(linkEl.classList).includes("sb-internal-link")) {
+          linkEl.setAttribute('target', '_blank');
+        }
+      });
+    }
   },
   mounted() {
     this.mediaQueryHook();
     this.urlForShare = window.location.href;
+    this.addTargetBlankToLinks();
   },
 };
 </script>

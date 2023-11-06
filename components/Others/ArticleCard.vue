@@ -2,7 +2,7 @@
   <div class="article-card" :class="{ 'article-card--minified': minified }">
     <div class="article-card__top">
       <NuxtLink
-        class="article-card__top-link-layer"
+        class="sb-internal-link article-card__top-link-layer"
         :to="`/blog/${content.slug}`"
       ></NuxtLink>
       <div class="article-card__top-bg" v-if="!isMobile"></div>
@@ -22,7 +22,7 @@
       <p class="article-card__description">
         {{ content.description }}
       </p>
-      <NuxtLink :to="`/blog/${content.slug}`">
+      <NuxtLink class="sb-internal-link" :to="`/blog/${content.slug}`">
         <div class="article-card__link">
           ЧИТАТЬ ПОЛНОСТЬЮ
           <svg

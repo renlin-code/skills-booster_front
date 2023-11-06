@@ -855,7 +855,7 @@
         </svg>
       </div>
       <div class="page-404__button">
-        <NuxtLink to="/">
+        <NuxtLink class="sb-internal-link" to="/">
           <MainButton>Перейти на главную</MainButton>
         </NuxtLink>
       </div>

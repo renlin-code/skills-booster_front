@@ -7,7 +7,7 @@
       }"
     >
       <div class="header-default__inner sb-container">
-        <NuxtLink to="/" class="header-default__logo"></NuxtLink>
+        <NuxtLink to="/" class="sb-internal-link header-default__logo"></NuxtLink>
         <NavMenu />
       </div>
     </div>

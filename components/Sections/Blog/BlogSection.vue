@@ -12,7 +12,7 @@
           </div>
           <div class="blog__subheader">
             <Chips :items="chipsOptions" @select-chip="switchCategory" />
-            <NuxtLink class="blog__subheader-link" v-if="!extended && !isMobile" to="/blog">
+            <NuxtLink class="sb-internal-link blog__subheader-link" v-if="!extended && !isMobile" to="/blog">
               <TextArrowButton>Все статьи</TextArrowButton>
             </NuxtLink>
             <div v-if="extended" class="blog__search">
@@ -52,7 +52,7 @@
             </NoResultsView>
           </div>
           <div v-if="!extended" class="blog__link-to-all">
-            <NuxtLink to="/blog">
+            <NuxtLink class="sb-internal-link" to="/blog">
               <MainButton arrow type="1">Перейти ко всем статьям</MainButton>
             </NuxtLink>
           </div>

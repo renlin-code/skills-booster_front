@@ -30,7 +30,6 @@ export default {
   computed: {
     ...mapGetters(["getScrollFixedValue"]),
   },
-
   watch: {
     getScrollFixedValue(value) {
       const documentEl = document.documentElement;

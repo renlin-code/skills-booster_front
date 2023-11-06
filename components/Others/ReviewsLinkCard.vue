@@ -3,7 +3,7 @@
     <div class="reviews-link-card__content">
       <h2 class="reviews-link-card__title">Посмотрите отзывы о школах и курсах</h2>
       <img src="/images/others/message.png" alt="">
-      <NuxtLink to="/schools-reviews">
+      <NuxtLink class="sb-internal-link" to="/schools-reviews">
         <MainButton type="2">Подробнее</MainButton>
       </NuxtLink>
     </div>

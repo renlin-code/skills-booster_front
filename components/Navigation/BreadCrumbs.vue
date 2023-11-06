@@ -18,7 +18,7 @@
             />
           </svg>
         </div>
-        <NuxtLink class="breadcrumbs__item-link" :to="route.path">{{ route.name }}</NuxtLink>
+        <NuxtLink class="sb-internal-link breadcrumbs__item-link" :to="route.path">{{ route.name }}</NuxtLink>
       </li>
       <li class="breadcrumbs__item">
         <div class="breadcrumbs__item-icon">
