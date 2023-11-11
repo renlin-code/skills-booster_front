@@ -46,7 +46,7 @@
                   <span class="sb-noselect">{{ index + 1 }}.&nbsp;</span>
                   <div>
                     <a
-                      class="sb-internal-link"
+                      class=""
                       :href="`#section-${index + 1}`"
                       @mouseover="indexHover = index"
                       @mouseout="indexHover = null"
@@ -179,6 +179,10 @@
                     </a>
                   </div>
 
+                  <ArticleLinkBanner
+                    v-if="block._type === 'content_banner_with_link'"
+                    :content="block"
+                  />
                   <ul
                     v-if="block._type === 'content_accordions'"
                     class="section__content-accordions section__content-block-item"
@@ -379,6 +383,7 @@ import Slide from "~/components/Slider/Slide.vue";
 import ArticleTable from "~/components/Articles/ArticleTable.vue";
 import ArticleCard from "~/components/Others/ArticleCard.vue";
 import MainButton from "~/components/Buttons/MainButton.vue";
+import ArticleLinkBanner from "~/components/Articles/ArticleLinkBanner.vue";
 
 export default {
   name: "ArticleContent",
@@ -393,7 +398,8 @@ export default {
     ArticleTable,
     ArticleCard,
     MainButton,
-  },
+    ArticleLinkBanner
+},
   props: {
     content: {
       type: Object,
@@ -430,8 +436,9 @@ export default {
     addTargetBlankToLinks() {
       const allLinksDOM = document.querySelectorAll("a");
       allLinksDOM.forEach((linkEl) => {
-        console.log(linkEl.classList)
-        if (!linkEl.getAttribute('target') && !Array.from(linkEl.classList).includes("sb-internal-link")) {
+        const targetAtt = linkEl.getAttribute('target');
+        const hrefAtt = linkEl.getAttribute('href');
+        if (!targetAtt && hrefAtt.slice(0, 1) !== '/' && !hrefAtt.includes('#section-')) {
           linkEl.setAttribute('target', '_blank');
         }
       });
@@ -441,6 +448,7 @@ export default {
     this.mediaQueryHook();
     this.urlForShare = window.location.href;
     this.addTargetBlankToLinks();
+    console.log(this.content)
   },
 };
 </script>

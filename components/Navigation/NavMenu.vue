@@ -13,7 +13,7 @@
       <div class="mobile-menu__header">
         <NuxtLink
           to="/"
-          class="sb-internal-link mobile-menu__header-logo"
+          class="mobile-menu__header-logo"
           @click.native="open = false"
         ></NuxtLink>
         <button
@@ -32,7 +32,7 @@
             }"
           >
             <NuxtLink
-              class="sb-internal-link underline-primary"
+              class="underline-primary"
               :to="item.route"
               @click.native="open = false"
               >{{ item.name }}</NuxtLink

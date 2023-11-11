@@ -63,12 +63,10 @@
 </template>
 
 <script>
-import mediaQueryMixin from "~/mixins/mediaQueryMixin";
 import MainButton from "~/components/Buttons/MainButton.vue";
 
 export default {
   name: "TestSection",
-  mixins: [mediaQueryMixin],
   components: {
     MainButton,
   },

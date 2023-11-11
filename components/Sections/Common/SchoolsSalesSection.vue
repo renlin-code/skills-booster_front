@@ -5,7 +5,7 @@
         <div v-if="!pending">
           <div class="schools-sales__top">
             <h2 class="schools-sales__title sb-section-title">{{ injectedTitle }}</h2>
-            <NuxtLink class="sb-internal-link" to="/schools-sales" v-if="!isMobile && !extended">
+            <NuxtLink to="/schools-sales" v-if="!isMobile && !extended">
               <TextArrowButton>Все акции</TextArrowButton>
             </NuxtLink>
           </div>
@@ -40,7 +40,7 @@
             class="sb-container schools-sales__link-to-all"
             v-if="!extended && isMobile"
           >
-            <NuxtLink class="sb-internal-link" to="/schools-sales">
+            <NuxtLink to="/schools-sales">
               <MainButton arrow type="3">Все акции</MainButton>
             </NuxtLink>
           </div>
