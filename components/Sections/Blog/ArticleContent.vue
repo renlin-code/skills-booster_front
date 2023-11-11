@@ -448,7 +448,6 @@ export default {
     this.mediaQueryHook();
     this.urlForShare = window.location.href;
     this.addTargetBlankToLinks();
-    console.log(this.content)
   },
 };
 </script>

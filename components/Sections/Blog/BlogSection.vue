@@ -149,6 +149,7 @@ export default {
       this.selectedCatId = index > 0 ? this.allCategories[index - 1].id : "";
       this.pendingGridQueue++;
       setTimeout(async () => {
+        this.itemsPerPage = 6;
         await this.fetchData();
         this.pendingGridQueue--;
       }, REQUEST_MIN_DELAY);

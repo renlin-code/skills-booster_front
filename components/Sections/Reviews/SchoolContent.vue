@@ -19,9 +19,8 @@
         <div class="school-content__banner-top">
           <div class="school-content__banner-logo">
             <img :src="content.logo" alt="" />
-            <span>{{ content.title }}</span>
+            <h1>Отзывы о курсах {{ content.title }}</h1>
           </div>
-          <div class="school-content__banner-words">отзывы, рейтинги</div>
           <div class="school-content__banner-link" v-if="!isMobile">
             <a :href="content.link" target="_blank">
               <MainButton type="3">Перейти на сайт школы</MainButton>
@@ -395,7 +394,7 @@ export default {
     }
     &-top {
       display: grid;
-      grid-template-columns: auto 1fr auto;
+      grid-template-columns: 1fr auto;
       gap: 20rem;
       align-items: center;
       margin-bottom: 20rem;
@@ -421,18 +420,11 @@ export default {
           height: 50rem;
         }
       }
-      span {
+      h1 {
         @include fontStyles($font_2, 42rem, 67.2rem, 600);
         @media screen and (max-width: $brakepoint) {
           @include fontStyles($font_2, 19rem, 30.4rem, 600);
         }
-      }
-    }
-    &-words {
-      color: $color_primary;
-      @include fontStyles($font_2, 26rem, 41.6rem, 600);
-      @media screen and (max-width: $brakepoint) {
-        @include fontStyles($font_2, 16rem, 25.6rem, 600);
       }
     }
     &-reviews {
