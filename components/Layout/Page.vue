@@ -1,6 +1,7 @@
 <template>
   <div class="page">
-    <BreadCrumbs class="page__breadcrumbs sb-container"
+    <BreadCrumbs
+      class="page__breadcrumbs sb-container"
       v-if="breadcrumbsPageName && breadcrumbsRoutes"
       :routes="breadcrumbsRoutes"
       :page-name="breadcrumbsPageName"
@@ -13,30 +14,90 @@
 </template>
 
 <script>
-import BreadCrumbs from '~/components/Navigation/BreadCrumbs.vue';
+import BreadCrumbs from "~/components/Navigation/BreadCrumbs.vue";
 
 export default {
-    name: "Page",
-    props: {
-      page: {
-        type: Object
-      },
-      breadcrumbsRoutes: {
-        type: Array
-      },
-      breadcrumbsPageName: {
-        type: String
-      },
-      breadcrumbsSliced: {
-        type: Boolean,
-        default: false
-      }
+  name: "Page",
+  components: { BreadCrumbs },
+  head() {
+    if (Object.keys(this.page).length !== 0) {
+      const headJson = this.page.yoast_head_json;
+
+      const metaArray = [
+        { charset: "utf-8" },
+        {
+          name: "viewport",
+          content:
+            "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        },
+        {
+          name: "robots",
+          content: "noindex, nofollow",
+        },
+        { name: "format-detection", content: "telephone=no" },
+        { name: "google", content: "notranslate" },
+
+        {
+          name: "description",
+          content: headJson.description,
+        },
+
+        //OPEN GRAPH TAGS
+        {
+          property: "og:title",
+          content: headJson.title,
+        },
+        {
+          property: "og:description",
+          content: headJson.description,
+        },
+        {
+          property: "og:image",
+          content: () => {
+            if(this.page.category) return this.page.category.image;
+            else if(this.page.logo) return this.page.logo;
+            else return ""
+          }
+        },
+        {
+          property: "og:url",
+          content: `https://skills-booster.ru${this.$route.fullPath}`,
+        },
+        {
+          property: "og:type",
+          content: "article",
+        },
+      ];
+
+      return {
+        title: headJson.title,
+        meta: metaArray,
+        htmlAttrs: {
+          lang: "ru",
+        },
+      };
+    }
+  },
+
+  props: {
+    page: {
+      type: Object,
     },
-    mounted() {
-        const routePath = this.$route.name;
-        this.$nuxt.$emit("page-path-name", routePath);
+    breadcrumbsRoutes: {
+      type: Array,
     },
-    components: { BreadCrumbs }
+    breadcrumbsPageName: {
+      type: String,
+    },
+    breadcrumbsSliced: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  mounted() {
+    const routePath = this.$route.name;
+    this.$nuxt.$emit("page-path-name", routePath);
+  },
 };
 </script>
 
