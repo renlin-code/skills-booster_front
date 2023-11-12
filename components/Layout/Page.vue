@@ -20,7 +20,7 @@ export default {
   name: "Page",
   components: { BreadCrumbs },
   head() {
-    if (Object.keys(this.page).length !== 0) {
+    // if (Object.keys(this.page).length !== 0) {
       const headJson = this.page.yoast_head_json;
 
       const metaArray = [
@@ -52,14 +52,6 @@ export default {
           content: headJson.description,
         },
         {
-          property: "og:image",
-          content: () => {
-            if(this.page.category) return this.page.category.image;
-            else if(this.page.logo) return this.page.logo;
-            else return ""
-          }
-        },
-        {
           property: "og:url",
           content: `https://skills-booster.ru${this.$route.fullPath}`,
         },
@@ -68,6 +60,14 @@ export default {
           content: "article",
         },
       ];
+      const openGraphImg = {
+        property: "og:image",
+        content: "",
+      }
+      if(this.page.category) openGraphImg.content = this.page.category.image;
+      else if(this.page.logo) openGraphImg.content = this.page.logo;
+      else openGraphImg.content = "";
+      metaArray.push(openGraphImg);
 
       return {
         title: headJson.title,
@@ -76,7 +76,7 @@ export default {
           lang: "ru",
         },
       };
-    }
+    // }
   },
 
   props: {
