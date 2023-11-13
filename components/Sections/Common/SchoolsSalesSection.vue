@@ -4,7 +4,8 @@
       <Transition name="fade">
         <div v-if="!pending">
           <div class="schools-sales__top">
-            <h2 class="schools-sales__title sb-section-title">{{ injectedTitle }}</h2>
+            <h1 v-if="extended" class="schools-sales__title sb-section-title">{{ injectedTitle }}</h1>
+            <h2 v-else class="schools-sales__title sb-section-title">{{ injectedTitle }}</h2>
             <NuxtLink to="/schools-sales" v-if="!isMobile && !extended">
               <TextArrowButton>Все акции</TextArrowButton>
             </NuxtLink>

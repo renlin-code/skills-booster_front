@@ -155,6 +155,7 @@ export default {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        padding-bottom: 30rem;
       }
     }
     &__list {

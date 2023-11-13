@@ -64,6 +64,9 @@ export default {
           left: 0;
         }
       }
+      & br {
+        display: none;
+      }
     }
   }
 }

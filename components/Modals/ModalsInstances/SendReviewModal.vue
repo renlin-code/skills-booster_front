@@ -49,7 +49,7 @@
             class="send-review__inner-form-checkbox"
             @changeChecked="checkboxHandler"
             >Даю своё согласие на обработку персональных данных в соответсвие с Политикой
-            обработки данных и принимаю условия Пользовательского соглашения</Checkbox
+            обработки данных и принимаю условия <a href="/terms-of-use" target="_blank">Пользовательского соглашения</a></Checkbox
           >
           <div class="send-review__submit">
             <MainButton type="1" :disabled="$v.$invalid && firstClick" v-if="!pending">
@@ -194,6 +194,9 @@ export default {
       }
       &-checkbox {
         margin-bottom: 40rem;
+        a {
+          color: $color_primary;
+        }
         @media screen and (max-width: $brakepoint) {
           margin-bottom: 12rem;
         }

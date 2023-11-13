@@ -106,6 +106,12 @@ body {
 }
 
 //TEXT SELECTION
+* {
+  ::selection {
+    background-color: rgba($color_primary, 0.8);
+    color: $color_white;
+  }
+}
 .sb-noselect {
   -webkit-user-select: none; /* Safari */
   -moz-user-select: none; /* Firefox */

@@ -3,12 +3,12 @@
     <div class="home-hero__inner sb-container">
       <div class="home-hero__grid">
         <div class="home-hero__texts">
-          <h1 class="home-hero__title">
-            <span class="home-hero__title-spaceholder">{{ content.title }}</span>
+          <div class="home-hero__title">
+            <h1 class="home-hero__title-spaceholder">{{ content.title }}</h1>
             <span class="home-hero__title-typing">
               <span ref="typingText"></span>
             </span>
-          </h1>
+          </div>
           <div class="home-hero__bottom">
             <p class="home-hero__text">
               {{ content.text }}

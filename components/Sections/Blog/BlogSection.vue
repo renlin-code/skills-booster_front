@@ -4,7 +4,11 @@
       <Transition name="fade">
         <div v-if="!pending">
           <div class="blog__header">
-            <h2 class="blog__title sb-section-title">
+            <h1 v-if="extended" class="blog__title sb-section-title">
+              <span v-if="!isMobile">&nbsp &nbsp &nbsp &nbsp &nbsp</span
+              >{{ injectedTitle }}
+            </h1>
+            <h2 v-else class="blog__title sb-section-title">
               <span v-if="!isMobile">&nbsp &nbsp &nbsp &nbsp &nbsp</span
               >{{ injectedTitle }}
             </h2>
