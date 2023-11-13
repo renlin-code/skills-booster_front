@@ -20,63 +20,57 @@ export default {
   name: "Page",
   components: { BreadCrumbs },
   head() {
-    // if (Object.keys(this.page).length !== 0) {
-      const headJson = this.page.yoast_head_json;
+    const headJson = this.page.yoast_head_json;
 
-      const metaArray = [
-        { charset: "utf-8" },
-        {
-          name: "viewport",
-          content:
-            "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
-        },
-        {
-          name: "robots",
-          content: "noindex, nofollow",
-        },
-        { name: "format-detection", content: "telephone=no" },
-        { name: "google", content: "notranslate" },
+    const metaArray = [
+      { charset: "utf-8" },
+      {
+        name: "viewport",
+        content:
+          "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+      },
+      {
+        name: "robots",
+        content: "noindex, nofollow",
+      },
+      { name: "format-detection", content: "telephone=no" },
+      { name: "google", content: "notranslate" },
 
-        {
-          name: "description",
-          content: headJson.description,
-        },
+      {
+        name: "description",
+        content: headJson.description,
+      },
 
-        //OPEN GRAPH TAGS
-        {
-          property: "og:title",
-          content: headJson.title,
-        },
-        {
-          property: "og:description",
-          content: headJson.description,
-        },
-        {
-          property: "og:url",
-          content: `https://skills-booster.ru${this.$route.fullPath}`,
-        },
-        {
-          property: "og:type",
-          content: "article",
-        },
-      ];
-      const openGraphImg = {
+      //OPEN GRAPH TAGS
+      {
+        property: "og:title",
+        content: headJson.title,
+      },
+      {
+        property: "og:description",
+        content: headJson.description,
+      },
+      {
+        property: "og:url",
+        content: `https://skills-booster.ru${this.$route.fullPath}`,
+      },
+      {
+        property: "og:type",
+        content: "article",
+      },
+      {
         property: "og:image",
-        content: "",
-      }
-      if(this.page.category) openGraphImg.content = this.page.category.image;
-      else if(this.page.logo) openGraphImg.content = this.page.logo;
-      else openGraphImg.content = "";
-      metaArray.push(openGraphImg);
+        content: '/images/others/opengraph_img.png',
+      },
+    ];
 
-      return {
-        title: headJson.title,
-        meta: metaArray,
-        htmlAttrs: {
-          lang: "ru",
-        },
-      };
-    // }
+    return {
+      title: headJson.title,
+      meta: metaArray,
+      htmlAttrs: {
+        lang: "ru",
+      },
+    };
   },
 
   props: {
