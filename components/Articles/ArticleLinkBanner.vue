@@ -54,13 +54,12 @@ export default {
   &__inner {
     background: $color_black;
     padding: 36rem 60rem;
-    border-radius: 50rem;
+    border-radius: 20rem;
     position: relative;
     overflow: hidden;
     z-index: 0;
     @media screen and (max-width: $brakepoint) {
       padding: 25rem 20rem;
-      border-radius: 20rem;
     }
   }
   &__content {
