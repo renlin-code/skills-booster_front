@@ -6,7 +6,8 @@
           <ChipButton
             :selected="selectedIndex === index"
             @click.native="selectChip(index)"
-          >{{ item }}</ChipButton>
+            >{{ item }}</ChipButton
+          >
         </li>
       </ul>
     </div>
@@ -14,25 +15,37 @@
 </template>
 
 <script>
-import ChipButton from '~/components/Buttons/ChipButton'
+import ChipButton from "~/components/Buttons/ChipButton";
 export default {
   name: "Chips",
   components: {
-    ChipButton
+    ChipButton,
   },
   props: {
     items: {
       type: Array,
-    }
+    },
+    injectedSelectedIndex: {
+      type: Number,
+      default: 0,
+    },
   },
   data: () => ({
-    selectedIndex: 0
+    selectedIndex: 0,
   }),
   methods: {
     selectChip(index) {
       this.selectedIndex = index;
       this.$emit("select-chip", this.selectedIndex);
-    }
+    },
+  },
+  watch: {
+    injectedSelectedIndex(value) {
+      this.selectedIndex = value;
+    },
+  },
+  mounted() {
+    this.selectedIndex = this.injectedSelectedIndex;
   },
 };
 </script>

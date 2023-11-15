@@ -15,10 +15,16 @@
             <div class="blog__vector" v-if="!isMobile"></div>
           </div>
           <div class="blog__subheader">
-            <Chips :items="chipsOptions" @select-chip="switchCategory" />
-            <NuxtLink class="blog__subheader-link" v-if="!extended && !isMobile" to="/blog">
-              <TextArrowButton>Все статьи</TextArrowButton>
-            </NuxtLink>
+            <Chips
+              :items="chipsOptions"
+              @select-chip="switchCategory"
+              :injectedSelectedIndex="selectedTabIndex"
+            />
+            <div v-if="!extended && !isMobile" @click="clearLocalStates">
+              <NuxtLink class="blog__subheader-link" to="/blog">
+                <TextArrowButton>Все статьи</TextArrowButton>
+              </NuxtLink>
+            </div>
             <div v-if="extended" class="blog__search">
               <SearchInput
                 class="blog__search-el"
@@ -55,7 +61,7 @@
               Извините, но по вашему запросу нет статей. Попробуйте изменить запрос
             </NoResultsView>
           </div>
-          <div v-if="!extended" class="blog__link-to-all">
+          <div v-if="!extended" class="blog__link-to-all" @click="clearLocalStates">
             <NuxtLink to="/blog">
               <MainButton arrow type="1">Перейти ко всем статьям</MainButton>
             </NuxtLink>
@@ -128,6 +134,7 @@ export default {
     templateArticles: [],
     allCategories: [],
     selectedCatId: "",
+    selectedTabIndex: 0,
     searchQuery: "",
     pending: true,
     pendingLoadMore: false,
@@ -149,11 +156,36 @@ export default {
     },
   },
   methods: {
+    readLocalStates() {
+      const searchQuery = sessionStorage.getItem("BLOG_SEARCH_QUERY_VALUE");
+      this.searchQuery = searchQuery ?? "";
+
+      const catId = sessionStorage.getItem("BLOG_SELECTED_CATEGORY_ID");
+      this.selectedCatId = catId ?? "";
+
+      const localTabIndex = sessionStorage.getItem("BLOG_SELECTED_TAB_INDEX");
+      this.selectedTabIndex = localTabIndex ? parseInt(localTabIndex) : 0;
+
+      const localItemsPerPage = sessionStorage.getItem("BLOG_ITEMS_PER_PAGE");
+      this.itemsPerPage = localItemsPerPage ?? 6;
+    },
+    clearLocalStates() {
+      sessionStorage.removeItem("BLOG_SEARCH_QUERY_VALUE");
+      sessionStorage.removeItem("BLOG_SELECTED_CATEGORY_ID");
+      sessionStorage.removeItem("BLOG_SELECTED_TAB_INDEX");
+      sessionStorage.removeItem("BLOG_ITEMS_PER_PAGE");
+    },
     async switchCategory(index) {
       this.selectedCatId = index > 0 ? this.allCategories[index - 1].id : "";
+      sessionStorage.setItem("BLOG_SELECTED_CATEGORY_ID", this.selectedCatId);
+
+      this.selectedTabIndex = index;
+      sessionStorage.setItem("BLOG_SELECTED_TAB_INDEX", this.selectedTabIndex);
+
       this.pendingGridQueue++;
       setTimeout(async () => {
         this.itemsPerPage = 6;
+        sessionStorage.setItem("BLOG_ITEMS_PER_PAGE", this.itemsPerPage);
         await this.fetchData();
         this.pendingGridQueue--;
       }, REQUEST_MIN_DELAY);
@@ -183,6 +215,8 @@ export default {
     },
     async loadMore() {
       this.itemsPerPage += 6;
+      sessionStorage.setItem("BLOG_ITEMS_PER_PAGE", this.itemsPerPage);
+
       this.pendingLoadMore = true;
       setTimeout(async () => {
         await this.fetchData();
@@ -192,6 +226,8 @@ export default {
   },
   watch: {
     async searchQuery() {
+      sessionStorage.setItem("BLOG_SEARCH_QUERY_VALUE", this.searchQuery);
+
       this.pendingGrid = true;
       this.pendingGridQueue++;
       setTimeout(async () => {
@@ -209,6 +245,13 @@ export default {
   },
   mounted() {
     this.mediaQueryHook();
+    this.readLocalStates();
+  },
+  beforeDestroy() {
+    const newRouteFullPath = this.$route.fullPath;
+    if (!newRouteFullPath.split("/").includes("blog")) {
+      this.clearLocalStates();
+    }
   },
 };
 </script>

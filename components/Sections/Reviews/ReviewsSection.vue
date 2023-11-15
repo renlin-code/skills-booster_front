@@ -17,7 +17,11 @@
             </div>
             <div class="reviews-section__sort">
               <label class="reviews-section__sort-label">Сортировать по:</label>
-              <Chips :items="sortOptions" @select-chip="switchSortOption" />
+              <Chips
+                :items="sortOptions"
+                @select-chip="switchSortOption"
+                :injectedSelectedIndex="selectedTabIndex"
+              />
             </div>
           </div>
           <div
@@ -115,8 +119,28 @@ export default {
     totalItems: null,
     currentPage: 1,
     totalPages: null,
+    selectedTabIndex: 0,
   }),
   methods: {
+    readLocalStates() {
+      const searchQuery = sessionStorage.getItem("SCHOOLS_SEARCH_QUERY_VALUE");
+      this.searchQuery = searchQuery ?? "";
+
+      const sortQuery = sessionStorage.getItem("SCHOOLS_SORT_QUERY_VALUE");
+      this.sortQuery = sortQuery ?? "";
+
+      const localTabIndex = sessionStorage.getItem("SCHOOLS_SELECTED_TAB_INDEX");
+      this.selectedTabIndex = localTabIndex ? parseInt(localTabIndex) : 0;
+
+      const localItemsPerPage = sessionStorage.getItem("SCHOOLS_ITEMS_PER_PAGE");
+      this.itemsPerPage = localItemsPerPage ?? 6;
+    },
+    clearLocalStates() {
+      sessionStorage.removeItem("SCHOOLS_SEARCH_QUERY_VALUE");
+      sessionStorage.removeItem("SCHOOLS_SORT_QUERY_VALUE");
+      sessionStorage.removeItem("SCHOOLS_SELECTED_TAB_INDEX");
+      sessionStorage.removeItem("SCHOOLS_ITEMS_PER_PAGE");
+    },
     async switchSortOption(index) {
       switch (index) {
         case 0:
@@ -129,6 +153,11 @@ export default {
           this.sortQuery = "name";
           break;
       }
+      sessionStorage.setItem("SCHOOLS_SORT_QUERY_VALUE", this.sortQuery);
+
+      this.selectedTabIndex = index;
+      sessionStorage.setItem("SCHOOLS_SELECTED_TAB_INDEX", this.selectedTabIndex);
+
       this.pendingGridQueue++;
       setTimeout(async () => {
         await this.fetchData();
@@ -149,6 +178,8 @@ export default {
     },
     async loadMore() {
       this.itemsPerPage += 6;
+      sessionStorage.setItem("SCHOOLS_ITEMS_PER_PAGE", this.itemsPerPage);
+
       this.pendingLoadMore = true;
       setTimeout(async () => {
         await this.fetchData();
@@ -158,6 +189,8 @@ export default {
   },
   watch: {
     async searchQuery() {
+      sessionStorage.setItem("SCHOOLS_SEARCH_QUERY_VALUE", this.searchQuery);
+
       this.pendingGrid = true;
       this.pendingGridQueue++;
       setTimeout(async () => {
@@ -172,6 +205,15 @@ export default {
       await this.fetchData();
       this.pending = false;
     }, REQUEST_MIN_DELAY);
+  },
+  mounted() {
+    this.readLocalStates();
+  },
+  beforeDestroy() {
+    const newRouteFullPath = this.$route.fullPath;
+    if (!newRouteFullPath.split("/").includes("schools-reviews")) {
+      this.clearLocalStates();
+    }
   },
 };
 </script>
