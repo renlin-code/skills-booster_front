@@ -89,18 +89,57 @@
                     v-html="block.content_html"
                   ></div>
 
+                  <a
+                    v-if="block._type === 'content_img' && block.link_url"
+                    :href="block.link_url"
+                    target="_blank"
+                  >
+                    <figure
+                      class="section__content-img section__content-block-item"
+                      :class="{
+                        'section__content-img--mobile-contained': block.mob_contained,
+                      }"
+                    >
+                      <img
+                        :src="isMobile ? block.content_img_mob : block.content_img"
+                        :alt="block.img_alt"
+                      />
+                    </figure>
+                  </a>
+
                   <figure
                     class="section__content-img section__content-block-item"
                     :class="{
                       'section__content-img--mobile-contained': block.mob_contained,
                     }"
-                    v-if="block._type === 'content_img'"
+                    v-if="block._type === 'content_img' && !block.link_url"
                   >
                     <img
                       :src="isMobile ? block.content_img_mob : block.content_img"
                       :alt="block.img_alt"
                     />
                   </figure>
+
+                  <div
+                    class="section__content-videos"
+                    :class="{'section__content-videos--single' : block.content_yt_videos.length === 1}"
+                    v-if="block._type === 'content_yt_videos'"
+                  >
+                    <div
+                      class="section__content-videos-item"
+                      v-for="video in block.content_yt_videos"
+                    >
+                      <iframe
+                        width="100%"
+                        height="100%"
+                        :src="video.link_url"
+                        title="YouTube video player"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen
+                      ></iframe>
+                    </div>
+                  </div>
 
                   <ul
                     class="section__content-list section__content-block-item"
@@ -158,7 +197,8 @@
 
                   <ArticleTable
                     class="section__content-table section__content-block-item"
-                    v-if="block._type === 'table'" :content="block"
+                    v-if="block._type === 'table'"
+                    :content="block"
                   />
 
                   <div
@@ -340,7 +380,7 @@
             />
             <ReviewsLinkCard
               class="body__ads-reviews"
-              v-if="isMobile && content.ads_banners.length"
+              v-if="isMobile"
             />
           </div>
         </div>
@@ -398,8 +438,8 @@ export default {
     ArticleTable,
     ArticleCard,
     MainButton,
-    ArticleLinkBanner
-},
+    ArticleLinkBanner,
+  },
   props: {
     content: {
       type: Object,
@@ -416,7 +456,7 @@ export default {
       return this.content.sections.map((i) => i.article_section_title);
     },
     adsWrapperStyles() {
-      return !this.isMobile ? "flex-direction: column; gap: 40rem; margin: 0;" : "";
+      return !this.isMobile ? "flex-direction: column; gap: 16rem; margin: 0;" : "";
     },
     othersWrapperStyles() {
       return !this.isMobile ? "width: 1660rem; margin: 0 auto;" : "";
@@ -436,13 +476,13 @@ export default {
     addTargetBlankToLinks() {
       const allLinksDOM = document.querySelectorAll("a");
       allLinksDOM.forEach((linkEl) => {
-        const targetAtt = linkEl.getAttribute('target');
-        const hrefAtt = linkEl.getAttribute('href');
-        if (!targetAtt && hrefAtt.slice(0, 1) !== '/' && !hrefAtt.includes('#section-')) {
-          linkEl.setAttribute('target', '_blank');
+        const targetAtt = linkEl.getAttribute("target");
+        const hrefAtt = linkEl.getAttribute("href");
+        if (!targetAtt && hrefAtt.slice(0, 1) !== "/" && !hrefAtt.includes("#section-")) {
+          linkEl.setAttribute("target", "_blank");
         }
       });
-    }
+    },
   },
   mounted() {
     this.mediaQueryHook();
@@ -510,7 +550,7 @@ export default {
     &__right {
       display: flex;
       flex-direction: column;
-      gap: 40rem;
+      gap: 16rem;
       @media screen and (max-width: $brakepoint) {
         gap: 0;
       }
@@ -580,8 +620,10 @@ export default {
         }
       }
       &-reviews {
-        padding: 0 10rem;
         margin-top: 16rem;
+        @media screen and (max-width: $brakepoint) {
+          padding: 0 10rem;
+        }
       }
     }
   }
@@ -769,6 +811,32 @@ export default {
             }
           }
         }
+        &-videos {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 16rem;
+          @media screen and (max-width: $brakepoint) {
+            display: flex;
+            flex-direction: column;
+            padding: 0 12rem;
+            gap: 10rem;
+          }
+          &-item {
+            width: 100%;
+            height: 400rem;
+            overflow: hidden;
+            border-radius: 20rem;
+            @media screen and (max-width: $brakepoint) {
+              height: 160rem !important;
+            }
+          }
+          &--single {
+            grid-template-columns: repeat(1, 1fr);
+            .section__content-videos-item {
+              height: 600rem;
+            }
+          }
+        }
         &-img {
           display: flex;
           border-radius: 20rem;
@@ -783,6 +851,9 @@ export default {
           &--mobile-contained {
             @media screen and (max-width: $brakepoint) {
               padding: 0 12rem;
+              img {
+                border-radius: 20rem;
+              }
             }
           }
         }
