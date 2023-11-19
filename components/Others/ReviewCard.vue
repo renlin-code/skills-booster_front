@@ -22,7 +22,7 @@
           {{ content.autor }}
         </div>
         <div class="review-card__top-date">
-          {{ content.date }}
+          {{ formattedDate }}
         </div>
       </div>
       <div class="review-card__bottom">
@@ -57,6 +57,9 @@ export default {
     showFullText: false,
   }),
   computed: {
+    formattedDate() {
+      return this.content.date.split("-").reverse().join("-");
+    },
     maxLength() {
       return this.isMobile ? 200 : 450;
     },

@@ -298,7 +298,7 @@ export default {
       &__content {
         display: flex;
         flex-direction: column;
-        gap: 91rem;
+        gap: 30rem;
         @media screen and (max-width: $brakepoint) {
           gap: 0;
         }
@@ -389,8 +389,8 @@ export default {
           }
           &--1 {
             left: auto;
-            right: 44rem;
-            bottom: 257rem;
+            right: -22rem;
+            bottom: 236rem;
             @media screen and (max-width: $brakepoint) {
               right: -30rem;
               bottom: 135rem;

@@ -121,7 +121,7 @@
                   </figure>
 
                   <div
-                    class="section__content-videos"
+                    class="section__content-videos section__content-block-item section__content-block-item"
                     :class="{'section__content-videos--single' : block.content_yt_videos.length === 1}"
                     v-if="block._type === 'content_yt_videos'"
                   >
@@ -221,6 +221,7 @@
 
                   <ArticleLinkBanner
                     v-if="block._type === 'content_banner_with_link'"
+                    class="section__content-block-item"
                     :content="block"
                   />
                   <ul
@@ -474,11 +475,11 @@ export default {
       }, 200);
     },
     addTargetBlankToLinks() {
-      const allLinksDOM = document.querySelectorAll("a");
-      allLinksDOM.forEach((linkEl) => {
+      const allLinksEL = this.$el.querySelectorAll("a");
+      allLinksEL.forEach((linkEl) => {
         const targetAtt = linkEl.getAttribute("target");
         const hrefAtt = linkEl.getAttribute("href");
-        if (!targetAtt && hrefAtt.slice(0, 1) !== "/" && !hrefAtt.includes("#section-")) {
+        if (!targetAtt && !hrefAtt.includes("#section-") && !hrefAtt.includes("/schools-reviews")) {
           linkEl.setAttribute("target", "_blank");
         }
       });
@@ -495,7 +496,7 @@ export default {
 <style lang="scss">
 .article-content {
   .banner {
-    border-radius: 30rem;
+    border-radius: 20rem;
     background-color: $color_primary;
     min-height: 470rem;
     display: grid;
@@ -628,12 +629,11 @@ export default {
     }
   }
   .index {
-    border-radius: 50rem;
+    border-radius: 20rem;
     padding: 50rem;
     background: $color_bg;
     margin-bottom: 10rem;
     @media screen and (max-width: $brakepoint) {
-      border-radius: 30rem;
       padding: 30rem 15rem;
       margin-bottom: 0;
     }
@@ -997,12 +997,11 @@ export default {
             flex-direction: column;
             padding: 20rem 40rem;
             background: $color_bg;
-            border-radius: 30rem;
+            border-radius: 20rem;
             cursor: pointer;
             transition: all $transition_base;
             @media screen and (max-width: $brakepoint) {
               padding: 12rem 16rem;
-              border-radius: 20rem;
             }
             &:hover {
               background: rgba($color_bg, 0.5);

@@ -62,8 +62,8 @@ export default {
       const number = this.content?.reviews_average;
       return number
         ? Number.isInteger(number)
-          ? `${number}.00`
-          : number.toFixed(2)
+          ? `${number}.0`
+          : number.toFixed(1)
         : "0";
     },
     reviewsFormatted() {

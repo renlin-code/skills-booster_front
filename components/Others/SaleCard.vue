@@ -19,8 +19,8 @@
             <div class="sale-card__average-star"></div>
           </div>
           <div class="sale-card__dates">
-            <span v-if="content.sale_start">с {{ content.sale_start }}</span>
-            <span>до {{ content.sale_end }}</span>
+            <span v-if="content.sale_start">с {{ formatDate(content.sale_start) }}</span>
+            <span>до {{ formatDate(content.sale_end) }}</span>
           </div>
         </div>
       </div>
@@ -61,10 +61,15 @@ export default {
       const number = this.content?.school_average;
       return number
         ? Number.isInteger(number)
-          ? `${number}.00`
-          : number.toFixed(2)
+          ? `${number}.0`
+          : number.toFixed(1)
         : "";
     },
+  },
+  methods: {
+    formatDate(date) {
+      return date.split("-").reverse().join("-");
+    }
   },
   mounted() {
     this.mediaQueryHook();
@@ -136,6 +141,7 @@ export default {
       height: 60rem;
       object-fit: cover;
       background-color: $color_white;
+      border-radius: 8rem;
       @media screen and (max-width: $brakepoint) {
         width: 40rem;
         height: 40rem;

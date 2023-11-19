@@ -80,8 +80,6 @@
 </template>
 
 <script>
-import { REQUEST_MIN_DELAY } from "~/utils/constants.js";
-
 import SearchInput from "~/components/Others/SearchInput.vue";
 import Chips from "~/components/Others/Chips.vue";
 import SchoolCard from "~/components/Others/SchoolCard.vue";
@@ -115,7 +113,7 @@ export default {
     pendingLoadMore: false,
     pendingGrid: false,
     pendingGridQueue: 0,
-    itemsPerPage: 6,
+    itemsPerPage: 10,
     totalItems: null,
     currentPage: 1,
     totalPages: null,
@@ -133,7 +131,7 @@ export default {
       this.selectedTabIndex = localTabIndex ? parseInt(localTabIndex) : 0;
 
       const localItemsPerPage = sessionStorage.getItem("SCHOOLS_ITEMS_PER_PAGE");
-      this.itemsPerPage = localItemsPerPage ?? 6;
+      this.itemsPerPage = localItemsPerPage ?? 10;
     },
     clearLocalStates() {
       sessionStorage.removeItem("SCHOOLS_SEARCH_QUERY_VALUE");
@@ -159,10 +157,8 @@ export default {
       sessionStorage.setItem("SCHOOLS_SELECTED_TAB_INDEX", this.selectedTabIndex);
 
       this.pendingGridQueue++;
-      setTimeout(async () => {
-        await this.fetchData();
-        this.pendingGridQueue--;
-      }, REQUEST_MIN_DELAY);
+      await this.fetchData();
+      this.pendingGridQueue--;
     },
     async fetchData() {
       const data = await this.$axios.$get("/wp-json/get/schools", {
@@ -177,14 +173,12 @@ export default {
       this.templateSchools = data.schools;
     },
     async loadMore() {
-      this.itemsPerPage += 6;
+      this.itemsPerPage += 10;
       sessionStorage.setItem("SCHOOLS_ITEMS_PER_PAGE", this.itemsPerPage);
 
       this.pendingLoadMore = true;
-      setTimeout(async () => {
-        await this.fetchData();
-        this.pendingLoadMore = false;
-      }, REQUEST_MIN_DELAY);
+      await this.fetchData();
+      this.pendingLoadMore = false;
     },
   },
   watch: {
@@ -193,18 +187,14 @@ export default {
 
       this.pendingGrid = true;
       this.pendingGridQueue++;
-      setTimeout(async () => {
-        await this.fetchData();
-        this.pendingGrid = false;
-        this.pendingGridQueue--;
-      }, REQUEST_MIN_DELAY);
+      await this.fetchData();
+      this.pendingGrid = false;
+      this.pendingGridQueue--;
     },
   },
   async created() {
-    setTimeout(async () => {
-      await this.fetchData();
-      this.pending = false;
-    }, REQUEST_MIN_DELAY);
+    await this.fetchData();
+    this.pending = false;
   },
   mounted() {
     this.readLocalStates();
@@ -319,15 +309,15 @@ export default {
     transform: translate(-50%, -50%);
     top: 50%;
     &--grid {
-      width: 100%;
+      width: 100% !important;
       height: 100%;
-      top: 0;
-      left: 0;
+      top: 0 !important;
+      left: 0 !important;
       display: flex;
       justify-content: center;
       padding-top: 240rem;
       background: rgba($color-white, 0.6);
-      transform: unset;
+      transform: unset !important;
       @media screen and (max-width: $brakepoint) {
         padding-top: 100rem;
       }

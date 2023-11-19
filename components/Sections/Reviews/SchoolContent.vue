@@ -280,7 +280,7 @@ export default {
     pendingLoadMore: false,
     pendingGrid: false,
     pendingGridQueue: 0,
-    itemsPerPage: 10,
+    itemsPerPage: 20,
     totalItems: null,
     currentPage: 1,
     totalPages: null,
@@ -290,8 +290,8 @@ export default {
       const number = this.content.reviews.average;
       return number
         ? Number.isInteger(number)
-          ? `${number}.00`
-          : number.toFixed(2)
+          ? `${number}.0`
+          : number.toFixed(1)
         : "0";
     },
     totalReviewsFormatted() {
@@ -360,7 +360,7 @@ export default {
       this.templateReviews = data.reviews.reviews;
     },
     async loadMore() {
-      this.itemsPerPage += 10;
+      this.itemsPerPage += 20;
       this.pendingLoadMore = true;
       setTimeout(async () => {
         await this.fetchData();

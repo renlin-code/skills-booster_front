@@ -20,14 +20,14 @@
           <div
             class="table__row-cell"
             :class="{
-              'table__row--bg': cellIndex % 2 !== 0 && !isMobile && content.horizontal,
+              'table__row--bg': cellIndex % 2 !== 0 && content.horizontal,
             }"
             v-for="(cell, cellIndex) in row.content_table_row_cells"
           >
             <div class="table__header-cell" v-if="content.horizontal">
               {{ content.content_table_cols[cellIndex].content_table_col_name }}
             </div>
-            <div class="table__row-cell-inner" v-html="cell.cell"></div>
+            <div class="table__row-cell-inner" v-html="setFirstLinkMarginInCell(cell.cell)"></div>
           </div>
         </div>
       </div>
@@ -45,6 +45,16 @@ export default {
     content: {
       type: Object,
       default: () => ({}),
+    },
+  },
+  methods: {
+    setFirstLinkMarginInCell(cellContent) {
+      if (cellContent.slice(0, 2) === "<a") {
+        const slicedCont = cellContent.slice(2, cellContent.length);
+        return `<a style="margin-top: 0;" ${slicedCont}`;
+      } else {
+        return cellContent;
+      }
     },
   },
   mounted() {

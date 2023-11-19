@@ -1,10 +1,11 @@
 <template>
   <div class="article-card" :class="{ 'article-card--minified': minified }">
     <div class="article-card__top">
-      <NuxtLink
+      <a
         class="article-card__top-link-layer"
-        :to="`/blog/${content.slug}`"
-      ></NuxtLink>
+        :href="`/blog/${content.slug}`"
+        target="_blank"
+      ></a>
       <div class="article-card__top-bg" v-if="!isMobile"></div>
       <div
         class="article-card__top-content"
@@ -22,7 +23,7 @@
       <p class="article-card__description">
         {{ content.description }}
       </p>
-      <NuxtLink :to="`/blog/${content.slug}`">
+      <a :href="`/blog/${content.slug}`" target="_blank">
         <div class="article-card__link">
           ЧИТАТЬ ПОЛНОСТЬЮ
           <svg
@@ -38,13 +39,13 @@
             />
           </svg>
         </div>
-      </NuxtLink>
+      </a>
     </div>
   </div>
 </template>
 
 <script>
-import mediaQueryMixin from '~/mixins/mediaQueryMixin';
+import mediaQueryMixin from "~/mixins/mediaQueryMixin";
 
 export default {
   name: "ArticleCard",
@@ -60,14 +61,14 @@ export default {
   },
   mounted() {
     this.mediaQueryHook();
-  }
+  },
 };
 </script>
 
 <style scoped lang="scss">
 .article-card {
   width: 770rem;
-  border-radius: 30rem;
+  border-radius: 20rem;
   border: 1rem solid $color_gray;
   background: $color_bg;
   height: 100%;
@@ -78,9 +79,9 @@ export default {
   }
   &__top {
     position: relative;
-    border-radius: 30rem;
+    border-radius: 20rem;
     background-color: $color_primary;
-    transform: scale(1.005);
+    transform: scale(1.006);
     overflow: hidden;
     &-link-layer {
       display: block;
