@@ -37,8 +37,22 @@ export default {
     // https://go.nuxtjs.dev/axios
     "@nuxtjs/axios",
     "@nuxtjs/style-resources",
+    '@nuxtjs/yandex-metrika',
+    '@nuxtjs/robots',
+    '@nuxtjs/sitemap',
   ],
-
+  robots: {
+    UserAgent: "*",
+    Allow: "/",
+    Sitemap: (req) => `https://${req.headers.host}/sitemap.xml`
+  },
+  yandexMetrika: {
+    id: '95617985',
+    clickmap: true,
+    trackLinks: true,
+    accurateTrackBounce: true,
+    webvisor: true
+  },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
