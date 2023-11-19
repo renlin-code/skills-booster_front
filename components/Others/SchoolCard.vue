@@ -125,6 +125,7 @@ export default {
     img {
       width: 90rem;
       height: 90rem;
+      border-radius: 8rem;
       @media screen and (max-width: $brakepoint) {
         width: 40rem;
         height: 40rem;
