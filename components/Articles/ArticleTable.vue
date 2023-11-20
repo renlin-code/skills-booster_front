@@ -52,6 +52,9 @@ export default {
       if (cellContent.slice(0, 2) === "<a") {
         const slicedCont = cellContent.slice(2, cellContent.length);
         return `<a style="margin-top: 0;" ${slicedCont}`;
+      } else if (cellContent.slice(0, 10) === "<strong><a") {
+        const slicedCont = cellContent.slice(10, cellContent.length);
+        return `<strong><a style="margin-top: 0;" ${slicedCont}`;
       } else {
         return cellContent;
       }
