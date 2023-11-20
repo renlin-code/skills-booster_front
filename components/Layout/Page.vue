@@ -31,7 +31,7 @@ export default {
       },
       {
         name: "robots",
-        content: "noindex, nofollow",
+        content: "index, follow",
       },
       { name: "format-detection", content: "telephone=no" },
       { name: "google", content: "notranslate" },
