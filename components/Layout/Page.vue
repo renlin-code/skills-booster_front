@@ -23,19 +23,6 @@ export default {
     const headJson = this.page.yoast_head_json;
 
     const metaArray = [
-      { charset: "utf-8" },
-      {
-        name: "viewport",
-        content:
-          "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
-      },
-      {
-        name: "robots",
-        content: "index, follow",
-      },
-      { name: "format-detection", content: "telephone=no" },
-      { name: "google", content: "notranslate" },
-
       {
         name: "description",
         content: headJson.description,

@@ -3,6 +3,21 @@ export default {
   head: {
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
     script: [{ src: "/js/rem.js", ssr: false }],
+    meta: [
+      { charset: "utf-8" },
+      {
+        name: "viewport",
+        content:
+          "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+      },
+      {
+        name: "robots",
+        content: "index, follow",
+      },
+      { name: "format-detection", content: "telephone=no" },
+      { name: "google", content: "notranslate" },
+      {name: "yandex-verification", content: "7fa31e4f0aae1d3b"},
+    ],
     bodyAttrs: {
       content: "notranslate",
     },
@@ -37,21 +52,21 @@ export default {
     // https://go.nuxtjs.dev/axios
     "@nuxtjs/axios",
     "@nuxtjs/style-resources",
-    '@nuxtjs/yandex-metrika',
-    '@nuxtjs/robots',
-    '@nuxtjs/sitemap',
+    "@nuxtjs/yandex-metrika",
+    "@nuxtjs/robots",
+    "@nuxtjs/sitemap",
   ],
   robots: {
     UserAgent: "*",
     Allow: "/",
-    Sitemap: (req) => `https://${req.headers.host}/sitemap.xml`
+    Sitemap: (req) => `https://${req.headers.host}/sitemap.xml`,
   },
   yandexMetrika: {
-    id: '95617985',
+    id: "95617985",
     clickmap: true,
     trackLinks: true,
     accurateTrackBounce: true,
-    webvisor: true
+    webvisor: true,
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
