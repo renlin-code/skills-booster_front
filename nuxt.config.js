@@ -16,7 +16,7 @@ export default {
       },
       { name: "format-detection", content: "telephone=no" },
       { name: "google", content: "notranslate" },
-      {name: "yandex-verification", content: "7fa31e4f0aae1d3b"},
+      {name: "yandex-verification", content: "486e9cae33d98517"},
     ],
     bodyAttrs: {
       content: "notranslate",
