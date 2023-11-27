@@ -238,6 +238,11 @@
                 </div>
               </div>
             </section>
+            <div class="body__contains-adds"
+              v-if="content.contains_external_refs"
+            >
+              На странице присутствует реклама. Информация о рекламодателях по ссылкам в статье.
+            </div>
           </div>
           <div class="body__share sb-noselect">
             <div class="body__share-title">Поделится статьей</div>
@@ -600,6 +605,15 @@ export default {
         @media screen and (max-width: $brakepoint) {
           padding: 0 10rem;
         }
+      }
+    }
+    &__contains-adds {
+      @include fontStyles($font_3, 19rem, 21rem, 400);
+      font-style: italic;
+      padding-top: 60rem;
+      @media screen and (max-width: $brakepoint) {
+        @include fontStyles($font_3, 12rem, 16rem, 400);
+        padding: 20rem 10rem 0;
       }
     }
   }
