@@ -72,7 +72,7 @@ export default {
     width: 100%;
     height: 100%;
     background: transparent;
-    border-radius: 20rem;
+    border-radius: 30rem;
     border: 1rem solid $color_gray;
     padding: 14rem 50rem 14rem 20rem;
     @include fontStyles($font_3, 16rem, 19.5rem, 500);

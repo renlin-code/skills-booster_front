@@ -60,8 +60,8 @@ export default {
   }
   &__figure {
     display: flex;
-    width: 243rem;
-    height: 243rem;
+    width: 233rem;
+    height: 233rem;
     padding: 10rem;
     position: relative;
     @media screen and (max-width: $brakepoint) {
@@ -77,7 +77,9 @@ export default {
       width: 100%;
       height: 100%;
       background: url("/images/others/img_border2.svg") center/contain no-repeat;
+      transform: scale(0.95);
       @media screen and (max-width: $brakepoint) {
+        transform: scale(0.96);
       }
     }
     img {
@@ -107,6 +109,11 @@ export default {
         width: 100%;
         @media screen and (max-width: $brakepoint) {
           height: 97rem;
+        }
+      }
+      &__figure {
+        &::before {
+          transform: scale(0.97) !important;
         }
       }
       &__inner {

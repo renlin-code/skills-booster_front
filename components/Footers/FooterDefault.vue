@@ -38,7 +38,7 @@
           </li>
         </ul>
         <p class="footer__imgs-links" v-if="isMobile">
-          Все фотографии на сайте взяты с:<br />
+          Все фотографии на сайте взяты с фотостоков:<br />
           <a href="https://freepik.com" target="_blank" class="underline-light-gray"
             >freepik.com</a
           >
@@ -49,7 +49,7 @@
       </div>
       <div class="footer__other-links">
         <p class="footer__imgs-links" v-if="!isMobile">
-          Все фотографии на сайте взяты с:<br />
+          Все фотографии на сайте взяты с фотостоков:<br />
           <a href="https://freepik.com" target="_blank" class="underline-light-gray"
             >freepik.com</a
           >
