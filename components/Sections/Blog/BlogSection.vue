@@ -193,7 +193,7 @@ export default {
       this.debouncedFetchData(true);
     },
   },
-  async created() {
+  created() {
     this.pending = true;
     this.debouncedFetchData(true);
   },

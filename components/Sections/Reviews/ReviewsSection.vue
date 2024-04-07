@@ -26,10 +26,10 @@
           </div>
           <div
             class="reviews-section__body"
-            :class="{ 'reviews-section__body--loading': pendingGridQueue !== 0 }"
+            :class="{ 'reviews-section__body--loading': pendingGrid }"
           >
             <Transition name="fade">
-              <ul class="reviews-section__schools" v-show="pendingGridQueue === 0">
+              <ul class="reviews-section__schools" v-show="!pendingGrid">
                 <li
                   class="reviews-section__schools-element"
                   v-for="school in templateSchools"
@@ -41,37 +41,22 @@
             <Transition name="fade">
               <RingPreloader
                 class="reviews-section__loading reviews-section__loading--grid"
-                v-if="pendingGridQueue !== 0"
+                v-if="pendingGrid"
               />
             </Transition>
             <NoResultsView
               class="reviews-section__no-results"
-              v-if="!templateSchools.length && pendingGridQueue === 0"
+              v-if="!templateSchools.length && !pendingGrid"
             >
               Извините, но по вашему запросу нет школ. Попробуйте изменить запрос
             </NoResultsView>
           </div>
-          <div
-            class="reviews-section__load-more"
-            v-if="
-              (totalItems > itemsPerPage && currentPage !== totalPages) || pendingLoadMore
-            "
-          >
-            <Transition name="fade">
-              <MainButton
-                type="3"
-                @click.native="loadMore"
-                v-if="!pendingLoadMore && pendingGridQueue === 0"
-                >Показать еще</MainButton
-              >
-            </Transition>
-            <Transition name="fade">
-              <RingPreloader
-                class="reviews-section__loading reviews-section__loading"
-                v-if="pendingLoadMore"
-              />
-            </Transition>
-          </div>
+          <Transition name="fade">
+            <RingPreloader
+              class="reviews-section__loading reviews-section__loading--load-more"
+              v-if="pendingLoadMore"
+            />
+          </Transition>
         </div>
       </Transition>
       <RingPreloader class="reviews-section__loading" v-if="pending" />
@@ -80,6 +65,10 @@
 </template>
 
 <script>
+import { REQUEST_MIN_DELAY } from "~/utils/constants.js";
+import { lazyLoadHandler } from "~/utils/lazyLoadHandler.js";
+import _ from "lodash";
+
 import SearchInput from "~/components/Others/SearchInput.vue";
 import Chips from "~/components/Others/Chips.vue";
 import SchoolCard from "~/components/Others/SchoolCard.vue";
@@ -107,39 +96,17 @@ export default {
   data: () => ({
     templateSchools: [],
     sortOptions: ["Рейтинг", "Отзывы", "Название"],
+    selectedTabIndex: 0,
     sortQuery: "",
     searchQuery: "",
-    pending: true,
+    pending: false,
     pendingLoadMore: false,
     pendingGrid: false,
-    pendingGridQueue: 0,
-    itemsPerPage: 10,
-    totalItems: null,
     currentPage: 1,
     totalPages: null,
-    selectedTabIndex: 0,
   }),
   methods: {
-    readLocalStates() {
-      const searchQuery = sessionStorage.getItem("SCHOOLS_SEARCH_QUERY_VALUE");
-      this.searchQuery = searchQuery ?? "";
-
-      const sortQuery = sessionStorage.getItem("SCHOOLS_SORT_QUERY_VALUE");
-      this.sortQuery = sortQuery ?? "";
-
-      const localTabIndex = sessionStorage.getItem("SCHOOLS_SELECTED_TAB_INDEX");
-      this.selectedTabIndex = localTabIndex ? parseInt(localTabIndex) : 0;
-
-      const localItemsPerPage = sessionStorage.getItem("SCHOOLS_ITEMS_PER_PAGE");
-      this.itemsPerPage = localItemsPerPage ?? 10;
-    },
-    clearLocalStates() {
-      sessionStorage.removeItem("SCHOOLS_SEARCH_QUERY_VALUE");
-      sessionStorage.removeItem("SCHOOLS_SORT_QUERY_VALUE");
-      sessionStorage.removeItem("SCHOOLS_SELECTED_TAB_INDEX");
-      sessionStorage.removeItem("SCHOOLS_ITEMS_PER_PAGE");
-    },
-    async switchSortOption(index) {
+    switchSortOption(index) {
       switch (index) {
         case 0:
           this.sortQuery = "average";
@@ -151,59 +118,64 @@ export default {
           this.sortQuery = "name";
           break;
       }
-      sessionStorage.setItem("SCHOOLS_SORT_QUERY_VALUE", this.sortQuery);
 
       this.selectedTabIndex = index;
-      sessionStorage.setItem("SCHOOLS_SELECTED_TAB_INDEX", this.selectedTabIndex);
 
-      this.pendingGridQueue++;
-      await this.fetchData();
-      this.pendingGridQueue--;
+      this.pendingGrid = true;
+      this.debouncedFetchData(true);
     },
-    async fetchData() {
-      const data = await this.$axios.$get("/wp-json/get/schools", {
-        params: {
-          page: this.currentPage,
-          per_page: this.itemsPerPage,
-          sort_by: this.sortQuery,
-          search: this.searchQuery,
-        },
-      });
-      this.totalItems = data.total_pages * this.itemsPerPage;
-      this.templateSchools = data.schools;
+    async fetchData(resetData) {
+      try {
+        if (resetData) {
+          this.currentPage = 1;
+        }
+        const data = await this.$axios.$get("/wp-json/get/schools", {
+          params: {
+            page: this.currentPage,
+            per_page: 10,
+            sort_by: this.sortQuery,
+            search: this.searchQuery,
+          },
+        });
+        const { schools, total_pages } = data;
+        this.totalPages = total_pages;
+
+        if (resetData) {
+          this.templateSchools = [];
+        }
+
+        this.templateSchools.push(...schools);
+      } catch (error) {
+        console.error(error)
+      } finally {
+        this.pending = false;
+        this.pendingGrid = false;
+        this.pendingLoadMore = false;
+      }
     },
+    debouncedFetchData: _.debounce(function (resetData) {
+      this.fetchData(resetData);
+    }, REQUEST_MIN_DELAY),
+
     async loadMore() {
-      this.itemsPerPage += 10;
-      sessionStorage.setItem("SCHOOLS_ITEMS_PER_PAGE", this.itemsPerPage);
-
+      if (this.currentPage === this.totalPages || this.pending) return;
+      this.currentPage++;
       this.pendingLoadMore = true;
-      await this.fetchData();
-      this.pendingLoadMore = false;
+      await this.fetchData(false);
     },
   },
   watch: {
-    async searchQuery() {
-      sessionStorage.setItem("SCHOOLS_SEARCH_QUERY_VALUE", this.searchQuery);
-
+    searchQuery() {
       this.pendingGrid = true;
-      this.pendingGridQueue++;
-      await this.fetchData();
-      this.pendingGrid = false;
-      this.pendingGridQueue--;
+      this.debouncedFetchData(true);
     },
   },
-  async created() {
-    await this.fetchData();
-    this.pending = false;
+  created() {
+    this.pending = true;
+    this.debouncedFetchData(true);
   },
   mounted() {
-    this.readLocalStates();
-  },
-  beforeDestroy() {
-    const newRouteFullPath = this.$route.fullPath;
-    if (!newRouteFullPath.split("/").includes("schools-reviews")) {
-      this.clearLocalStates();
-    }
+    lazyLoadHandler(this.loadMore);
   },
 };
 </script>
@@ -322,24 +294,20 @@ export default {
         padding-top: 100rem;
       }
     }
+    &--load-more {
+      margin: 0 auto;
+      position: static;
+      transform: none;
+      margin-top: 30rem;
+      @media screen and (max-width: $brakepoint) {
+        margin-top: 24rem;
+      }
+    }
   }
   &__no-results {
     margin: 150rem 0;
     @media screen and (max-width: $brakepoint) {
       margin: 100rem 0;
-    }
-  }
-  &__load-more {
-    margin: 0 auto;
-    margin-top: 30rem;
-    width: 240rem;
-    height: 70rem;
-    position: relative;
-    @media screen and (max-width: $brakepoint) {
-      width: 100%;
-      height: 47rem;
-      padding: 0 15rem;
-      margin-top: 24rem;
     }
   }
 }

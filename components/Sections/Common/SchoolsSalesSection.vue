@@ -95,7 +95,7 @@ export default {
   },
   data: () => ({
     templateSales: [],
-    pending: true,
+    pending: false,
     pendingLoadMore: false,
     itemsPerPage: null,
     currentPage: 1,
@@ -157,7 +157,7 @@ export default {
     },
 
   },
-  async created() {
+  created() {
     this.pending = true;
     this.debouncedFetchData(true);
   },
