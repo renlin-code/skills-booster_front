@@ -51,8 +51,6 @@
                 />
               </g>
             </svg>
-
-            <!-- <img :src="content.image" alt="" /> -->
           </figure>
           <ul class="test-section__words">
             <li
@@ -356,19 +354,8 @@ export default {
           height: 180rem;
           transform: translate(0, 8rem);
         }
-        &::before {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: 0;
+        image {
           width: 100%;
-          height: 100%;
-          background: url("/images/others/img_border.svg") center/contain no-repeat;
-        }
-        img {
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
           object-fit: cover;
         }
       }
