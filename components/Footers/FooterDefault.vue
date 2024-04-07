@@ -3,7 +3,6 @@
     <div class="footer__inner sb-container">
       <div class="footer__left">
         <div class="footer__logo-wrapper">
-          <div class="footer__vector"></div>
           <div class="footer__logo"></div>
         </div>
       </div>
@@ -134,26 +133,10 @@ export default {
     }
   }
   &__logo-wrapper {
-    padding-top: 27rem;
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
+    padding: 27rem 0;
     @media screen and (max-width: $brakepoint) {
       width: 100%;
-      flex-direction: row-reverse;
-      padding-top: 15rem;
-      justify-content: space-between;
-    }
-  }
-  &__vector {
-    width: 102rem;
-    height: 91rem;
-    transform: translateY(10rem);
-    background: url("/images/others/stars_white.svg") center/contain no-repeat;
-    @media screen and (max-width: $brakepoint) {
-      width: 84rem;
-      height: 75rem;
-      transform: unset;
+      padding: 15rem 0;
     }
   }
   &__logo {

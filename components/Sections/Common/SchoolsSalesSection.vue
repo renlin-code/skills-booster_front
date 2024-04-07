@@ -190,8 +190,8 @@ export default {
   }
   &__top {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: flex-end;
     margin-bottom: 50rem;
     @media screen and (max-width: $brakepoint) {
       padding: 0 15rem;
