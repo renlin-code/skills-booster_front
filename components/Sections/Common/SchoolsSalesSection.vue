@@ -4,8 +4,12 @@
       <Transition name="fade">
         <div v-if="!pending">
           <div class="schools-sales__top">
-            <h1 v-if="extended" class="schools-sales__title sb-section-title">{{ injectedTitle }}</h1>
-            <h2 v-else class="schools-sales__title sb-section-title">{{ injectedTitle }}</h2>
+            <h1 v-if="extended" class="schools-sales__title sb-section-title">
+              {{ injectedTitle }}
+            </h1>
+            <h2 v-else class="schools-sales__title sb-section-title">
+              {{ injectedTitle }}
+            </h2>
             <NuxtLink to="/schools-sales" v-if="!isMobile && !extended">
               <TextArrowButton>Все акции</TextArrowButton>
             </NuxtLink>
@@ -13,8 +17,7 @@
           <div class="schools-sales__sales">
             <Transition name="fade">
               <Slider
-                v-show="pendingGridQueue === 0"
-                :init="pendingGridQueue === 0 && !extended"
+                :init="!extended"
                 class="schools-sales__slider"
                 desktop-off
                 :mobile-off="extended"
@@ -30,44 +33,23 @@
                 </Slide>
               </Slider>
             </Transition>
-            <Transition name="fade">
-              <RingPreloader
-                class="schools-sales__loading"
-                v-if="pendingGridQueue !== 0"
-              />
-            </Transition>
           </div>
-          <div
-            class="sb-container schools-sales__link-to-all"
-            v-if="!extended && isMobile"
+          <div class="sb-container schools-sales__bottom"
+          v-if="!extended && isMobile || pendingLoadMore"
           >
-            <NuxtLink to="/schools-sales">
+            <NuxtLink
+              v-if="!extended && isMobile"
+              to="/schools-sales"
+              class="schools-sales__link-to-all"
+            >
               <MainButton arrow type="3">Все акции</MainButton>
             </NuxtLink>
-          </div>
-          <div v-if="extended">
-            <div
-              class="schools-sales__load-more"
-              v-if="
-                (totalItems > itemsPerPage && currentPage !== totalPages) ||
-                pendingLoadMore
-              "
-            >
-              <Transition name="fade">
-                <MainButton
-                  type="3"
-                  @click.native="loadMore"
-                  v-if="!pendingLoadMore && pendingGridQueue === 0"
-                  >Показать еще</MainButton
-                >
-              </Transition>
-              <Transition name="fade">
-                <RingPreloader
-                  class="schools-sales__loading schools-sales__loading"
-                  v-if="pendingLoadMore"
-                />
-              </Transition>
-            </div>
+            <Transition name="fade">
+              <RingPreloader
+                class="schools-sales__loading schools-sales__loading--load-more"
+                v-if="pendingLoadMore"
+              />
+            </Transition>
           </div>
         </div>
       </Transition>
@@ -78,6 +60,8 @@
 
 <script>
 import { REQUEST_MIN_DELAY } from "~/utils/constants.js";
+import { lazyLoadHandler } from "~/utils/lazyLoadHandler.js";
+import _ from "lodash";
 
 import mediaQueryMixin from "~/mixins/mediaQueryMixin";
 import TextArrowButton from "~/components/Buttons/TextArrowButton.vue";
@@ -113,10 +97,7 @@ export default {
     templateSales: [],
     pending: true,
     pendingLoadMore: false,
-    pendingGrid: false,
-    pendingGridQueue: 0,
     itemsPerPage: null,
-    totalItems: null,
     currentPage: 1,
     totalPages: null,
   }),
@@ -134,42 +115,58 @@ export default {
     },
   },
   methods: {
-    async fetchData() {
-      const data = await this.$axios.$get("/wp-json/get/schools_sales", {
-        params: {
-          page: this.currentPage,
-          per_page: this.itemsPerPage,
-        },
-      });
-      this.totalItems = data.total_pages * this.itemsPerPage;
-      const sales = data.schools_sales;
-
-      this.templateSales = [];
-      sales.forEach((i, index) => {
-        this.templateSales.push({
-          ...i,
-          black: index % 2 !== 0,
+    async fetchData(resetData) {
+      try {
+        if (resetData) {
+          this.currentPage = 1;
+        }
+        const data = await this.$axios.$get("/wp-json/get/schools_sales", {
+          params: {
+            page: this.currentPage,
+            per_page: this.extended ? 6 : 3,
+          },
         });
-      });
-    },
-    async loadMore() {
-      this.itemsPerPage += 6;
-      this.pendingLoadMore = true;
-      setTimeout(async () => {
-        await this.fetchData();
+        const { schools_sales: sales, total_pages } = data;
+        this.totalPages = total_pages;
+
+        if (resetData) {
+          this.templateSales = [];
+        }
+
+        sales.forEach((i, index) => {
+          this.templateSales.push({
+            ...i,
+            black: index % 2 !== 0,
+          });
+        });
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.pending = false;
         this.pendingLoadMore = false;
-      }, REQUEST_MIN_DELAY);
+      }
     },
+    debouncedFetchData: _.debounce(function (resetData) {
+      this.fetchData(resetData);
+    }, REQUEST_MIN_DELAY),
+    async loadMore() {
+      if (this.currentPage === this.totalPages || this.pending) return;
+      this.currentPage++;
+      this.pendingLoadMore = true;
+      await this.fetchData(false);
+    },
+
   },
   async created() {
-    this.itemsPerPage = this.extended ? 6 : 3;
-    setTimeout(async () => {
-      await this.fetchData();
-      this.pending = false;
-    }, REQUEST_MIN_DELAY);
+    this.pending = true;
+    this.debouncedFetchData(true);
   },
+
   mounted() {
     this.mediaQueryHook();
+    if (this.extended) {
+      lazyLoadHandler(this.loadMore);
+    }
   },
 };
 </script>
@@ -222,21 +219,22 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
     top: 50%;
-  }
-  &__load-more {
-    margin: 0 auto;
-    width: 240rem;
-    height: 70rem;
-    position: relative;
-    margin-top: 30rem;
-    @media screen and (max-width: $brakepoint) {
-      width: 100%;
-      padding: 0 15rem;
-      height: 47rem;
-      margin-top: 24rem;
+    &--load-more {
+      position: static;
+      transform: none;
+      margin: 0 auto;
     }
   }
   &__link-to-all {
+    margin: 0 auto;
+    width: 405rem;
+    display: block;
+    @media screen and (max-width: $brakepoint) {
+      width: 100%;
+      padding: 0 15rem;
+    }
+  }
+  &__bottom {
     margin-top: 30rem;
     @media screen and (max-width: $brakepoint) {
       margin-top: 24rem;

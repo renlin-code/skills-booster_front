@@ -181,11 +181,10 @@ export default {
       this.fetchData(resetData);
     }, REQUEST_MIN_DELAY),
     async loadMore() {
-      console.log(this.pending)
       if (this.currentPage === this.totalPages || this.pending) return;
       this.currentPage++;
       this.pendingLoadMore = true;
-      this.fetchData(false);
+      await this.fetchData(false);
     },
   },
   watch: {
@@ -282,7 +281,6 @@ export default {
       display: flex;
       justify-content: center;
       padding-top: 240rem;
-      background: rgba($color-bg, 0.6);
       transform: unset;
       @media screen and (max-width: $brakepoint) {
         padding-top: 100rem;
