@@ -65,7 +65,6 @@ export default {
     }
   },
   data: () => ({
-    // pageName: "Топ 10 самых восстребованных языков программирования",
     scrumbsPageName: "",
   }),
   mounted() {

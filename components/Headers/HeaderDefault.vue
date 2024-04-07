@@ -34,8 +34,6 @@ export default {
 
         this.headerUp = currentScrollPosition > lastScrollPosition;
         lastScrollPosition = currentScrollPosition;
-
-        // this.headerColored = lastScrollPosition > 0;
       });
     },
   },
