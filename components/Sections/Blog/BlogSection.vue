@@ -181,7 +181,8 @@ export default {
       this.fetchData(resetData);
     }, REQUEST_MIN_DELAY),
     async loadMore() {
-      if (this.currentPage === this.totalPages) return;
+      console.log(this.pending)
+      if (this.currentPage === this.totalPages || this.pending) return;
       this.currentPage++;
       this.pendingLoadMore = true;
       this.fetchData(false);
@@ -195,10 +196,7 @@ export default {
   },
   async created() {
     this.pending = true;
-    setTimeout(async () => {
-      await this.fetchData();
-      this.pending = false;
-    }, REQUEST_MIN_DELAY);
+    this.debouncedFetchData(true);
   },
   mounted() {
     this.mediaQueryHook();
@@ -323,20 +321,6 @@ export default {
       padding: 0 15rem;
     }
   }
-
-  // &__load-more {
-  //   margin: 0 auto;
-  //   width: 240rem;
-  //   height: 70rem;
-  //   position: relative;
-  //   margin-top: 30rem;
-  //   @media screen and (max-width: $brakepoint) {
-  //     width: 100%;
-  //     height: 47rem;
-  //     padding: 0 15rem;
-  //     margin-top: 24rem;
-  //   }
-  // }
   &__bottom {
     margin-top: 30rem;
     @media screen and (max-width: $brakepoint) {
