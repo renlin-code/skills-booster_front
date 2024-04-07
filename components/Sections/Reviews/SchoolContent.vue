@@ -183,13 +183,10 @@
             <div class="school-content__reviews-body">
               <div
                 class="school-content__reviews-body-content--loading"
-                :class="{ 'blog__body--loading': pendingGridQueue !== 0 }"
+                :class="{ 'blog__body--loading': pendingGrid }"
               >
                 <Transition name="fade">
-                  <ul
-                    v-show="pendingGridQueue === 0"
-                    class="school-content__reviews-elements"
-                  >
+                  <ul v-show="!pendingGrid" class="school-content__reviews-elements">
                     <li
                       class="school-content__reviews-elements-element"
                       v-for="review in templateReviews"
@@ -200,33 +197,17 @@
                 </Transition>
                 <Transition name="fade">
                   <RingPreloader
-                    class="school-content__loading"
-                    v-if="pendingGridQueue !== 0"
+                    class="school-content__loading school-content__loading--grid"
+                    v-if="pendingGrid"
                   />
                 </Transition>
               </div>
-              <div
-                class="school-content__load-more"
-                v-if="
-                  (totalItems > itemsPerPage && currentPage !== totalPages) ||
-                  pendingLoadMore
-                "
-              >
-                <Transition name="fade">
-                  <MainButton
-                    type="3"
-                    @click.native="loadMore"
-                    v-if="!pendingLoadMore && pendingGridQueue === 0"
-                    >Показать еще</MainButton
-                  >
-                </Transition>
-                <Transition name="fade">
-                  <RingPreloader
-                    class="school-content__loading school-content__loading"
-                    v-if="pendingLoadMore"
-                  />
-                </Transition>
-              </div>
+              <Transition name="fade">
+                <RingPreloader
+                  class="school-content__loading school-content__loading--load-more"
+                  v-if="pendingLoadMore"
+                />
+              </Transition>
             </div>
           </div>
         </Transition>
@@ -238,6 +219,8 @@
 
 <script>
 import { REQUEST_MIN_DELAY } from "~/utils/constants.js";
+import { lazyLoadHandler } from "~/utils/lazyLoadHandler.js";
+import _ from "lodash";
 import animateOnScrollMixin from "~/mixins/animateOnScrollMixin";
 import mediaQueryMixin from "~/mixins/mediaQueryMixin";
 
@@ -276,12 +259,9 @@ export default {
     sortByQuery: "date",
     sortOrderQuery: "DESC",
     templateReviews: [],
-    pending: true,
+    pending: false,
     pendingLoadMore: false,
     pendingGrid: false,
-    pendingGridQueue: 0,
-    itemsPerPage: 20,
-    totalItems: null,
     currentPage: 1,
     totalPages: null,
   }),
@@ -341,41 +321,56 @@ export default {
           this.sortOrderQuery = "ASC";
           break;
       }
-      this.pendingGridQueue++;
-      setTimeout(async () => {
-        await this.fetchData();
-        this.pendingGridQueue--;
-      }, REQUEST_MIN_DELAY);
+      this.pendingGrid = true;
+      this.debouncedFetchData(true);
     },
-    async fetchData() {
-      const data = await this.$axios.$get(`/wp-json/get/schools/${this.content.slug}`, {
-        params: {
-          page: this.currentPage,
-          per_page: this.itemsPerPage,
-          sort_by: this.sortByQuery,
-          order: this.sortOrderQuery,
-        },
-      });
-      this.totalItems = data.reviews.total_pages * this.itemsPerPage;
-      this.templateReviews = data.reviews.reviews;
-    },
-    async loadMore() {
-      this.itemsPerPage += 20;
-      this.pendingLoadMore = true;
-      setTimeout(async () => {
-        await this.fetchData();
+    async fetchData(resetData) {
+      try {
+        if (resetData) {
+          this.currentPage = 1;
+        }
+        const data = await this.$axios.$get(`/wp-json/get/schools/${this.content.slug}`, {
+          params: {
+            page: this.currentPage,
+            per_page: 20,
+            sort_by: this.sortByQuery,
+            order: this.sortOrderQuery,
+          },
+        });
+        const { reviews: dataReviews } = data;
+        const { reviews, total_pages } = dataReviews;
+        this.totalPages = total_pages;
+
+        if (resetData) {
+          this.templateReviews = [];
+        }
+
+        this.templateReviews.push(...reviews);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.pending = false;
+        this.pendingGrid = false;
         this.pendingLoadMore = false;
-      }, REQUEST_MIN_DELAY);
+      }
+    },
+    debouncedFetchData: _.debounce(function (resetData) {
+      this.fetchData(resetData);
+    }, REQUEST_MIN_DELAY),
+    async loadMore() {
+      if (this.currentPage === this.totalPages || this.pending) return;
+      this.currentPage++;
+      this.pendingLoadMore = true;
+      await this.fetchData(false);
     },
   },
-  async created() {
-    setTimeout(async () => {
-      await this.fetchData();
-      this.pending = false;
-    }, REQUEST_MIN_DELAY);
+  created() {
+    this.pending = true;
+    this.debouncedFetchData(true);
   },
   mounted() {
     this.mediaQueryHook();
+    lazyLoadHandler(this.loadMore);
   },
 };
 </script>
@@ -665,11 +660,6 @@ export default {
       flex-direction: column;
       gap: 40rem;
       min-height: 470rem;
-      margin-bottom: 30rem;
-      @media screen and (max-width: $brakepoint) {
-        gap: 16rem;
-        margin-bottom: 24rem;
-      }
     }
   }
   &__loading {
@@ -679,18 +669,27 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
     top: 50%;
-  }
-  &__load-more {
-    margin: 0 auto;
-    margin-top: 30rem;
-    width: 240rem;
-    height: 70rem;
-    position: relative;
-    @media screen and (max-width: $brakepoint) {
-      width: 100%;
-      height: 47rem;
-      padding: 0 15rem;
-      margin-top: 24rem;
+    &--grid {
+      width: 100% !important;
+      height: 100%;
+      top: 0 !important;
+      left: 0 !important;
+      display: flex;
+      justify-content: center;
+      padding-top: 240rem;
+      transform: unset !important;
+      @media screen and (max-width: $brakepoint) {
+        padding-top: 100rem;
+      }
+    }
+    &--load-more {
+      margin: 0 auto;
+      position: static;
+      transform: none;
+      margin-top: 30rem;
+      @media screen and (max-width: $brakepoint) {
+        margin-top: 24rem;
+      }
     }
   }
 }

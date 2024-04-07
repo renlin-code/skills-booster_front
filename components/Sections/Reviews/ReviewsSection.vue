@@ -288,7 +288,6 @@ export default {
       display: flex;
       justify-content: center;
       padding-top: 240rem;
-      background: rgba($color-white, 0.6);
       transform: unset !important;
       @media screen and (max-width: $brakepoint) {
         padding-top: 100rem;
