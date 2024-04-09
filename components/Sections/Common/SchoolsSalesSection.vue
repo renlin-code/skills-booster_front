@@ -23,12 +23,12 @@
                 :mobile-off="extended"
                 :wrapper-styles="sliderWrapperStyles"
               >
-                <Slide class="schools-sales__slider-slide" v-for="sale in templateSales">
+                <Slide class="schools-sales__slider-slide" v-for="(sale, index) in templateSales">
                   <SaleCard
                     class="schools-sales__sales-card"
                     :class="{ 'schools-sales__sales-card--extended': extended }"
                     :content="sale"
-                    :black="sale.black"
+                    :black="index % 2 !== 0"
                   />
                 </Slide>
               </Slider>
@@ -132,13 +132,7 @@ export default {
         if (resetData) {
           this.templateSales = [];
         }
-
-        sales.forEach((i, index) => {
-          this.templateSales.push({
-            ...i,
-            black: index % 2 !== 0,
-          });
-        });
+        this.templateSales.push(...sales);
       } catch (error) {
         console.error(error);
       } finally {
@@ -150,9 +144,10 @@ export default {
       this.fetchData(resetData);
     }, REQUEST_MIN_DELAY),
     async loadMore() {
-      if (this.currentPage === this.totalPages || this.pending) return;
+      if (this.currentPage === this.totalPages || this.pending || this.pendingLoadMore) return;
       this.currentPage++;
       this.pendingLoadMore = true;
+      await this.$nextTick();
       await this.fetchData(false);
     },
 

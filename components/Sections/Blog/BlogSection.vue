@@ -37,10 +37,13 @@
               <ul class="blog__articles" v-show="!pendingGrid">
                 <li
                   class="blog__articles-element"
-                  v-for="article in templateArticles"
+                  v-for="(article, index) in templateArticles"
                   :key="article.id"
                 >
-                  <ArticleCard :minified="article.minified" :content="article" />
+                  <ArticleCard
+                    :minified="getArticleIsMinified(index)"
+                    :content="article"
+                  />
                 </li>
               </ul>
             </Transition>
@@ -135,6 +138,15 @@ export default {
       this.pendingGrid = true;
       this.debouncedFetchData(true);
     },
+    getArticleIsMinified(articleIndex) {
+      if (this.isMobile) {
+        const rest = articleIndex % 2;
+        return rest !== 0;
+      } else {
+        const rest = articleIndex % 6;
+        return rest !== 0 && rest !== 5;
+      }
+    },
     async fetchData(resetData) {
       try {
         if (resetData) {
@@ -155,20 +167,7 @@ export default {
         if (resetData) {
           this.templateArticles = [];
         }
-        let minifiedCounter = 0;
-        articles.forEach((i) => {
-          this.templateArticles.push({
-            ...i,
-            minified: this.isMobile
-              ? minifiedCounter % 2 !== 0
-              : minifiedCounter > 0 && minifiedCounter < 5,
-          });
-          if (this.isMobile) {
-            minifiedCounter++;
-          } else {
-            minifiedCounter = minifiedCounter < 5 ? minifiedCounter + 1 : 0;
-          }
-        });
+        this.templateArticles.push(...articles);
       } catch (error) {
         console.error(error);
       } finally {
@@ -181,9 +180,10 @@ export default {
       this.fetchData(resetData);
     }, REQUEST_MIN_DELAY),
     async loadMore() {
-      if (this.currentPage === this.totalPages || this.pending) return;
+      if (this.currentPage === this.totalPages || this.pending || this.pendingLoadMore) return;
       this.currentPage++;
       this.pendingLoadMore = true;
+      await this.$nextTick();
       await this.fetchData(false);
     },
   },

@@ -358,9 +358,10 @@ export default {
       this.fetchData(resetData);
     }, REQUEST_MIN_DELAY),
     async loadMore() {
-      if (this.currentPage === this.totalPages || this.pending) return;
+      if (this.currentPage === this.totalPages || this.pending || this.pendingLoadMore) return;
       this.currentPage++;
       this.pendingLoadMore = true;
+      await this.$nextTick();
       await this.fetchData(false);
     },
   },
