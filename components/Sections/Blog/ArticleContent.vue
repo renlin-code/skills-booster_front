@@ -323,7 +323,7 @@
             v-if="isMobile && content.random_articles.length"
           >
             <div class="article-content__others-title sb-container">
-              Еще статьи на эту тему
+              Возможно вам будет интересно
             </div>
             <Slider
               class="article-content__others-slider"
@@ -381,7 +381,7 @@
         v-if="!isMobile && content.random_articles.length"
       >
         <div class="article-content__others-title sb-container">
-          Еще статьи на эту тему
+          Возможно вам будет интересно
         </div>
         <Slider
           class="article-content__others-slider"
