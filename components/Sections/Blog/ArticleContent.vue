@@ -537,7 +537,7 @@ export default {
       }
     }
     &__share {
-      margin-bottom: 40rem;
+      margin-bottom: 50rem;
       @media screen and (max-width: $brakepoint) {
         padding: 0 15rem;
         margin-bottom: 24rem;
